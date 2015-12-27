@@ -1,4 +1,4 @@
-__author__ = 'qimi'
+__author__ = 'Q1mi'
 
 luckyNum = 6
 for i in range(3):
@@ -11,4 +11,4 @@ for i in range(3):
     else:
         print("bingo!")
 else:
-    print("Too many retrys!")
+    print("Too many retry!")

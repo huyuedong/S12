@@ -1,4 +1,4 @@
-__author__ = 'qimi'
+__author__ = 'Q1mi'
 
 name = input("Name:").strip()
 age = input("Age:")

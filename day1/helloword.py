@@ -1,3 +1,3 @@
-__author__ = 'qimi'
+__author__ = 'Q1mi'
 
 print("hello world!")

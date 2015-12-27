@@ -1,11 +1,12 @@
 
-_author__ = 'qimi'
+_author__ = 'Q1mi'
+
 '''
-    猜幸运数字，num = 6
-    猜的数字比6大，提示打印的小一点
-    猜的数字比6小，提示打印的大一点
-    猜的数字等于6，提示bingo
-    猜错三次，提示too many retrys
+        猜幸运数字，num = 6
+        猜的数字比6大，提示打印的小一点
+        猜的数字比6小，提示打印的大一点
+        猜的数字等于6，提示bingo
+        猜错三次，提示too many retry
 '''
 luckyNum = 6
 inputNum = -1
@@ -22,4 +23,4 @@ while guess_count < 3:
         break
     guess_count += 1
 else:
-    print("Too many retrys!")
+    print("Too many retry!")
