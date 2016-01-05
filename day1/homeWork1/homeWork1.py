@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 # __author__ = "Q1mi"
-'''
+"""
 	编写登陆接口
 		-输入用户名和密码
 		-认证成功后显示欢迎信息
 		-输错三次密码锁定相应用户
-'''
+"""
 
 account_file = "account.txt"  # 定义用于存储用户名和密码的account.txt
 lock_file = "lock.txt"  # 定义用于存储锁定用户名的lock.txt
