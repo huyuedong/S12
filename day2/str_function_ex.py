@@ -77,7 +77,7 @@ print(name1.__hash__())
 
 # 返回一个字符串的迭代
 for i in name1.__iter__():
-	print(i)
+    print(i)
 
 # 返回字符串的长度
 print(name1.__len__())
@@ -85,8 +85,18 @@ print(name1.__len__())
 # 首字母大写
 print(name1.capitalize())
 
+# 返回将小写字符串转换为大写，大写转换为小写
+name3 = "AlEx"
+print(name1.swapcase())
+print(name2.swapcase())
+print(name3.swapcase())
+
 # 返回str的小写
 print(name2.casefold())
+
+# 将字符串转换为标题：每个单词的首字母大写
+str_temp = "eric is humor!"
+print(str_temp.title())
 
 # 居中 下例为：20个字符的宽度以'*'号填充，name1居中
 print(name1.center(20, '*'))
@@ -131,15 +141,21 @@ print(str_temp.isalnum())
 # 判断字符串是否只是字母
 print(str_temp.isalpha())
 
-# 判断是否只包含十进制字符
+# 判断字符串中是否只包含十进制字符
 str_temp = '0.3a0.4b'
 str_temp1 = '0.3'
 print(str_temp.isdecimal())
 print(str_temp1.isdecimal())
 
 # 判断字符串中是否只有数字
-str_temp = '12345'
+str_temp = b'12345'
+str_temp1 = '12345'
+str_temp2 = '四'
 print(str_temp.isdigit())
+print(str_temp1.isdigit())
+print(str_temp2.isdigit())
+
+print("line:148".center(20, "="))
 
 # 判断是否是标识符
 str_temp = 'class'
@@ -152,11 +168,116 @@ print(str_temp.islower())
 print(str_temp1.islower())
 
 # 判断字符串中是否都是数值型字符串
+# 'bytes' object has no attribute 'isnumeric'
+str_temp = '12345'
+str_temp1 = '12345'
+str_temp2 = '四'
+str_temp3 = '壹佰贰拾叁'
+print(str_temp.isnumeric())
+print(str_temp1.isnumeric())
+print(str_temp2.isnumeric())
+print(str_temp3.isnumeric())
 
+# 判断是否可被打印
+str_temp = 'abc'
+print(str_temp.isprintable())
 
-# 所有首字母大写
+# 是否为空格
+str_temp = ' '
+print(str_temp.isspace())
+
+# 判断是否为标题 （所有首字母大写）
 str_temp = 'eric is humor!'
-result = str_temp.title()
-print(result)
+str_temp1 = 'Eric Is Humor!'
+print(str_temp.istitle())
+print(str_temp1.istitle())
 
+print('line:185'.center(20, '='))
 
+# 判断字符串是否全为大写
+str_temp = 'eric is humor!'
+str_temp1 = 'Eric Is Humor!'
+str_temp2 = 'ERIC IS HUMOR!'
+print(str_temp.isupper())
+print(str_temp1.isupper())
+print(str_temp2.isupper())
+
+# 字符串的拼接 join(self, iterable)
+str_temp = "ERIC"
+print(':'.join(str_temp))
+
+# 左对齐
+str_temp = "eric"
+print(str_temp.ljust(20, '*'))
+# 右对齐
+print(str_temp.rjust(20, '*'))
+
+# 将字符串转换为小写
+str_temp = "ERIC"
+print(str_temp.lower())
+# 将字符串转换为大写
+str_temp1 = "eric"
+print(str_temp1.upper())
+
+# strip()移除字符串前后的指定字符；lstrip()移除左边指定字符 默认为移除空格;rstrip()移除右边指定字符
+str_temp = "   eric is humor   !   "
+print(str_temp.strip())
+print(str_temp.lstrip())
+print(str_temp.rstrip())
+str_temp1 = "eric is humor!"
+print(str_temp1.lstrip('eric'))
+print(str_temp1.rstrip('mor!'))
+
+# maketrans(self, *args, **kwargs)和translate()
+str_temp = '654321123789'
+map_temp = str.maketrans('123', 'abc')
+map_temp1 = str.maketrans('123', 'abc', '789')
+print(str_temp.translate(map_temp))
+print(str_temp.translate(map_temp1))
+
+# 按照指定分隔符将字符串分割，返回元祖
+# 如果字符串包含指定的分隔符，则返回一个三元的元组，第一个为分隔符左边的子串，第二个为分隔符本身，第三个为分隔符右边的子串。
+# 如果字符串不包含指定的分隔符，则返回一个三元的元祖，第一个为字符串本身，第二个、第三个为空字符串。
+str_temp = "www.google.com"
+print(str_temp.partition('google'))
+print(str_temp.partition('www'))
+print(str_temp.partition('wxw'))
+
+# 右侧开始分隔
+print(str_temp.partition('o'))
+print(str_temp.rpartition('o'))
+
+# Python replace() 方法把字符串中的 old（旧字符串） 替换成 new(新字符串)，如果指定第三个参数max，则替换不超过 max 次。
+str_temp = "www.google.com"
+print(str_temp.replace('.', '-', 1))
+
+# 右查找
+str_temp.rfind('.')
+
+# 右索引
+str_temp.rindex('.')
+
+# 分割
+str_temp = "www.google.com"
+print(str_temp.split('o', 2))
+# 右分隔
+print(str_temp.rsplit('o', 2))
+
+print('line:252'.center(20, '='))
+
+# 行分割
+str_temp = """
+eric
+is
+humor
+!
+"""
+print(str_temp.splitlines())
+
+# 以什么开始
+str_temp = "eric is humor!"
+print(str_temp.startswith('eric'))
+
+# 返回指定长度的字符串，原字符串右对齐，前面补0
+str_temp = "23"
+print(str_temp.zfill(20))
