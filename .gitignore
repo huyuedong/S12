@@ -3,4 +3,4 @@
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-*/__pycache__/*
+__pycache__/
