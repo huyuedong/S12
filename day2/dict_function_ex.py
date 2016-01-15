@@ -88,3 +88,13 @@ for i in l1:
 		else:
 			dic['key2'] = [i, ]
 print(dic)
+
+# 使用defaultdict方法
+from collections import defaultdict
+dic_tmp = defaultdict(list)
+for i in l1:
+	if i > 66:
+		dic_tmp['key1'].append(i)
+	else:
+		dic_tmp['key2'].append(i)
+print(dic_tmp)
