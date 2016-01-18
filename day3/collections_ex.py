@@ -34,6 +34,7 @@ print(type(dic_tmp))
 
 # namedtuple 可命名元祖
 from collections import namedtuple
+# 例如用于定义x,y,x轴等
 MyNamedtupleClass = namedtuple('MyNamedtupleClass', ['x', 'y', 'z'])
 namedtuple_tmp = MyNamedtupleClass(11, 22, 33)
 print(namedtuple_tmp.x)
@@ -44,7 +45,7 @@ print(namedtuple_tmp.z)
 # deque 一个线程安全的双向队列:左右皆可进出
 from collections import deque
 deque_tmp = deque()
-deque_tmp.append(11, 22, 33)
+deque_tmp.append((11, 22, 33))
 print(deque_tmp)
 deque_tmp.pop()
 
