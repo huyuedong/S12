@@ -50,7 +50,7 @@ def get_url_info():
 			print("invalid url，please try again!")
 
 
-# 查找
+# 查看配置信息
 def show_info(url):
 	server_list = []
 	with open('haproxy.cfg') as f:
