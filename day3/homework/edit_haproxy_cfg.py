@@ -6,6 +6,7 @@
 通过python程序可以对ha配置文件进行增删改，不再是以往的打开文件进行直接操作。
 """
 import string
+import json
 
 
 # 获取用户输入
@@ -66,11 +67,45 @@ def show_info(url):
 			# 将符合条件的server信息录入列表
 			elif all([i.startswith(' '), i, flag]):
 				server_list.append(i.strip())
+		return server_list
+
+
+# 增加配置信息
+def add_menu():
+	arg = input("Please input the cfg you want to change:")
+	arg = json.loads(arg)
+	server_list = show_info(arg.get('backend'))
+	# 原来无此项配置记录时需要新建backend记录
 	if len(server_list) == 0:
-		print("Sorry,there is no records about your input!")
+		pass
+		# flag = True
+		# with open('haproxy.cfg', 'r+') as f1, open('haproxy.new', 'w+') as f2:
+		# 	for line in f1:
+		# 		if line.strip() == "backend {}".format(arg.get("backend")):
+		# 			f2.write(line)
+		# 			flag = False
+		# 			for i in server_list:
+		# 				f2.write("{}{}\n".format(' ' * 8, i))
+		# 		elif line.startswith("backend"):
+		# 			f2.write(line)
+		# 			flag = True
+		# 		elif all([flag, line]):
+		# 			f2.write(line)
 	else:
-		for i in server_list:
-			print(i)
+		server_list.append(arg.get('record'))
+		flag = True
+		with open('haproxy.cfg', 'r+') as f1, open('haproxy.new', 'w+') as f2:
+			for line in f1:
+				if line.strip() == "backend {}".format(arg.get("backend")):
+					f2.write(line)
+					flag = False
+					for i in server_list:
+						f2.write("{}{}\n".format(' ' * 8, i))
+				elif line.startswith("backend"):
+					f2.write(line)
+					flag = True
+				elif all([flag, line]):
+					f2.write(line)
 
 
 # 主函数
@@ -78,7 +113,12 @@ def main():
 	num = get_user_input()
 	if num == 1:
 		ur = get_url_info()
-		show_info(ur)
+		server_list = show_info(ur)
+		if len(server_list) == 0:
+			print("Sorry,there is no records about your input!")
+		else:
+			for i in server_list:
+				print(i)
 
 
 if __name__ == '__main__':
