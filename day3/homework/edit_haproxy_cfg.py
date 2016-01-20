@@ -125,6 +125,7 @@ def add_menu():
 			# 删除旧的备份文件
 			os.remove('haproxy.bak')
 
+
 # 获取用户输入的删除条目
 def get_delete_index(server_list):
 	while True:
