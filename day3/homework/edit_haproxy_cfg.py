@@ -150,10 +150,10 @@ def get_delete_index(server_list):
 def del_menu(input_title):
 	server_list = show_info(input_title)
 	delete_index = get_delete_index(server_list)
+	delete_title = server_list[delete_index]
 	server_list.pop(delete_index)
 	if server_list:
 		# server_list不为空的时候，写入配置
-		# 更新配置文件
 		with open('haproxy.cfg', 'r+') as f1, open('haproxy.new', 'w+') as f2:
 			flag = True
 			for line in f1:
@@ -178,14 +178,16 @@ def del_menu(input_title):
 	# server_list为空时，则删除对应的backend项
 	else:
 		with open('haproxy.cfg', 'r+') as f1, open('haproxy.new', 'w+') as f2:
-			flag = True
+			# flag = True
 			for line in f1:
+				# 删除backend项
 				if line.strip() == "backend {}".format(input_title):
-					flag = False
+					# flag = False
 					continue
-				elif line.strip().startswith("backend"):
-					flag = True
-				elif all([flag, line]):
+				# 删除server 信息
+				elif line.strip() == delete_title:
+					continue
+				else:
 					f2.write(line)
 			f1.flush()
 			f2.flush()
