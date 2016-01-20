@@ -92,6 +92,7 @@ def add_menu():
 		with open('haproxy.cfg', 'a+') as f:
 			f.write("backend {}".format(arg.get('backend')))
 			f.write("{}{}\n".format(' ' * 8, list_demo))
+			f.flush()
 		# 打印修改后的配置信息
 
 	# 原来有该配置项记录时，将新输入的内容加入配置列表再写入文件
@@ -119,6 +120,8 @@ def add_menu():
 							f2.write("{}{}\n".format(' ' * 8, i))
 					elif all([not start_flag, stop_flag, line]):
 						f2.write(line)
+				f1.flush()
+				f2.flush()
 			# 将原配置文件备份
 			os.rename('haproxy.cfg', 'haproxy.bak')
 			# 将新配置文件
@@ -164,6 +167,8 @@ def del_menu(input_title):
 					flag = True
 				elif all([flag, line]):
 					f2.write(line)
+			f1.flush()
+			f2.flush()
 		# 将原配置文件备份
 		os.rename('haproxy.cfg', 'haproxy.bak')
 		# 将新配置文件
@@ -182,6 +187,8 @@ def del_menu(input_title):
 					flag = True
 				elif all([flag, line]):
 					f2.write(line)
+			f1.flush()
+			f2.flush()
 		# 将原配置文件备份
 		os.rename('haproxy.cfg', 'haproxy.bak')
 		# 将新配置文件
@@ -203,11 +210,14 @@ def main():
 			else:
 				for i in server_list:
 					print(i)
+		# 修改或增加
 		elif num == 2:
 			add_menu()
+		# 删除
 		elif num == 3:
 			url = get_url_info()
 			del_menu(url)
+		# 退出
 		elif num == 4:
 			print("Good Bye~")
 			break
