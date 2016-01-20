@@ -64,11 +64,12 @@ def show_info(url):
 				continue
 			# 匹配到下一条backend时就退出
 			elif line.startswith('backend'):
-				break
+				flag = False
+				continue
 			# 将符合条件的server信息录入列表
 			elif all([line.startswith(' '), line, flag]):
 				server_list.append(line.strip())
-		return server_list
+	return server_list
 
 
 # 增加配置信息
@@ -185,6 +186,8 @@ def del_menu(input_title):
 		os.rename('haproxy.cfg', 'haproxy.bak')
 		# 将新配置文件
 		os.rename('haproxy.new', 'haproxy.cfg')
+		# 将原配置文件删除
+		os.remove('haproxy.bak')
 
 
 # 主函数
