@@ -14,43 +14,43 @@ from collections import OrderedDict
 def get_user_input():
 	while True:
 		print("""
-		Welcome to the menu of operate HAProxy.cfg：
-		1.Check out the records of backend!
-		2.Edit the records of backend!
-		3.Remove some records of the backend!
-		4.Quit!
+		这是操作haproxy.cfg文件的小程序：
+		1.查看后台配置信息。
+		2.添加后台配置信息。
+		3.删除后台配置信息。
+		4.退出。
 		""")
-		user_choose = input("Please input the serial number of your choice：").strip()
+		user_choose = input("请输入你要进行的操作对应的序号：").strip()
 		if user_choose.isdigit():
 			user_choose = int(user_choose)
 			if user_choose == 1:
-				print("Your choice is ：1.Check out the records of backend!")
+				print("您的选择是：1.查看后台配置信息!")
 				return 1
 			elif user_choose == 2:
-				print("Your choice is ：2.Edit the records of backend!")
+				print("您的选择是：2.添加后台配置信息!")
 				return 2
 			elif user_choose == 3:
-				print("Your choice is ：3.Remove some records of the backend!")
+				print("您的选择是：3.删除后台配置信息!")
 				return 3
 			elif user_choose == 4:
-				print("Your choice is ：4.Quit!")
+				print("您的选择是：4.退出!")
 				return 4
 			else:
-				print("Invalid input, please try again!")
+				print("错误的输入，请重新输入！")
 		else:
-			print("Invalid input, please try again!")
+			print("错误的输入，请重新输入！")
 
 
 # 获取用户输入的供查询的url
 def get_url_info():
 	while True:
-		url = input("Please input the url you want to check:").strip()
+		url = input("请输入要改动的url:").strip()
 		n = url.count('.')
 		if n:
 			if all([n == 2, url.split('.')[2].isalpha()]):
 				return url
 		else:
-			print("invalid url，please try again!")
+			print("错误的url，请重新输入！")
 
 
 # 查看配置信息
@@ -73,34 +73,39 @@ def show_info(url):
 	return server_list
 
 
+# 查看当前backend配置信息
 def init_backend_info():
-	dic_tmp = OrderedDict()
+	dic_tmp = {}
 	with open('haproxy.cfg', 'r') as f:
-		n = 1
+		n = 0
 		flag = False
-		n_flag = False
 		for line in f:
 			if line.strip().startswith('backend'):
+				n += 1
 				dic_tmp[n] = []
-				dic_tmp[n].append(line.strip()[1])
+				dic_tmp[n].append(line.split()[1])
 				flag = True
-				n_flag = True
-				continue
 			elif all([flag, line.strip().startswith("server")]):
 				dic_tmp[n].append(line.strip())
-				n_flag = False
-			elif all([flag, n_flag]):
-				n += 1
-			else:
 				continue
-	return dic_tmp
+	backend_dic = OrderedDict()
+	for i in dic_tmp.items():
+		tmp = i[1][0]
+		i[1].pop(0)
+		backend_dic[tmp] = i[1]
+	print("当前backend配置信息如下：")
+	for k in backend_dic.keys():
+		print("backend {}".format(k))
+		for v in backend_dic.get(k):
+			print("{}{}".format(" " * 8, v))
+		print("\n")
 
 
 # 增加配置信息
 def add_menu():
 	# 打印一个输入示例供输入时复制修改。
-	print('eq：{"backend": "www.oldboy.org", "record": {"server": "100.1.7.99", "maxconn": 30, "weight": 20}}')
-	arg = input("Please input the cfg you want to change:")
+	print('例如=>：{"backend": "www.oldboy.org", "record": {"server": "100.1.7.99", "maxconn": 30, "weight": 20}}')
+	arg = input("请输入要添加的配置信息:")
 	arg = json.loads(arg)
 	server_list = show_info(arg.get('backend'))
 	d1 = arg.get('record')
@@ -117,15 +122,15 @@ def add_menu():
 			f.write("backend {}\n".format(arg.get('backend')))
 			f.write("{}{}\n".format(' ' * 8, list_demo))
 			f.flush()
+		print("添加成功！")
 		# 打印修改后的配置信息
+		init_backend_info()
 
 	# 原来有该配置项记录时，将新输入的内容加入配置列表再写入文件
 	else:
-		# 原来的server信息已存在时打印重复提示
-		print(list_demo)
-		print(server_list)
+		# 添加的server信息已存在时打印重复提示
 		if list_demo in server_list:
-			print("The record you input is already exist!")
+			print("该配置信息已存在！")
 		# 新加的server信息不存在则写入
 		else:
 			server_list.append(list_demo)
@@ -133,6 +138,7 @@ def add_menu():
 				stop_flag = True
 				start_flag = False
 				for line in f1:
+					# 此处的if(elif)判断从上到下，如果一个判断满足则后面的判断均不再执行
 					if line.strip() == "backend {}".format(arg.get('backend')):
 						f2.write(line)
 						start_flag = True
@@ -156,6 +162,8 @@ def add_menu():
 			os.rename('haproxy.new', 'haproxy.cfg')
 			# 删除旧的备份文件
 			os.remove('haproxy.bak')
+			print("添加成功！")
+			init_backend_info()
 
 
 # 获取用户输入的删除条目
@@ -163,15 +171,15 @@ def get_delete_index(server_list):
 	while True:
 		for num, i in enumerate(server_list, 1):
 			print("{}.{}".format(num, i))
-		delete_num = input("Please input the number of record you want to delete：")
+		delete_num = input("请输入要删除的记录对应的序号：")
 		if delete_num.isdigit():
 			delete_num = int(delete_num)
 			if 0 < delete_num <= len(server_list):
 				return delete_num - 1
 			else:
-				print("Invalid input,Please try again!")
+				print("错误的输入，请重新输入！")
 		else:
-			print("Invalid input,Please try again!")
+			print("错误的输入，请重新输入！")
 
 
 # 删除菜单
@@ -203,6 +211,8 @@ def del_menu(input_title):
 		os.rename('haproxy.new', 'haproxy.cfg')
 		# 删除旧的配置文件
 		os.remove('haproxy.bak')
+		print("配置文件删除成功！")
+		init_backend_info()
 	# server_list为空时，则删除对应的backend项
 	else:
 		with open('haproxy.cfg', 'r+') as f1, open('haproxy.new', 'w+') as f2:
@@ -225,6 +235,8 @@ def del_menu(input_title):
 		os.rename('haproxy.new', 'haproxy.cfg')
 		# 将原配置文件删除
 		os.remove('haproxy.bak')
+		print("配置文件删除成功！因为server配置项为空，backend {}记录已删除。".format(input_title))
+		init_backend_info()
 
 
 # 主函数
@@ -236,7 +248,7 @@ def main():
 			ur = get_url_info()
 			server_list = show_info(ur)
 			if len(server_list) == 0:
-				print("Sorry,there is no records about your input!")
+				print("找不到要查询的记录！")
 			else:
 				for i in server_list:
 					print(i)
@@ -249,7 +261,7 @@ def main():
 			del_menu(url)
 		# 退出
 		elif num == 4:
-			print("Good Bye~")
+			print("再见~")
 			break
 
 if __name__ == '__main__':
