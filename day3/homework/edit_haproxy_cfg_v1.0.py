@@ -131,7 +131,8 @@ def add_menu(arg):
 	# for k, v in d1.items():
 	# 	l1.append("{} {}".format(k, v))
 	# list_demo = reduce(lambda x, y: "{} {}".format(x, y), l1)
-	list_demo = "server {} {} weight {} maxconn {}".format(d1.get('server'), d1.get('server'), d1.get('weight'), d1.get('maxconn'))
+	l_tmp = [d1.get('server'), d1.get('server'), d1.get('weight'), d1.get('maxconn')]
+	list_demo = "server {} {} weight {} maxconn {}".format(* l_tmp)
 	# 原来无此项配置记录时需要新建backend记录
 	if len(server_list) == 0:
 		with open('haproxy.cfg', 'a+') as f:
