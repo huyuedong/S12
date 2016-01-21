@@ -150,23 +150,29 @@ def add_menu(arg):
 		else:
 			server_list.append(list_demo)
 			with open('haproxy.cfg', 'r+') as f1, open('haproxy.new', 'w+') as f2:
+				# 定义一个停止从server_list取数据写入的标签
 				stop_flag = True
+				# 定义一个开始从server_list取数据写入的标签
 				start_flag = False
 				for line in f1:
 					# 此处的if(elif)判断从上到下，如果一个判断满足则后面的判断均不再执行
+					# 匹配到backend记录时，将开始标签置为真，结束标签置为否
 					if line.strip() == "backend {}".format(arg.get('backend')):
 						f2.write(line)
 						start_flag = True
 						stop_flag = False
 						continue
+					# 匹配到下一条backend记录时，将结束标签置为真
 					elif line.startswith("backend"):
 						f2.write(line)
 						stop_flag = True
 						continue
+					# 当开始标签为真，结束标签为假时，从server_list取值写入，并把开始标签置为假
 					elif all([start_flag, not stop_flag]):
 						start_flag = False
 						for i in server_list:
 							f2.write("{}{}\n".format(' ' * 8, i))
+					# 当开始标签为假且结束标签为真时，从原配置文件取值写入
 					elif all([not start_flag, stop_flag, line]):
 						f2.write(line)
 				f1.flush()
