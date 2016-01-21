@@ -7,9 +7,11 @@
 version 0.3
 -增加二级菜单回退功能
 -在查看配置信息菜单增加回车直接打印当前所有backend配置信息
+-修改、删除操作完成后，改为默认回到主菜单。
 -修复几处bug
 -*修复用户添加配置信息时，输入非json可以解析的有效数据时程序非正常退出的bug
 -*修复了用户删除配置信息时，输入不存在的url时，没有提示信息的bug
+-*修复了get_url_info()中输入不正确的网址格式时没有跳出并提示用户的bug
 """
 import json
 import os
@@ -52,17 +54,22 @@ def get_user_input():
 def get_url_info():
 	while True:
 		url = input("请输入要操作的url（B返回上级菜单，回车查看当前所有backend信息）:").strip()
-		if url == "":
-			init_backend_info()
-		else:
-			n = url.count('.')
-			if n:
+		n = url.count('.')
+		# 判断输入是否为有效的url
+		if n:
+			# 判断输入的是否为有效url格式
+			try:
 				if all([n == 2, url.split('.')[2].isalpha()]):
 					return url
-			elif url.upper() == "B":
-				return "B"
-			else:
-				print("错误的url，请重新输入！")
+			except IndexError:
+				print("错误的输入，请重新输入！")
+		elif url.upper() == "B":
+			return "B"
+		# 输入回车或空格返回“ENTER”,准备打印所有backend信息
+		elif url == "":
+			return "ENTER"
+		else:
+			print("错误的url，请重新输入！")
 
 
 # 查看配置信息
@@ -219,7 +226,7 @@ def del_menu(server_list, input_title):
 		os.rename('haproxy.new', 'haproxy.cfg')
 		# 删除旧的配置文件
 		os.remove('haproxy.bak')
-		print("配置文件删除成功！")
+		print("配置信息删除成功！")
 		init_backend_info()
 	# server_list为空时，则删除对应的backend项
 	else:
@@ -256,7 +263,11 @@ def main():
 			loop_flag = True
 			while loop_flag:
 				ur = get_url_info()
-				if ur == 'B':
+				if ur == "B":
+					break
+				# 打印所有backend信息
+				if ur == "ENTER":
+					init_backend_info()
 					break
 				else:
 					server_list = show_info(ur)
@@ -265,6 +276,7 @@ def main():
 					else:
 						for i in server_list:
 							print(i)
+						break
 		# 修改或增加
 		elif num == 2:
 			loop_flag = True
@@ -279,6 +291,7 @@ def main():
 					try:
 						arg = json.loads(arg)
 						add_menu(arg)
+						break
 					except json.decoder.JSONDecodeError:
 						print("无效的输入，请重新输入！")
 		# 删除
@@ -294,10 +307,10 @@ def main():
 					# 输入的网址存在，打印该网址下的server信息。
 					if server_list:
 						del_menu(server_list, ur)
+						break
 					# 输入的网址不存在时，打印提示信息。
 					else:
 						print("您输入的后台网址不存在，请重新输入！")
-						break
 		# 退出
 		elif num == 4:
 			print("再见~")
