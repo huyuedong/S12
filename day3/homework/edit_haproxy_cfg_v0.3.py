@@ -5,7 +5,11 @@
 """
 通过python程序可以对ha配置文件进行增删改，不再是以往的打开文件进行直接操作。
 version 0.3
-增加二级菜单回退
+-增加二级菜单回退功能
+-在查看配置信息菜单增加回车直接打印当前所有backend配置信息
+-修复几处bug
+-*修复用户添加配置信息时，输入非json可以解析的有效数据时程序非正常退出的bug
+-*修复了用户删除配置信息时，输入不存在的url时，没有提示信息的bug
 """
 import json
 import os
@@ -15,13 +19,14 @@ from collections import OrderedDict
 # 获取用户输入
 def get_user_input():
 	while True:
+		print("这是操作haproxy.cfg文件的小程序：".center(50, '*'))
 		print("""
-		这是操作haproxy.cfg文件的小程序：
-		1.查看后台配置信息。
-		2.添加后台配置信息。
-		3.删除后台配置信息。
-		4.退出。
+				1.查看后台配置信息。
+				2.添加后台配置信息。
+				3.删除后台配置信息。
+				4.退出。
 		""")
+		print("-" * 60)
 		user_choose = input("请输入你要进行的操作对应的序号：").strip()
 		if user_choose.isdigit():
 			user_choose = int(user_choose)
@@ -46,15 +51,18 @@ def get_user_input():
 # 获取用户输入的供查询的url
 def get_url_info():
 	while True:
-		url = input("请输入要改动的url:").strip()
-		n = url.count('.')
-		if n:
-			if all([n == 2, url.split('.')[2].isalpha()]):
-				return url
-		elif url.upper() == "B":
-			return "B"
+		url = input("请输入要操作的url（B返回上级菜单，回车查看当前所有backend信息）:").strip()
+		if url == "":
+			init_backend_info()
 		else:
-			print("错误的url，请重新输入！")
+			n = url.count('.')
+			if n:
+				if all([n == 2, url.split('.')[2].isalpha()]):
+					return url
+			elif url.upper() == "B":
+				return "B"
+			else:
+				print("错误的url，请重新输入！")
 
 
 # 查看配置信息
@@ -106,11 +114,7 @@ def init_backend_info():
 
 
 # 增加配置信息
-def add_menu():
-	# 打印一个输入示例供输入时复制修改。
-	print('例如=>：{"backend": "www.oldboy.org", "record": {"server": "100.1.7.99", "maxconn": 30, "weight": 20}}')
-	arg = input("请输入要添加的配置信息（'B'返回上一级）:").strip()
-	arg = json.loads(arg)
+def add_menu(arg):
 	server_list = show_info(arg.get('backend'))
 	d1 = arg.get('record')
 	# 如果用户输入server时输入hostname和IP的话可以使用reduce
@@ -187,8 +191,8 @@ def get_delete_index(server_list):
 
 
 # 删除菜单
-def del_menu(input_title):
-	server_list = show_info(input_title)
+def del_menu(server_list, input_title):
+
 	delete_index = get_delete_index(server_list)
 	delete_title = server_list[delete_index]
 	server_list.pop(delete_index)
@@ -265,13 +269,35 @@ def main():
 		elif num == 2:
 			loop_flag = True
 			while loop_flag:
-				add_menu()
+				# 打印一个输入示例供输入时复制修改。
+				print('例如=>：{"backend": "www.oldboy.org", "record": {"server": "100.1.7.99", "maxconn": 30, "weight": 20}}')
+				arg = input("请输入要添加的配置信息（'B'返回上一级）:").strip()
+				if arg.upper() == 'B':
+					break
+				else:
+					# 如果json解析不了就让用户重新输入
+					try:
+						arg = json.loads(arg)
+						add_menu(arg)
+					except json.decoder.JSONDecodeError:
+						print("无效的输入，请重新输入！")
 		# 删除
 		elif num == 3:
 			loop_flag = True
 			while loop_flag:
-				url = get_url_info()
-				del_menu(url)
+				ur = get_url_info()
+				# 返回上一级菜单。
+				if ur == "B":
+					break
+				else:
+					server_list = show_info(ur)
+					# 输入的网址存在，打印该网址下的server信息。
+					if server_list:
+						del_menu(server_list, ur)
+					# 输入的网址不存在时，打印提示信息。
+					else:
+						print("您输入的后台网址不存在，请重新输入！")
+						break
 		# 退出
 		elif num == 4:
 			print("再见~")
