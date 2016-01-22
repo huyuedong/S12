@@ -54,7 +54,7 @@ def get_user_input():
 # 获取用户输入的供查询的url
 def get_url_info():
 	while True:
-		url = input("请输入要操作的url（B返回上级菜单，回车查看当前所有backend信息）:").strip()
+		url = input("请输入要操作的url（B返回上级菜单，查询菜单下可直接回车查看当前所有backend信息）:").strip()
 		n = url.count('.')
 		# 判断输入是否为有效的url
 		if n:
@@ -268,8 +268,7 @@ def main():
 		num = get_user_input()
 		# 查看
 		if num == 1:
-			loop_flag = True
-			while loop_flag:
+			while True:
 				ur = get_url_info()
 				if ur == "B":
 					break
@@ -287,8 +286,7 @@ def main():
 						break
 		# 修改或增加
 		elif num == 2:
-			loop_flag = True
-			while loop_flag:
+			while True:
 				# 打印一个输入示例供输入时复制修改。
 				print('例如=>：{"backend": "www.oldboy.org", "record": {"server": "100.1.7.99", "maxconn": 30, "weight": 20}}')
 				arg = input("请输入要添加的配置信息（'B'返回上一级）:").strip()
@@ -304,8 +302,7 @@ def main():
 						print("无效的输入，请重新输入！")
 		# 删除
 		elif num == 3:
-			loop_flag = True
-			while loop_flag:
+			while True:
 				ur = get_url_info()
 				# 返回上一级菜单。
 				if ur == "B":
