@@ -11,7 +11,7 @@ def catch_mony(amount):
 	while amount > 0:
 		amount -= 100
 		print("又来取钱了！")
-		yield "给你100吧。。。"
+		yield "给你100吧,剩余:{}".format(amount)
 
 atm = catch_mony(500)
 print(type(atm))
