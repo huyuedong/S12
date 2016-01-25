@@ -49,14 +49,32 @@ import re
 # 	print("Invalid input")
 
 
-# 分组匹配?
+# 分组匹配
 contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
-match = re.search(r'(\w+), (\w+): (\S+)', contactInfo)
+match = re.search(r'(.+), (.+): (\S+)', contactInfo)
 if match:
-	print(match.groups())
+	print("get it!")
+	print(match.group(0))   # group(0)指的是原始字符串
+	print(match.group(1))   # group(1)指的是第1个子串
+	print(match.group(2))   # group(2)指的是第2个子串
+	print(match.group(3))   # group(3)指的是第3个子串
 else:
-	print("eeeeeee")
+	print("error")
 
-# 匹配email
+
+# 字符串中查找email
+email_info = "Hey guy, my email address is master@liwenzhou.com, send mail to me!"
+match = re.search(r'([a-z0-9])[a-z.0-9]{0,25}@[a-z.0-9]{1,20}.[a-z0-9]{1,8}', email_info)
+if match:
+	print(match.group())
+
+# 匹配输入是否为有效email地址
+email = input("Please input your email:").strip()
+result = re.match(r'^([a-z.0-9]{1,26})@([a-z.0-9]{1,20})(.[a-z0-9]{1,8})$', email)
+if result:
+	print("Your email is: {}".format(result.group()))
+else:
+	print("Invalid input!")
+
 
 

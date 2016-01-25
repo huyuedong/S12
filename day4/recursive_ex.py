@@ -79,14 +79,28 @@ def show(arg):
 		print(i)
 
 # 顺时针转90度
-for i in range(len(list_demo)):
-	for j in range(i, len(list_demo)):
-		list_demo[i][j], list_demo[j][i] = list_demo[j][i], list_demo[i][j]
+# for i in range(len(list_demo)):
+# 	for j in range(i, len(list_demo)):
+# 		list_demo[i][j], list_demo[j][i] = list_demo[j][i], list_demo[i][j]
 
 
 # 逆时针转90度
-for i in range(len(list_demo)).__reversed__():
-	print(list_demo[i])
+# for i in range(len(list_demo)).__reversed__():
+# 	print(list_demo[i])
 
 # show(list_demo)
 
+# 打印9*9乘法表
+for i in range(1, 10):
+	for j in range(1, i):
+		print("{}*{}={}\t".format(j, i, i*j).lstrip(), end=" ")
+	if i == 1:  # 要不然第一行和其他行对不齐。。。
+		print(" {}*{}={}\n".format(i, i, i*i), end=" ")
+	else:
+		print("{}*{}={}\n".format(i, i, i*i), end=" ")
+
+# 另外一种方法，但是两行之间多了空行
+# for i in range(1, 10):
+# 	for j in range(1, i+1):
+# 		print("{}*{}={}".format(j, i, i*j), end=" ")
+# 	print("\n")
