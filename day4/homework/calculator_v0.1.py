@@ -15,7 +15,12 @@ s = "1 - 2 * ( (60-30 +(-40/5) * (9-2*5/3 + 7 /3*99/4*2998 +10 * 568/14 )) - (-4
 result = re.search(r'\([^\(\)]+\)', s)
 if result:
 	print(result.group())
-	n = re.split(r'[]')
+	# 去除运算符和括号，得到数字的列表
+	n = re.split(r'[\+\-\*\/]', result.group().strip('\(\)'))
 	print(n)
+	# 去除数字和括号，得到运算符的列表
+	m = re.split(r'\d+', result.group().strip('\(\)'))
+	print(m)
+# 将字符串的前面和后面放进列表，把匹配到的字符串算出数值之后再传进去
 result2 = s.split(result.group())
 print(result2)
