@@ -29,11 +29,29 @@ def calc_func(arg):
 
 # 找括号
 def find_brackets(arg):
-	tmp = re.search((r'\([^\(\)]+\)]', arg))
+	tmp = re.search(r'\([^\(\)]+\)', arg)
 	if tmp:
 		return tmp.group()
 	else:
 		return None
+
+
+# 判断正负号
+def check_sign(arg):
+	if isinstance(arg, str):
+		if arg.startswith("-"):
+			result_tmp = 0 - float(arg.strip("-"))
+			return result_tmp
+		elif arg.startswith("+"):
+			result_tmp = float(arg.strip("+"))
+			return result_tmp
+		elif arg.isdigit():
+			result_tmp = float(arg)
+			return result_tmp
+		else:
+			return "Error!"
+	else:
+		return "ParamTypeError!"
 
 s = "1 - 2 * ( (60-30 +(-40/5) * (9-2*5/3 + 7 /3*99/4*2998 +10 * 568/14 )) - (-4*3)/ (16-3*2) )"
 # 先去除掉空格
@@ -43,25 +61,30 @@ print(s)
 # 找到最里面的括号
 result = re.search(r'\([^\(\)]+\)', s)
 if result:
+	# result = result.group()
 	print(result.group())
+	result = result.group()
 
-# 将匹配到的结果去除括号
-result = result.group().strip("()")
-
-result2 = calc_func(result)
+# 计算剥离出来的括号里面的值
+result2 = calc_func(result.strip("()"))
 print(result2)
+
+# 将计算后的值转换成字符串
 result2 = str(result2)
+print(result2)
 
-# 将字符串的前面和后面放进列表，把匹配到的字符串算出数值之后再传进去
-result3 = s.split(result)
-result5 = result2.join(result3)
+# 将源字符串按匹配到的字符串分割成列表
+result_list = s.split(result)
+print(result_list)
+
+# 将计算后的数值按原位置拼接回去
+result5 = result2.join(result_list)
 print(result5)
-print("{0}{1}{2}".format(result3[0], result2, result3[1]))
+print(type(result5))
 
-# result = find_brackets(result3)
-# if result:
-# 	result = result.strip("()")
-# 	result4 = calc_func(result)
-# 	print(result4)
-# else:
-# 	print("ERROR!")
+
+result_2 = find_brackets(result5)
+if result_2:
+	print(result_2)
+else:
+	print("ERROR!")
