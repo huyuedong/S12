@@ -17,6 +17,7 @@ def check_sign(arg):
 		return result_tmp
 
 s = "1-2*((60-30+-8.0*(9-2*5/3+7/3*99/4*2998+10*568/14))-(-4*3)/(16-3*2))"
+s = "-3-9"
 init_s = s
 loop_flag = True
 while loop_flag:
@@ -85,11 +86,18 @@ while loop_flag:
 					elif "-" in finded_n:
 						n_list = finded_n.split("-")
 						print(n_list)
-						lift_num = check_sign(n_list[0])
-						right_num = check_sign(n_list[1])
-						print(lift_num - right_num)
-						a = lift_num - right_num
-						a = str(a)
+						if len(n_list) == 2:
+							lift_num = check_sign(n_list[0])
+							right_num = check_sign(n_list[1])
+							print(lift_num - right_num)
+							a = lift_num - right_num
+							a = str(a)
+						elif len(n_list) == 3:
+							lift_num = check_sign(n_list[1])
+							right_num = check_sign(n_list[2])
+							print(0 - lift_num - right_num)
+							a = 0 - lift_num - right_num
+							a = str(a)
 						if float(a) >= 0:
 							a = "+{}".format(a)
 						b = a.join(finded_result.strip("()").split(finded_n))
@@ -159,10 +167,18 @@ while loop_flag:
 					elif "-" in finded_n:
 						n_list = finded_n.split("-")
 						print(n_list)
-						lift_num = check_sign(n_list[0])
-						right_num = check_sign(n_list[1])
-						print(lift_num - right_num)
-						a = lift_num - right_num
+						if len(n_list) == 2:
+							lift_num = check_sign(n_list[0])
+							right_num = check_sign(n_list[1])
+							print(lift_num - right_num)
+							a = lift_num - right_num
+							a = str(a)
+						elif len(n_list) == 3:
+							lift_num = check_sign(n_list[1])
+							right_num = check_sign(n_list[2])
+							print(0 - lift_num - right_num)
+							a = 0 - lift_num - right_num
+							a = str(a)
 						a = str(a)
 						if float(a) >= 0:
 							a = "+{}".format(a)
