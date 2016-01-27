@@ -150,6 +150,7 @@ while loop_flag:
 					bracket_str = str_1.join(bracket_str.strip("()").split(str_tmp2))
 				# 找不到加、减
 				else:
+					# 找不到括号以后就把算出来的结果返回到源字符串中
 					s = bracket_str.lstrip("+").join(s.split(init_bracket_str))
 					break
 	# 没有括号
@@ -157,18 +158,22 @@ while loop_flag:
 		while True:
 			# 从左往右找乘、除
 			str_tmp = find_mul_div(s)
+			# 找到乘、除
 			if str_tmp:
 				str_1 = mul_div_func(str_tmp)
 				str_1 = int_to_str(str_1)
 				s = str_1.join(s.split(str_tmp))
+			# 找不到乘、除
 			else:
 				# 找加、减
 				s = optimize_formula(s)
 				str_tmp = find_add_sub(s.lstrip("+"))
+				# 找到加、减
 				if str_tmp:
 					str_1 = add_sub_func(str_tmp)
 					str_1 = int_to_str(str_1)
 					s = str_1.join(s.split(str_tmp))
+				# 找不到加、减
 				else:
 					print("{}={}".format(original_s, s.lstrip("+")))
 					loop_flag = False
