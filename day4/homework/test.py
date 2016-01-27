@@ -17,7 +17,7 @@ def check_sign(arg):
 		return result_tmp
 
 s = "1-2*((60-30+-8.0*(9-2*5/3+7/3*99/4*2998+10*568/14))-(-4*3)/(16-3*2))"
-s = "-3-9"
+# s = "-3-9"
 init_s = s
 loop_flag = True
 while loop_flag:

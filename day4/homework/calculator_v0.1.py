@@ -36,11 +36,16 @@ def add_sub_func(arg):
 		return lift_num + right_num
 	elif "-" in arg:
 		l_demo = arg.split("-")
-		lift_num = check_sign(l_demo[0])
-		right_num = check_sign(l_demo[1])
-		return lift_num + right_num
+		if len(l_demo) == 2:
+			lift_num = check_sign(l_demo[0])
+			right_num = check_sign(l_demo[1])
+			return lift_num - right_num
+		elif len(l_demo) == 3:
+			lift_num = check_sign(l_demo[1])
+			right_num = check_sign(l_demo[2])
+			return 0 - lift_num - right_num
 	else:
-		return arg
+		pass
 
 
 # 找括号
@@ -61,13 +66,9 @@ def check_sign(arg):
 		elif arg.startswith("+"):
 			result_tmp = float(arg.strip("+"))
 			return result_tmp
-		elif arg.isdigit():
+		else:
 			result_tmp = float(arg)
 			return result_tmp
-		else:
-			return "Error!"
-	else:
-		return "ParamTypeError!"
 
 
 # 分离操作数
@@ -100,65 +101,75 @@ def find_mul_div(arg):
 
 # 找加或减
 def find_add_sub(arg):
-	tmp = re.search(r'[\+\-]?\d*\.?\d+[\+\-][\+\-]]?\d*\.?\d+', arg.strip("()"))
+	tmp = re.search(r'[\+\-]?\d*\.?\d+[\+\-]\d+\.?\d*', arg.strip("()"))
 	if tmp:
 		return tmp.group()
 	else:
 		return None
 
 
-s = "1 - 2 * ( (60-30 +(-40/5) * (9-2*5/3 + 7 /3*99/4*2998 +10 * 568/14 )) - (-4*3)/ (16-3*2) )"
-s = "1+2*3/(4*5)"
+# 优化算式
+def optimize_formula(arg):
+	arg = re.sub(r'\-{2}', "+", arg)
+	arg = re.sub(r'\+{2}', "+", arg)
+	arg = re.sub(r'\+\-', "-", arg)
+	arg = re.sub(r'\-\+', "-", arg)
+	return arg
+
+
+# s = "1 - 2 * ( (60-30 +(-40/5) * (9-2*5/3 + 7 /3*99/4*2998 +10 * 568/14 )) - (-4*3)/ (16-3*2) )"
+s = input("请输入算式：")
 # 先去除掉空格
 s = re.sub(r'\s+', '', s)
-print(s)
+original_s = s
 loop_flag = True
 while loop_flag:
 	# 在s中找括号
 	bracket_str = find_brackets(s)
 	init_bracket_str = bracket_str
-	print(bracket_str)
 	# 有括号
 	if bracket_str:
 		while True:
 			# 在括号里找乘、除
 			str_tmp = find_mul_div(bracket_str)
-			print(str_tmp)
+			# 找得到乘、除
 			if str_tmp:
 				str_1 = mul_div_func(str_tmp)
 				str_1 = int_to_str(str_1)
-				print(str_1)
-				bracket_str = str_1.join(bracket_str.split(str_tmp))
-				print(bracket_str)
+				bracket_str = str_1.join(bracket_str.strip("()").split(str_tmp))
 			# 找不到乘除了
 			else:
 				# 在括号里找加、减
-				print(bracket_str)
-				str_tmp2 = find_add_sub(bracket_str)
+				# 在进行加、减运算之前对算式进行优化
+				bracket_str = optimize_formula(bracket_str)
+				str_tmp2 = find_add_sub(bracket_str.lstrip("+"))
+				# 找到加、减
 				if str_tmp2:
 					str_1 = add_sub_func(str_tmp2)
 					str_1 = int_to_str(str_1)
 					bracket_str = str_1.join(bracket_str.strip("()").split(str_tmp2))
+				# 找不到加、减
 				else:
-					s = bracket_str.join(s.split(bracket_str))
+					s = bracket_str.lstrip("+").join(s.split(init_bracket_str))
 					break
-			s = str_1.join(s.split(bracket_str))
 	# 没有括号
 	else:
-		str_tmp = find_multi_div(s)
-		if str_tmp:
-			str_1 = calc_func(str_tmp)
-			str_1 = int_to_str(str_1)
-			print(str_1)
-			s = str_1.join(s.strip("()").split(str_tmp))
-			print(s)
-		else:
-			# 找加、减
-			str_tmp = find_add_sub(s)
+		while True:
+			# 从左往右找乘、除
+			str_tmp = find_mul_div(s)
 			if str_tmp:
-				str_1 = calc_func(str_tmp)
+				str_1 = mul_div_func(str_tmp)
 				str_1 = int_to_str(str_1)
-				bracket_str = str_1.join(s.strip("()").split(str_tmp))
+				s = str_1.join(s.split(str_tmp))
 			else:
-				print(s)
-				break
+				# 找加、减
+				s = optimize_formula(s)
+				str_tmp = find_add_sub(s.lstrip("+"))
+				if str_tmp:
+					str_1 = add_sub_func(str_tmp)
+					str_1 = int_to_str(str_1)
+					s = str_1.join(s.split(str_tmp))
+				else:
+					print("{}={}".format(original_s, s.lstrip("+")))
+					loop_flag = False
+					break
