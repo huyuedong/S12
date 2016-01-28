@@ -103,7 +103,7 @@ def find_mul_div(arg):
 
 # 找加或减
 def find_add_sub(arg):
-	tmp = re.search(r'[\+\-]?\d*\.?\d+[\+\-]\d+\.?\d*', arg.strip("()"))
+	tmp = re.search(r'[\+\-]?\d*\.?\d+[\+\-]\d+\.?\d*', arg.strip("()").lstrip("+"))
 	if tmp:
 		return tmp.group()
 	else:
@@ -124,66 +124,87 @@ def get_input():
 	while True:
 		print("SimpleCalculator".center(50, '*'))
 		s = input("Please input the equation:").strip()
-		result = re.search(r'[()]')
+		result_list = []
+		result_list.append(re.search(r'\([\*\/%]+', s))
+		result_list.append(re.search(r'^[\*\/%]+\d', s))
+		result_list.append(re.search(r'\d[\*\/%]+$', s))
+		result_list.append(re.search(r'\d[\*\/%]+\)', s))
+		result_list.append(re.search(r'[\(\)\d%]+\(', s))
+		result_list.append(re.search(r'[\*\\]{3,}', s))
+		result_list.append(re.search(r'[%%]{2,}', s))
+		result_list.append(re.search(r'[a-zA-Z_=]', s))
+		result_list.append(s.count("(") != s.count(")"))
+		result_list.append(len(s) == 0)
+		if any(result_list):
+			print("Invalid input,please try again!")
+		else:
+			return s
 
 # s = "1 - 2 * ( (60-30 +(-40/5) * (9-2*5/3 + 7 /3*99/4*2998 +10 * 568/14 )) - (-4*3)/ (16-3*2) )"
-s = input("请输入算式：")
-# 先去除掉空格
-s = re.sub(r'\s+', '', s)
-original_s = s
-loop_flag = True
-while loop_flag:
-	# 在s中找括号
-	bracket_str = find_brackets(s)
-	init_bracket_str = bracket_str
-	# 有括号
-	if bracket_str:
-		while True:
-			# 在括号里找乘、除
-			str_tmp = find_mul_div(bracket_str)
-			# 找得到乘、除
-			if str_tmp:
-				str_1 = mul_div_func(str_tmp)
-				str_1 = int_to_str(str_1)
-				bracket_str = str_1.join(bracket_str.strip("()").split(str_tmp))
-			# 找不到乘除了
-			else:
-				# 在括号里找加、减
-				# 在进行加、减运算之前对算式进行优化
-				bracket_str = optimize_formula(bracket_str)
-				str_tmp2 = find_add_sub(bracket_str.lstrip("+"))
-				# 找到加、减
-				if str_tmp2:
-					str_1 = add_sub_func(str_tmp2)
-					str_1 = int_to_str(str_1)
-					bracket_str = str_1.join(bracket_str.strip("()").split(str_tmp2))
-				# 找不到加、减
-				else:
-					# 找不到括号以后就把算出来的结果返回到源字符串中
-					s = bracket_str.lstrip("+").join(s.split(init_bracket_str))
-					break
-	# 没有括号
-	else:
-		while True:
-			# 从左往右找乘、除
-			str_tmp = find_mul_div(s)
-			# 找到乘、除
-			if str_tmp:
-				str_1 = mul_div_func(str_tmp)
-				str_1 = int_to_str(str_1)
-				s = str_1.join(s.split(str_tmp))
-			# 找不到乘、除
-			else:
-				# 找加、减
-				s = optimize_formula(s)
-				str_tmp = find_add_sub(s.lstrip("+"))
-				# 找到加、减
+
+
+# 主函数
+def main():
+	s = get_input()
+	# 先去除掉空格
+	s = re.sub(r'\s+', '', s)
+	original_s = s
+	loop_flag = True
+	while loop_flag:
+		# 在s中找括号
+		bracket_str = find_brackets(s)
+		original_bracket_str = bracket_str
+		# 有括号
+		if bracket_str:
+			while True:
+				# 在括号里找乘、除
+				str_tmp = find_mul_div(bracket_str)
+				# 找得到乘、除
 				if str_tmp:
-					str_1 = add_sub_func(str_tmp)
+					str_1 = mul_div_func(str_tmp)
 					str_1 = int_to_str(str_1)
-					s = str_1.join(s.split(str_tmp))
-				# 找不到加、减
+					bracket_str = bracket_str.replace(str_tmp, str_1)
+				# 找不到乘除了
 				else:
-					print("{}={}".format(original_s, s.lstrip("+")))
-					loop_flag = False
-					break
+					# 在括号里找加、减
+					# 在进行加、减运算之前对算式进行优化
+					bracket_str = optimize_formula(bracket_str)
+					str_tmp1 = find_add_sub(bracket_str)
+					# 找到加、减
+					if str_tmp1:
+						str_1 = add_sub_func(str_tmp1)
+						str_1 = int_to_str(str_1)
+						bracket_str = bracket_str.replace(str_tmp1, str_1)
+					# 找不到加、减
+					else:
+						# 找不到括号以后就把算出来的结果返回到源字符串中
+						s = s.replace(original_bracket_str, bracket_str.strip("()").lstrip("+"))
+						break
+		# 没有括号
+		else:
+			while True:
+				# 从左往右找乘、除
+				str_tmp = find_mul_div(s)
+				# 找到乘、除
+				if str_tmp:
+					str_1 = mul_div_func(str_tmp)
+					str_1 = int_to_str(str_1)
+					s = s.replace(str_tmp, str_1)
+				# 找不到乘、除
+				else:
+					# 找加、减
+					s = optimize_formula(s)
+					str_tmp = find_add_sub(s.lstrip("+"))
+					# 找到加、减
+					if str_tmp:
+						str_1 = add_sub_func(str_tmp)
+						str_1 = int_to_str(str_1)
+						s = s.replace(str_tmp, str_1)
+					# 找不到加、减
+					else:
+						print("{}={}".format(original_s, s.lstrip("+")))
+						loop_flag = False
+						break
+
+if __name__ == '__main__':
+	main()
