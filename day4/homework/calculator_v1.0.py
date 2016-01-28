@@ -128,7 +128,7 @@ def get_input():
 			result_list.append(re.search(r'[\(\)\d%]+\(', s))
 			result_list.append(re.search(r'[\*\\]{3,}', s))
 			result_list.append(re.search(r'[%%]{2,}', s))
-			result_list.append(re.search(r'[^0-9\.\+\-\*\/]', s))
+			result_list.append(re.search(r'[^0-9\.\+\-\*\/\(\)\s]', s))
 			result_list.append(s.count("(") != s.count(")"))
 			result_list.append(len(s) == 0)
 			if any(result_list):
