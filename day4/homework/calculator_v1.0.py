@@ -74,14 +74,6 @@ def check_sign(arg):
 			return result_tmp
 
 
-# 分离操作数
-def split_num(str_demo, operator):
-	list_tmp = str_demo.split(operator)
-	lift_num = check_sign(list_tmp[0])
-	right_num = check_sign(list_tmp[1])
-	return [lift_num, right_num]
-
-
 # 数值转字符串
 def int_to_str(arg):
 	if float(arg) >= 0:
@@ -124,14 +116,14 @@ def optimize_formula(arg):
 def get_input():
 	while True:
 		print("SimpleCalculator".center(50, '*'))
-		s = input("Please input the equation:(enter 'Q' to quit)").strip()
+		s = input("Please input the equation,(enter 'Q' to quit):").strip()
 		if s.upper() == 'Q':
 			return 'Q'
 		else:
 			result_list = []
 			result_list.append(re.search(r'\([\*\/%]+\d', s))
 			result_list.append(re.search(r'^[\*\/%]+\d', s))
-			result_list.append(re.search(r'\d[\*\/%]+$', s))
+			result_list.append(re.search(r'\d[\.\*\/%]+$', s))
 			result_list.append(re.search(r'\d[\*\/%]+\)', s))
 			result_list.append(re.search(r'[\(\)\d%]+\(', s))
 			result_list.append(re.search(r'[\*\\]{3,}', s))
@@ -177,18 +169,28 @@ def main():
 		if s == 'Q':
 			break
 		else:
+			# 去掉字符串空格
 			s = re.sub(r'\s+', "", s)
+			# 保存原始输入
 			original_s = s
 			while True:
+				# 找括号
 				bracket_str = find_brackets(s)
-				original_bracket_str = bracket_str
 				# 有括号
 				if bracket_str:
+					# 保存原始括号内容
+					original_bracket_str = bracket_str
+					# 计算括号内的值
 					bracket_str = operating(bracket_str)
+					# 用计算出的值去替换源字符串中的括号
 					s = s.replace(original_bracket_str, bracket_str)
 				# 无括号
 				else:
+					# 从左往右计算值
 					result = operating(s)
+					# 结果为\d+.0时，去掉.0
+					if result.endswith(".0"):
+						result = result.rstrip(".0")
 					print("{}={}".format(original_s, result))
 					break
 
