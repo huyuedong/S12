@@ -38,11 +38,11 @@ import re
 # print("result2:{}".format(result2))
 # print("result3:{}".format(result3))
 
-content = "1234Abc5678Abc"
-result = re.sub(r'\d+', "哈哈", content)
-result2 = re.sub(r'\d+', "哈哈", content, 1)
-print("result:{}".format(result))
-print("result2:{}".format(result2))
+# content = "1234Abc5678Abc"
+# result = re.sub(r'\d+', "哈哈", content)
+# result2 = re.sub(r'\d+', "哈哈", content, 1)
+# print("result:{}".format(result))
+# print("result2:{}".format(result2))
 
 # content = "'1 - 2 * ((60-30+1*(9-2*5/3+7/3*99/4*2998+10*568/14))-(-4*3)/(16-3*2) )'"
 # new_content = re.split(r'[\+\-\*\/]+', content)
@@ -81,7 +81,7 @@ print("result2:{}".format(result2))
 
 
 # 分组匹配
-# contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
+contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
 # match = re.search(r'(.+), (.+): (\S+)', contactInfo)
 # if match:
 # 	print("get it!")
@@ -92,6 +92,10 @@ print("result2:{}".format(result2))
 # else:
 # 	print("error")
 
+match = re.search(r'(?P<name>\.+),(?P<addr>\.+):', contactInfo)
+if match:
+	print(match.group('name'))
+	print(match.group('addr'))
 
 # 字符串中查找email
 # email_info = "Hey guy, my email address is master@liwenzhou.com, send mail to me!"
