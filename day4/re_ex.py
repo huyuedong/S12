@@ -92,10 +92,11 @@ contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
 # else:
 # 	print("error")
 
-match = re.search(r'(?P<name>\.+),(?P<addr>\.+):', contactInfo)
+match = re.search(r'(?P<name>.+), (?P<addr>.+): (?P<tel>\S+)', contactInfo)
 if match:
 	print(match.group('name'))
 	print(match.group('addr'))
+	print(match.group('tel'))
 
 # 字符串中查找email
 # email_info = "Hey guy, my email address is master@liwenzhou.com, send mail to me!"
