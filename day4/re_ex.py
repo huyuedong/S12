@@ -81,7 +81,7 @@ import re
 
 
 # 分组匹配
-contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
+# contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
 # match = re.search(r'(.+), (.+): (\S+)', contactInfo)
 # if match:
 # 	print("get it!")
@@ -91,12 +91,14 @@ contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
 # 	print(match.group(3))   # group(3)指的是第3个子串
 # else:
 # 	print("error")
-
+contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
 match = re.search(r'(?P<name>.+), (?P<addr>.+): (?P<tel>\S+)', contactInfo)
 if match:
 	print(match.group('name'))
 	print(match.group('addr'))
 	print(match.group('tel'))
+else:
+	print("error")
 
 # 字符串中查找email
 # email_info = "Hey guy, my email address is master@liwenzhou.com, send mail to me!"
