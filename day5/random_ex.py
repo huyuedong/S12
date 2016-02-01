@@ -4,11 +4,11 @@
 
 import random
 
-print(random.random())
+print(random.random())  # 输出=>0.10518206284945941
 # 包含边界
-print(random.randint(1, 3))
+print(random.randint(1, 3))    # 输出=>2
 # 不包含边界
-print(random.randrange(1, 3))
+print(random.randrange(1, 3))   # 输出=>1
 
 # 生成4位随机验证码
 check_code = ""
@@ -20,4 +20,4 @@ for i in range(4):
 		temp = random.randint(0, 9)
 	check_code = "{}{}".format(check_code, temp)
 
-print(check_code)
+print(check_code)   # 输出=>oovf
