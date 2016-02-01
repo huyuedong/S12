@@ -47,6 +47,7 @@ print(datetime.date.fromtimestamp(time.time() - 86640))    # 输出=>2016-01-31
 
 current_time = datetime.datetime.now()
 print(current_time)    # 输出=>2016-02-01 14:01:02.428880
+
 # 返回struct_time格式的时间
 print(current_time.timetuple())
 # time.struct_time(tm_year=2016, tm_mon=2, tm_mday=1, tm_hour=14, tm_min=1, tm_sec=41, tm_wday=0, tm_yday=32, tm_isdst=-1)
