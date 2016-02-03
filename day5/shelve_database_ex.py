@@ -15,11 +15,12 @@ def store_person(db):
     Query user for data and store it in the shelf object
     """
     pid = input('Enter unique ID number: ')
-    person = {}
-    person['name'] = input('Enter name: ')
-    person['age'] = input('Enter age: ')
-    person['phone'] = input('Enter phone number: ')
-    db[pid] = person
+    goods = {}
+    goods['name'] = input('Enter trade name: ')
+    goods['info'] = input('Enter trade info: ')
+    goods['price'] = input('Enter price: ')
+    goods['stock'] = input('Enter stock number: ')
+    db[pid] = goods
 
 
 def lookup_person(db):
@@ -48,7 +49,7 @@ def enter_command():
 
 
 def main():
-    database = shelve.open('database.dat')
+    database = shelve.open('trade_db.dat')
     try:
         while True:
             cmd = enter_command()
