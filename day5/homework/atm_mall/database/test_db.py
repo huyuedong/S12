@@ -9,7 +9,7 @@
 import pickle
 import shelve
 
-with open("trade_db.dat", "rb") as f:
+with open("trade_db.dat.dat", "rb") as f:
 	d1 = pickle.load(f)
 	# for k in d1.keys():
 	# 	print(k)
@@ -17,6 +17,6 @@ with open("trade_db.dat", "rb") as f:
 	# 	print(i)
 	print(d1)
 
-# d2 = shelve.open("trade_db.dat")
+# d2 = shelve.open("trade_db.dat.dat")
 # print(d2)
 # d2.close()

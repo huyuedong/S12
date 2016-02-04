@@ -49,7 +49,7 @@ def enter_command():
 
 
 def main():
-    database = shelve.open('trade_db.dat')
+    database = shelve.open('trade_db')
     try:
         while True:
             cmd = enter_command()
