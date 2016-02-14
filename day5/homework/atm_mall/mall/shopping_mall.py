@@ -103,11 +103,10 @@ def get_user_input(level):
 # 主函数
 def main():
 	checkout_flag = False   # 定义一个判断用户是否在购物车界面跳出的flag
-	general_budget = user_budget = get_budget()
 	ordered_shop_dic = init_shop_dic(shop_dic)
 	print_shop_dic(ordered_shop_dic)
 	price_dict = get_price_dict(ordered_shop_dic)
-	while user_budget >= 0 and not checkout_flag:    # 当用户的预算大于等于0时，就一直循环直到用户输入Q结算
+	while not checkout_flag:    # 当用户的预算大于等于0时，就一直循环直到用户输入Q结算
 		option = get_user_input(1)
 		if option == 'P':
 			print("正在打印购物车...")
@@ -115,34 +114,25 @@ def main():
 			print_shopping_cart(ordered_shop_dic)
 			while True:
 				option2 = get_user_input(2)    # 获取用户在购物车界面的输入
-				if option2 == 'B':  # 用户输入B则打印当前余额，并返回购物商城界面
-					print("您当前余额是：%s" % user_budget)
+				if option2 == 'B':  # 用户输入B则返回购物商城界面
 					print_shop_dic(ordered_shop_dic)
 					break
 				elif option2 == 'Q':    # 用户在购物车界面输入Q则结算退出
-					check_out(general_budget, shopping_cart_list, ordered_shop_dic, user_budget)
+					print("此处调用结算功能。。。")
 					checkout_flag = True    # 用户在购物车界面结算时跳出主循环
 					break   # 跳出购物车界面的循环
 				else:
 					print("无效的输入，请重新输入！")
 		elif option == 'Q':    # 如果用户输入Q直接结算退出
-			check_out(general_budget, shopping_cart_list, ordered_shop_dic, user_budget)
+			print("此处调用结算功能。。。")
 			break
 		else:
 			if 0 < option <= len(ordered_shop_dic):   # 判断输入是否为有效数字
-				item_price = int(price_dict[option][1])   # 找到用户选择物品的价格
-				if user_budget - item_price >= 0:   # 判断余额是否能购买所选的商品
-					user_budget -= item_price    # 获取余额
-					object_name = price_dict[option][0]   # 定义物品名称
-					shopping_cart_list.append(object_name)  # 将用户选择的物品名称加入购物车列表
-					print("%s已加入购物车，按P查看购物车，按Q结算退出：" % price_dict[option][0])
-					print("您当前余额：%s" % user_budget)
-					print("\n")
-					print_shop_dic(ordered_shop_dic)
-				else:
-					print("余额不足！")
-					print("您当前余额：%s" % user_budget)
-					print_shop_dic(ordered_shop_dic)
+				object_name = price_dict[option][0]   # 定义物品名称
+				shopping_cart_list.append(object_name)  # 将用户选择的物品名称加入购物车列表
+				print("%s已加入购物车，按P查看购物车，按Q结算退出：" % price_dict[option][0])
+			else:
+				print("无效的输入，请重新输入！")
 
 
 if __name__ == '__main__':

@@ -41,7 +41,7 @@ import datetime
 #
 # # datetime 模块
 #
-# print(datetime.date.today())    # 输出=>2016-02-01
+print(datetime.date.today())    # 输出=>2016-02-01
 #
 # print(datetime.date.fromtimestamp(time.time() - 86640))    # 输出=>2016-01-31
 #
@@ -88,17 +88,17 @@ import datetime
 
 
 # 计息可以用的？
-text_demo = "2015-09-20"
-start_time = datetime.datetime.strptime(text_demo, "%Y-%m-%d")
-now_time = datetime.datetime.now()
-
-day_num = now_time - start_time
-print(day_num.days)
-print(type(day_num.days))
-
-get_money = 0.0005 * 10000 * day_num.days
-
-print("应收利息：{}元".format(get_money))
+# text_demo = "2015-09-20"
+# start_time = datetime.datetime.strptime(text_demo, "%Y-%m-%d")
+# now_time = datetime.datetime.now()
+#
+# day_num = now_time - start_time
+# print(day_num.days)
+# print(type(day_num.days))
+#
+# get_money = 0.0005 * 10000 * day_num.days
+#
+# print("应收利息：{}元".format(get_money))
 
 
 
