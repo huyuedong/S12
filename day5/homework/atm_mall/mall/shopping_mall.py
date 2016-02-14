@@ -13,17 +13,6 @@ shop_dic = {"MacBook Air": 7999, "Starbucks Coffee": 33, "iphone 6 Plus": 6188, 
 shopping_cart_list = []
 
 
-# 获取用户的预算
-def get_budget():
-	while True:
-		user_budget = input("请输入您的预算：").strip()    # 获取用户输入的预算
-		if user_budget.isdigit():
-			user_budget = int(user_budget)
-			return user_budget
-		else:
-			print("无效的输入请重新输入！")
-
-
 # 初始化商品目录
 def init_shop_dic(dic):
 	print("Welcome to Q1mi's shopping mall,below are the things we are selling:")
@@ -48,10 +37,9 @@ def get_price_dict(dic):
 
 
 # 结算
-def check_out(general_budget, cart_list, ord_dic, remain_budget):
+def check_out(cart_list, ord_dic):
 	print("正在结算，请稍后...")
 	print("=" * 75)
-	print("您的预算总额是：%60s" % general_budget)    # 打印用户最开始输入的预算
 	print("-" * 75)
 	print("购物清单：".center(75))
 	print("-" * 75)
@@ -60,7 +48,6 @@ def check_out(general_budget, cart_list, ord_dic, remain_budget):
 		print("商品名称：%-20s 数量：%-10s 单价：%8s 总价：%8s" % (
 			key, shopping_cart_count[key], ord_dic[key], ord_dic[key] * shopping_cart_count[key]))
 	print("-" * 75)
-	print("您的余额：%66s" % remain_budget)
 	print("=" * 75)
 	print("谢谢惠顾！".center(75))
 
