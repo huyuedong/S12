@@ -9,17 +9,6 @@
 import pickle
 import datetime
 
-# with open("trade_db.dat.dat", "rb") as f:
-# 	d1 = pickle.load(f)
-# 	# for k in d1.keys():
-# 	# 	print(k)
-# 	# for i in d1:
-# 	# 	print(i)
-# 	print(d1)
-
-# d2 = shelve.open("trade_db.dat.dat")
-# print(d2)
-# d2.close()
 
 info = {
 	"88888881":
