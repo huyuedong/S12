@@ -56,7 +56,7 @@ def add_card_account(db):
 		db_demo[card_id] = {}
 		card_name = input("请输入卡主姓名：").strip()
 		card_limit = input("请输入卡片额度：").strip()
-		bool_a = re.match(r'^[a-zA-Z.]{4,26}$', card_name)
+		bool_a = re.match(r'^[a-zA-Z.\u4e00-\u9fa5]{1,26}$', card_name)
 		bool_b = re.match(r'^\d{1,8}$', card_limit)
 		if all([bool_a, bool_b]):
 			db_demo[card_id]["name"] = card_name
