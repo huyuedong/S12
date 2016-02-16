@@ -12,6 +12,7 @@
 """
 
 import datetime
+import re
 
 
 # 查询菜单
@@ -21,10 +22,10 @@ def check_info(card_id, db):
 		option = input("1查询额度，2查询账单，Q退出！：").strip()
 		if option == "1":
 			print("查询额度。。。")
-			print("您总额度为：{}，当前额度：{}，取现额度：{}".format(db[card_id]["limit"], db[card_id]["current_limit"], db[card_id]["cash_limit"]))
+			print("您总额度为：{:.2f}，当前额度：{:.2f}，取现额度：{:.2f}".format(db[card_id]["limit"], db[card_id]["current_limit"], db[card_id]["cash_limit"]))
 		elif option == "2":
 			print("查询账单。。。")
-			print("您当前的账单为：{}".format(db[card_id]["bill"]))
+			print("您当前的账单为：{:.2f}".format(db[card_id]["bill"]))
 		elif option.upper() == "Q":
 			break
 		else:
@@ -40,19 +41,21 @@ def repay_bill(card_id, db):
 		if option == "1":
 			while loop_flag:
 				bill = db[card_id]["bill"]
-				print("您当前账单为：{}".format(bill))
+				print("您当前账单为：{:.2f}".format(bill))
 				option2 = input("请输入您要还款的金额：").strip()
-				if option2.isdigit():
-					if int(option2) > int(bill):
+				if re.match(r'^\d+\.?\d{1,2}$', option2):
+					option2 = float(option2)
+					if option2 > float(bill):
 						while loop_flag:
-							print("多余的钱也没有利息哦~")
 							# 用临时变量存储
 							bill_temp = 0
-							current_limit_demo = int(option2) - int(bill)
-							option3 = input("你账单：{}，本次还款：{}，1确认，B返回，Q退出：".format(bill, option2))
+							balance_temp = option2 - float(bill)    # 多的钱存入余额
+							current_limit_add_temp = option2 - float(bill)   # 余额也算到当前额度里
+							option3 = input("你账单：{:.2f}元，本次还款：{:.2f}元，1确认，B返回，Q退出：".format(bill, option2)).strip()
 							if option3 == "1":
-								db[card_id]["bill"] = bill_temp
-								db[card_id]["current_limit"] = current_limit_demo
+								db[card_id]["bill"] = bill_temp    # 还完后账单清零
+								db[card_id]["balance"] = balance_temp   # 余额
+								db[card_id]["current_limit"] += current_limit_add_temp  # 当前额度
 								return db
 							elif option3.upper() == "B":
 								break
@@ -60,12 +63,12 @@ def repay_bill(card_id, db):
 								return db
 							else:
 								print("无效的输入，请重新输入！")
-					elif int(option2) == 0:
+					elif option2 == 0:
 						print("别逗了，你丫根本没放钱进来。。。")
 					else:
 						while loop_flag:
-							bill_temp = bill - int(option2)
-							print("你本次还款：{}元，剩余账单：{}元".format(option2, bill_temp))
+							bill_temp = bill - float(option2)
+							print("你本次还款：{:.2f}元，剩余账单：{:.2f}元".format(option2, bill_temp))
 							option4 = input("1确认还款，B返回，Q退出：")
 							if option4 == "1":
 								db[card_id]["bill"] = bill_temp
@@ -83,7 +86,7 @@ def repay_bill(card_id, db):
 				else:
 					print("无效的输入，请重新输入！")
 		elif option == "2":
-			pass
+			pass    # 功能类似于转账，此处略。。。
 		elif option.upper() == "Q":
 			return db
 		else:
@@ -91,8 +94,56 @@ def repay_bill(card_id, db):
 
 
 # 转账
-def transfer_accounts(db):
+def transfer_accounts(card_id, db):
 	print("这是转账菜单。。。")
+	loop_flag = True
+	while loop_flag:
+		card_id_1 = input("请输入卡号，Q退出：").strip()
+		card_id_2 = input("请再次输入卡号：").strip()
+		bool_a = card_id_1 == card_id_2
+		bool_b = card_id_1.isdigit()
+		bool_c = card_id_2.isdigit()
+		bool_d = db.get(card_id_2)  # 暂时只支持同行转账
+		if all([bool_a, bool_b, bool_c, bool_d]):
+			transfer_card_id = card_id_1
+			if transfer_card_id != card_id:
+				while loop_flag:
+					print("您当前余额：{:.2f}元。".format(db[card_id]["balance"]))
+					print("您要转账的卡号是：{}".format(transfer_card_id))
+					transfer_amount = input("请输入要转账的金额，B返回Q退出：").strip()
+					if transfer_amount.upper() == "B":
+						break
+					elif transfer_amount.upper() == "Q":
+						return db
+					elif transfer_amount.isdigit():
+						# 要转账 金额肯定要大于0
+						if float(transfer_amount) > 0:
+							if db[card_id]["balance"] >= float(transfer_amount):
+								print("您要向{}账户转账{:.2f}元。。。".format(transfer_card_id, float(transfer_amount)))
+								while loop_flag:
+									option = input("1确认，B返回，Q退出！").strip()
+									if option == "1":
+										db[card_id]["balance"] -= float(transfer_amount)  # 从自己卡的余额里减掉转账的金额
+										db[transfer_card_id]["balance"] += float(transfer_amount)    # 把转账的金额加到对方卡的余额
+										return db
+									elif option.upper() == "B":
+										break
+									elif option.upper() == "Q":
+										return db
+									else:
+										print("无效的输入，请重新输入！")
+							else:
+								print("您的余额不足，请充值后再试！")
+						else:
+							print("别捣乱。。。")
+					else:
+						print("无效的输入，请重新输入！")
+			else:
+				print("自己不能给自己转账。。。")
+		elif card_id_1.upper() == "Q":
+			return db
+		else:
+			print("两次输入的卡号不一致或卡号有误，请重新输入！")
 
 
 # 提现
@@ -108,13 +159,15 @@ def change_password():
 info = {
 	"88888881":
 		{"name": "alex", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 20000,
-			"cash_limit": 10000, "current_limit": 20000, "bill": 8888, "retry_count": 0, "created_date": datetime.date(2016, 2, 1)},
+			"cash_limit": 10000, "current_limit": 20000, "bill": 8888, "balance": 1000, "retry_count": 0, "created_date": datetime.date(2016, 2, 1)},
 	"88888882":
 		{"name": "john", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 10000,
-			"cash_limit": 5000, "current_limit": 10000, "bill": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 2)},
+			"cash_limit": 5000, "current_limit": 10000, "bill": 0, "balance": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 2)},
 }
 
 # check_info("88888881", info)
-a = repay_bill("88888881", info)
-for i in a:
-	print(a[i])
+# a = repay_bill("88888881", info)
+# a = transfer_accounts("88888881", info)
+#
+# for i in a:
+# 	print(a[i])

@@ -66,6 +66,7 @@ def add_card_account(db):
 			db_demo[card_id]["lock_flag"] = 0
 			db_demo[card_id]["password"] = "b8b28fcfe009057f2ef7362b1e91fe7a"
 			db_demo[card_id]["bill"] = 0
+			db_demo[card_id]["balance"] = 0
 			db_demo[card_id]["retry_count"] = 0
 			db_demo[card_id]["created_date"] = datetime.date.today()
 			while True:

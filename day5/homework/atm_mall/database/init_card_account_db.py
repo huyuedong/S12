@@ -13,10 +13,10 @@ import datetime
 info = {
 	"88888881":
 		{"name": "alex", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 20000,
-			"cash_limit": 10000, "current_limit": 20000, "bill": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 1)},
+			"cash_limit": 10000, "current_limit": 20000, "bill": 0, "balance": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 1)},
 	"88888882":
 		{"name": "john", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 10000,
-			"cash_limit": 5000, "current_limit": 10000, "bill": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 2)},
+			"cash_limit": 5000, "current_limit": 10000, "bill": 0, "balance": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 2)},
 }
 
 db_file = "card_account.db"
