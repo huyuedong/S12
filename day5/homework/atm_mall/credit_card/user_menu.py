@@ -13,6 +13,13 @@
 
 import datetime
 import re
+import os
+import sys
+
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(base_dir)
+
+from general_module import md5_encryption
 
 
 # 查询菜单
@@ -147,13 +154,67 @@ def transfer_accounts(card_id, db):
 
 
 # 提现
-def enchashment(db):
+def enchashment(card_id, db):
 	print("这是取现的菜单。。。")
+	while True:
+		print("您目前的取现额度是：{:.2f}元".format(db[card_id]["cash_limit"]))
+		cash_amount = input("请输入金额（100的整数），手续费5%，Q退出：").strip()
+		if cash_amount.isdigit():
+			cash_amount = float(cash_amount)
+			if cash_amount % 100 == 0:
+				handle_charge = cash_amount * 0.05
+				print("您此次取款：{:.2f}元，手续费：{:.2f}元。".format(cash_amount, handle_charge))
+				all_amount = cash_amount + handle_charge
+				while True:
+					option = input("1确认，B返回，Q退出").strip()
+					if option == "1":
+						db[card_id]["limit"] -= all_amount
+						db[card_id]["cash_limit"] -= all_amount
+						db[card_id]["current_limit"] -= all_amount
+						db[card_id]["bill"] += all_amount
+						return db
+					elif option.upper() == "B":
+						break
+					elif option.upper() == "Q":
+						return db
+			else:
+				print("无效输入，请重新输入！")
+		elif cash_amount.upper() == "Q":
+			return db
+		else:
+			print("无效的输入，请重新输入！")
 
 
 # 修改密码
-def change_password():
+def change_password(card_id, db):
 	print("这是修改密码的菜单。。。")
+	# 输入原密码次数是否应该有限制？
+	while True:
+		password = input("请输入原密码，Q退出：").strip()
+		if md5_encryption.md5_encryption(password) == db[card_id]["password"]:
+			new_password_1 = input("请输入新密码：").strip()
+			new_password_2 = input("请再次输入新密码：").strip()
+			bool_a = new_password_1 == new_password_2
+			bool_b = new_password_1.isdigit()
+			bool_c = len(new_password_1) == 6
+			if all([bool_a, bool_b, bool_c]):
+				new_password = new_password_1
+				while True:
+					option = input("1确认，B返回，Q退出：").strip()
+					if option == "1":
+						db[card_id]["password"] = md5_encryption.md5_encryption(new_password)
+						print("密码修改完成！")
+						return db
+					elif option.upper() == "B":
+						break
+					elif option.upper() == "Q":
+						return db
+			else:
+				print("两次密码不一致，或输入的密码不是6位数字！")
+		elif password.upper() == "Q":
+			return db
+		else:
+			print("密码错误，请重试！")
 
 
 info = {
@@ -168,6 +229,8 @@ info = {
 # check_info("88888881", info)
 # a = repay_bill("88888881", info)
 # a = transfer_accounts("88888881", info)
-#
-# for i in a:
-# 	print(a[i])
+# a = enchashment("88888881", info)
+a = change_password("88888881", info)
+
+for i in a:
+	print(a[i])
