@@ -21,7 +21,7 @@ def transaction_record(card_id, description, rmb_amount,):
 		record_id = str(float(time.time()))    # 生成一个流水号
 		info = {record_id: {}}
 		info[record_id]["card_id"] = card_id
-		info[record_id]["tran_date"] = time.strftime("%y-%m-%d %H:%M:%S", time.gmtime())
+		info[record_id]["tran_date"] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 		info[record_id]["description"] = description
 		info[record_id]["rmb_amount"] = rmb_amount
 		with open(file_name, "a") as fp:

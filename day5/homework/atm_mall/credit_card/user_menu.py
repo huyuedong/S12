@@ -15,6 +15,7 @@ import datetime
 import re
 import os
 import sys
+import json
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_dir)
@@ -37,6 +38,58 @@ def check_info(card_id, db):
 			break
 		else:
 			print("无效的输入，请重新输入！")
+
+
+# 查询消费流水
+def check_tran_record(card_id):
+	print("这是查询消费流水的菜单。。。")
+	start_date_str = input("请输入开始时间(格式：%Y-%m-%d)：")
+	end_date_str = input("请输入结束时间(格式：%Y-%m-%d)：")
+	try:
+		# 将字符串格式的时间转换为日期格式
+		start_date = datetime.datetime.strptime(start_date_str, "%Y-%m-%d")
+		end_date = datetime.datetime.strptime(end_date_str, "%Y-%m-%d")
+		# 定义消费记录数据库位置
+		base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		file_name = "{}\\database\\record.db".format(base_path)
+		with open(file_name, "r") as f:
+			for line in f:
+				# 按行读取字典
+				d_temp = json.loads(line)
+				# 按流水号检索
+				for k in d_temp:
+					if d_temp[k]["card_id"] == card_id:
+						record_temp = d_temp[k]["tran_date"]
+						print("{}至{}的消费流水如下：".format(start_date_str, end_date_str))
+						if start_date <= record_temp <= end_date:
+							print("交易时间：{} 交易详情：{} 交易金额：{} 卡号：{} 交易流水号：{}".format(
+									d_temp[k]["tran_date"]), d_temp[k]["description"], d_temp[k]["rmb_amount"], d_temp[k]["card_id"], k)
+	except ValueError:
+		return None
+
+
+# 账单详情
+def show_record():
+	print("这是计算账单的功能。。。")
+	# 将字符串格式的时间转换为日期格式
+	start_date = datetime.datetime.strptime(start_date_str, "%Y-%m-%d")
+	end_date = datetime.datetime.strptime(end_date_str, "%Y-%m-%d")
+	# 定义消费记录数据库位置
+	base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	file_name = "{}\\database\\record.db".format(base_path)
+	with open(file_name, "r") as f:
+		for line in f:
+			# 按行读取字典
+			d_temp = json.loads(line)
+			# 按流水号检索
+			for k in d_temp:
+				if d_temp[k]["card_id"] == card_id:
+					record_temp = d_temp[k]["tran_date"]
+					print("{}至{}的消费流水如下：".format(start_date_str, end_date_str))
+					if start_date <= record_temp <= end_date:
+						print("交易时间：{} 交易详情：{} 交易金额：{} 卡号：{} 交易流水号：{}".format(
+								d_temp[k]["tran_date"]), d_temp[k]["description"], d_temp[k]["rmb_amount"], d_temp[k]["card_id"], k)
+
 
 
 # 还款

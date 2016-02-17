@@ -60,9 +60,9 @@ def add_card_account(db):
 		if all([(bool_a or bool_b), bool_c]):
 			# 初始化用户信息
 			db_demo[card_id]["name"] = card_name
-			db_demo[card_id]["limit"] = int(card_limit)
-			db_demo[card_id]["current_limit"] = int(card_limit)
-			db_demo[card_id]["cash_limit"] = int(db_demo[card_id]["current_limit"] * 0.5)
+			db_demo[card_id]["limit"] = float(card_limit)
+			db_demo[card_id]["current_limit"] = float(card_limit)
+			db_demo[card_id]["cash_limit"] = float(db_demo[card_id]["current_limit"] * 0.5)
 			db_demo[card_id]["lock_flag"] = 0
 			db_demo[card_id]["password"] = "b8b28fcfe009057f2ef7362b1e91fe7a"
 			db_demo[card_id]["bill"] = 0

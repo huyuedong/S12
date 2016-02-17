@@ -20,7 +20,7 @@ from general_module import md5_encryption
 
 # 用户注册
 def user_register():
-	db_file_tmp = "{}/database/account.db".format(os.path.dirname(os.path.dirname(__file__)))
+	db_file_tmp = "{}\database\account.db".format(os.path.dirname(os.path.dirname(__file__)))
 	db_file = os.path.abspath(db_file_tmp)
 	# 读取用户数据库信息
 	info = db_operater.read_db(db_file)
