@@ -41,10 +41,10 @@ def check_info(card_id, db):
 
 
 # 查询消费流水
-def check_tran_record(card_id):
+def check_tran_record(card_id, start_date_str, end_date_str):
 	print("这是查询消费流水的菜单。。。")
-	start_date_str = input("请输入开始时间(格式：%Y-%m-%d)：")
-	end_date_str = input("请输入结束时间(格式：%Y-%m-%d)：")
+	# start_date_str = input("请输入开始时间(格式：%Y-%m-%d)：")
+	# end_date_str = input("请输入结束时间(格式：%Y-%m-%d)：")
 	try:
 		# 将字符串格式的时间转换为日期格式
 		start_date = datetime.datetime.strptime(start_date_str, "%Y-%m-%d")
@@ -52,6 +52,7 @@ def check_tran_record(card_id):
 		# 定义消费记录数据库位置
 		base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 		file_name = "{}\\database\\record.db".format(base_path)
+		print("{}至{}的消费流水如下：".format(start_date_str, end_date_str))
 		with open(file_name, "r") as f:
 			for line in f:
 				# 按行读取字典
@@ -60,7 +61,6 @@ def check_tran_record(card_id):
 				for k in d_temp:
 					if d_temp[k]["card_id"] == card_id:
 						record_temp = d_temp[k]["tran_date"]
-						print("{}至{}的消费流水如下：".format(start_date_str, end_date_str))
 						if start_date <= record_temp <= end_date:
 							print("交易时间：{} 交易详情：{} 交易金额：{} 卡号：{} 交易流水号：{}".format(
 									d_temp[k]["tran_date"]), d_temp[k]["description"], d_temp[k]["rmb_amount"], d_temp[k]["card_id"], k)
@@ -68,28 +68,25 @@ def check_tran_record(card_id):
 		return None
 
 
-# 账单详情
-def show_record():
+# 账单详情:上个月22号到这个月21号的消费流水
+def show_record(card_id):
 	print("这是计算账单的功能。。。")
 	# 将字符串格式的时间转换为日期格式
-	start_date = datetime.datetime.strptime(start_date_str, "%Y-%m-%d")
-	end_date = datetime.datetime.strptime(end_date_str, "%Y-%m-%d")
-	# 定义消费记录数据库位置
-	base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-	file_name = "{}\\database\\record.db".format(base_path)
-	with open(file_name, "r") as f:
-		for line in f:
-			# 按行读取字典
-			d_temp = json.loads(line)
-			# 按流水号检索
-			for k in d_temp:
-				if d_temp[k]["card_id"] == card_id:
-					record_temp = d_temp[k]["tran_date"]
-					print("{}至{}的消费流水如下：".format(start_date_str, end_date_str))
-					if start_date <= record_temp <= end_date:
-						print("交易时间：{} 交易详情：{} 交易金额：{} 卡号：{} 交易流水号：{}".format(
-								d_temp[k]["tran_date"]), d_temp[k]["description"], d_temp[k]["rmb_amount"], d_temp[k]["card_id"], k)
-
+	today = datetime.date.today().timetuple()
+	cur_year = today.tm_year
+	cur_mon = today.tm_mon
+	cur_day = today.tm_mday
+	if cur_day >= 22:
+		print("您本月账单已出。。。")
+		last_mon = datetime.date(cur_year, cur_mon, 1) - datetime.timedelta(days=1)
+		last_tm_mon = last_mon.timetuple().tm_mon   # 前一个月的月份
+		start_date_str = "{}-{}-{}".format(cur_year, last_tm_mon, 22)
+		end_date_str = "{}-{}-{}".format(cur_year, cur_mon, 21)
+		# 调用查询流水的菜单
+		print("您本期账单{}至{}交易详情：".format(start_date_str, end_date_str))
+		check_tran_record(card_id, start_date_str, end_date_str)
+	else:
+		print("您本月账单还没出。。。")
 
 
 # 还款
