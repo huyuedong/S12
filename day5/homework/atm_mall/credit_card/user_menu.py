@@ -24,8 +24,8 @@ from conf import setting
 from general_module import db_operater
 from general_module import md5_encryption
 from general_module import logger
-import transaction_record
-import login
+from . import transaction_record
+from . import login
 
 
 # 信用卡支付接口

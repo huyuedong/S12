@@ -6,8 +6,8 @@
 信用卡的主程序
 """
 
-import admin_menu
-import user_menu
+from . import admin_menu
+from . import user_menu
 
 
 def card_main():
@@ -16,8 +16,10 @@ def card_main():
 	while loop_flag:
 		option = input("1.普通用户登录 2.管理员登录 Q.退出：").strip()
 		if option == "1":
+			print("这是普通用户登录界面：")
 			user_menu.main_body()
 		elif option == "2":
+			print("这是管理员登录界面：")
 			admin_menu.main_body()
 		elif option.upper() == "Q":
 			break

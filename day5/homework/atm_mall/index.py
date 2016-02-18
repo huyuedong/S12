@@ -6,26 +6,23 @@
 主程序
 """
 
-# from credit_card import admin_menu
-# from credit_card import transaction_record
-# from credit_card import user_menu
-# from general_module import db_operater
-# from general_module import logger
-# from general_module import md5_encryption
-from mall import mall_login
-# from mall import mall_register
+# import credit_card
+# import mall
+
+
 from mall import shopping_mall
+from credit_card import card_main
 
 
 def main():
 	loop_flag = True
 	while loop_flag:
-		option = input("1:购物商城 2：ATM 3：退出").strip()
+		option = input("1.购物商城 2.ATM Q.退出：").strip()
 		if option == "1":
 			shopping_mall.main()
 		elif option == "2":
-			pass
-		elif option == "3":
+			card_main.card_main()
+		elif option == "Q":
 			loop_flag = False
 		else:
 			print("无效的输入！")
