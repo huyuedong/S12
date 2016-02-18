@@ -16,13 +16,13 @@ sys.path.append(base_dir)
 from general_module import db_operater
 from general_module import db_operater
 from general_module import md5_encryption
+from conf import setting
 
 
 def mall_login(func):
 	def wrapper():
 		print("想购物，先登录。。。")
-		db_file_tmp = "{}/database/account.db".format(os.path.dirname(os.path.dirname(__file__)))
-		db_file = os.path.abspath(db_file_tmp)
+		db_file = setting.MALL_ACCOUNT_DB
 		info = db_operater.read_db(db_file)
 		for i in info:
 			if info[i]["unlock_date"] <= datetime.date.today():

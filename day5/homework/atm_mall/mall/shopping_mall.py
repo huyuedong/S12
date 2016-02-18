@@ -7,7 +7,6 @@
 """
 
 import os
-import re
 import sys
 from collections import OrderedDict
 from collections import Counter
@@ -15,10 +14,8 @@ from collections import Counter
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_dir)
 
-from general_module import db_operater
-from general_module import db_operater
-from general_module import md5_encryption
-from mall_login import mall_login
+from mall import mall_login
+from credit_card import user_menu
 
 shop_dic = {"MacBook Air": 7999, "Starbucks Coffee": 33, "iphone 6 Plus": 6188, "Air Jordan S.F 4": 888, "Casio": 1799}
 shopping_cart_list = []
@@ -47,44 +44,33 @@ def get_price_dict(dic):
 	return dict(list(zip(index_list, content_list)))  # 字典格式：选项：(物品名称：价格)
 
 
-# 获取总价
-# def get_prices(cart_list, ord_dic):
-# 	print("正在结算，请稍后...")
-# 	print("购物清单：".center(75))
-# 	shopping_cart_count = Counter(cart_list)   # Counter统计序列中元素出现的次数
-# 	total_prices = 0
-# 	for key, val in shopping_cart_count.items():    # 打印出用户的购物清单
-# 		print("商品名称：%-20s 数量：%-10s 单价：%8s 总价：%8s" % (
-# 			key, shopping_cart_count[key], ord_dic[key], ord_dic[key] * shopping_cart_count[key]))
-# 		total_prices += ord_dic[key] * shopping_cart_count[key]
-# 	return total_prices
-
-
 # 信用卡支付接口
-def check_out(arg):
-	db_file_tmp = "{}/database/card_account.db".format(os.path.dirname(os.path.dirname(__file__)))
-	db_file = os.path.abspath(db_file_tmp)
-	info = db_operater.read_db(db_file)
-	while True:
-		card_id = input("请输入信用卡卡号（8位数字）：")
-		if re.match(r'^\d{8}$', card_id):
-			if info.get(card_id, None):
-				card_passwd = input("请输入密码：")
-				if md5_encryption.md5_encryption(card_passwd) == info[card_id].get("password", None):
-					if info[card_id]["current_limit"] - arg >= 0:
-						info[card_id]["current_limit"] -= arg
-						print("结算完成！")
-						db_operater.write_db(file=db_file, data=info)
-						break
-					else:
-						print("余额不足！")
-						break
-				else:
-					print("密码错误，请重新输入！")
-			else:
-				print("无效的卡号！请重新输入！")
-		else:
-			print("无效的卡号！请重新输入！")
+# def check_out(arg):
+# 	db_file_tmp = "{}/database/card_account.db".format(os.path.dirname(os.path.dirname(__file__)))
+# 	db_file = os.path.abspath(db_file_tmp)
+# 	info = db_operater.read_db(db_file)
+# 	while True:
+# 		card_id = input("请输入信用卡卡号（8位数字）：").strip()
+# 		if re.match(r'^\d{8}$', card_id):
+# 			if info.get(card_id, None):
+# 				card_passwd = input("请输入密码：")
+# 				if md5_encryption.md5_encryption(card_passwd) == info[card_id].get("password", None):
+# 					if info[card_id]["current_limit"] - arg >= 0:
+# 						info[card_id]["current_limit"] -= arg
+# 						print("结算完成！")
+# 						db_operater.write_db(file=db_file, data=info)
+# 						break
+# 					else:
+# 						print("余额不足！")
+# 						break
+# 				else:
+# 					print("密码错误，请重新输入！")
+# 			else:
+# 				print("无效的卡号！请重新输入！")
+# 		elif card_id == "B":
+# 			break
+# 		else:
+# 			print("无效的输入！请重新输入！")
 
 
 # 打印购物车
@@ -130,7 +116,7 @@ def get_user_input(level):
 
 
 # 主函数
-@mall_login
+@mall_login.mall_login
 def main():
 	checkout_flag = False   # 定义一个判断用户是否在购物车界面跳出的flag
 	ordered_shop_dic = init_shop_dic(shop_dic)
@@ -152,7 +138,7 @@ def main():
 					print("购物清单：".center(75))
 					a = print_shopping_cart(ordered_shop_dic)
 					print("您此次消费总金额是：{}元".format(a))
-					check_out(a)
+					user_menu.check_out(a)
 					checkout_flag = True    # 用户在购物车界面结算时跳出主循环
 					break   # 跳出购物车界面的循环
 				elif option2 == 'Q':

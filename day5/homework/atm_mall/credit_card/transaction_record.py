@@ -32,8 +32,8 @@ def transaction_record(card_id, description, rmb_amount,):
 
 # transaction_record(1, 2, 3)
 
-with open("D:\\GitHub\\S12\day5\\homework\\atm_mall\database\\record.db", "r") as f:
-	for line in f:
-		d_temp = json.loads(line)
-		for k in d_temp:
-			print(k, d_temp[k])
+# with open("D:\\GitHub\\S12\day5\\homework\\atm_mall\database\\record.db", "r") as f:
+# 	for line in f:
+# 		d_temp = json.loads(line)
+# 		for k in d_temp:
+# 			print(k, d_temp[k])

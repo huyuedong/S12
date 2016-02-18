@@ -11,11 +11,23 @@
 """
 import datetime
 import re
+import os
+import sys
+
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(base_dir)
+
+from conf import setting
+from general_module import db_operater
+from general_module import logger
+import login
 
 
 # 调整额度
-def change_limit(db):
+def change_limit(admin_id):
 	print("这是调整额度的菜单。。。")
+	db_file = setting.ACCOUNT_DB
+	db = db_operater.read_db(db_file)
 	loop_flag = True
 	while loop_flag:
 		card_number = input("请输入要操作的卡号（Q退出）：").strip()
@@ -28,27 +40,33 @@ def change_limit(db):
 					if option2 == "1":
 						db[card_number]["limit"] = int(option)
 						print("卡号{}的额度修改为{}。".format(card_number, db[card_number]["limit"]))
-						return db
+						logger.my_logger(card_number, "额度被管理员{}调整为{}。".format(admin_id, db[card_number]["limit"]))
+						db_operater.write_db(file=db_file, data=db)
 					elif option2.upper() == "B":
 						break
 					elif option2.uooer() == "Q":
-						return db
+						loop_flag = False
+						break
 				elif option.upper() == "B":
 					break
 				elif option.upper() == "Q":
-					return db
+					loop_flag = False
+					break
 				else:
 					print("无效的输入，请重新输入！")
 		elif card_number.upper() == "Q":
-			return db
+			break
 		else:
 			print("卡号不存在请重新输入！")
 
 
 # 添加账户
-def add_card_account(db):
+def add_card_account(admin_id):
 	print("这是添加信用卡账户的菜单。。。")
-	while True:
+	db_file = setting.ACCOUNT_DB
+	db = db_operater.read_db(db_file)
+	loop_flag = True
+	while loop_flag:
 		db_demo = {}
 		card_id = format(len(db)+1, "8=8")  # 生成一个8位的卡号
 		db_demo[card_id] = {}
@@ -69,28 +87,32 @@ def add_card_account(db):
 			db_demo[card_id]["balance"] = 0
 			db_demo[card_id]["retry_count"] = 0
 			db_demo[card_id]["created_date"] = datetime.date.today()
-			while True:
+			while loop_flag:
 				option = input("确认添加按1，B返回Q退出：")
 				if option == "1":
 					print("正在添加。。。")
 					db.update(db_demo)  # 更新数据
 					print("添加完成！")
-					return db
+					logger.my_logger("管理员{}", "添加账户，卡号：{}".format(admin_id, card_id))
+					db_operater.write_db(file=db_file, data=db)
 				elif option.upper() == "B":
 					break
 				elif option.upper() == "Q":
-					return db
+					loop_flag = False
+					break
 				else:
 					print("无效的输入，请重新输入！")
 		elif card_name.upper() == "Q":
-			return db
+			break
 		else:
 			print("无效的输入，请重新输入！")
 
 
 # 冻结账户
-def frozen_account(db):
+def frozen_account(admin_id):
 	print("这是冻结账户菜单。。。")
+	db_file = setting.ACCOUNT_DB
+	db = db_operater.read_db(db_file)
 	loop_flag = True
 	while loop_flag:
 		card_number = input("请输入要冻结的卡号（Q退出）：").strip()
@@ -100,55 +122,92 @@ def frozen_account(db):
 				option = input("确认冻结按1，B返回，Q退出：").strip()
 				if option == "1":
 					db[card_number]["lock_flag"] = 1
-					return db
+					logger.my_logger(card_number, "被管理员{}冻结".format(admin_id))
+					db_operater.write_db(file=db_file, data=db)
 				elif option.upper() == "B":
 					break
 				elif option.upper() == "Q":
-					return db
+					loop_flag = False
+					break
 				else:
 					print("无效的输入，请重新输入！")
 		elif card_number.upper() == "Q":
-			return db
+			break
 		else:
 			print("卡号不存在，请重新输入！")
 
 
 # 重置密码
-def reset_password(db):
+def reset_password(admin_id):
 	print("这是重置密码菜单。。。")
-	while True:
+	db_file = setting.ACCOUNT_DB
+	db = db_operater.read_db(db_file)
+	loop_flag = True
+	while loop_flag:
 		card_number = input("请输入要重置密码的卡号,Q退出：").strip()
 		if card_number.upper() == "Q":
-			return db
+			break
 		elif all([card_number.isdigit(), db.get(card_number)]):
-			while True:
+			while loop_flag:
 				option = input("您要重置密码的卡号为{},用户名为{}，1确认，B返回，Q退出！".format(card_number, db[card_number]["name"]))
 				if option == "1":
 					db[card_number]["password"] = "b8b28fcfe009057f2ef7362b1e91fe7a"
 					print("卡号：{}的密码已重置为初始密码！".format(card_number))
-					return db
+					logger.my_logger(card_number, "被管理员{}重置为初始密码。".format(admin_id))
+					db_operater.write_db(file=db_file, data=db)
 				elif option.upper() == "B":
 					break
 				elif option.upper() == "Q":
-					return db
+					loop_flag = False
+					break
 				else:
 					print("无效的输入，请重新输入！")
 		else:
 			print("无效的输入，请重新输入！")
 
-info = {
-	"88888881":
-		{"name": "alex", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 20000,
-			"cash_limit": 10000, "current_limit": 20000, "bill": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 1)},
-	"88888882":
-		{"name": "john", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 10000,
-			"cash_limit": 5000, "current_limit": 10000, "bill": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 2)},
-}
 
-a = change_limit(info)
+# 管理员界面
+@login.login(2)
+def main_body(admin_id):
+	print("欢迎来到管理员操作界面！")
+	loop_flag = True
+	while loop_flag:
+		option = input("1.调整额度 2.添加账户 3.冻结账户 4.重置密码 Q.退出：").strip()
+		if option == "1":
+			change_limit(admin_id)
+		elif option == "2":
+			add_card_account(admin_id)
+		elif option == "3":
+			frozen_account(admin_id)
+		elif option == "4":
+			reset_password(admin_id)
+		elif option.upper() == "Q":
+			loop_flag = False
+		else:
+			print("无效的输入！")
+
+
+def main():
+	main_body()
+
+
+if __name__ == "__main__":
+	main()
+
+
+# info = {
+# 	"88888881":
+# 		{"name": "alex", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 20000,
+# 			"cash_limit": 10000, "current_limit": 20000, "bill": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 1)},
+# 	"88888882":
+# 		{"name": "john", "lock_flag": 0, "password": "b8b28fcfe009057f2ef7362b1e91fe7a", "limit": 10000,
+# 			"cash_limit": 5000, "current_limit": 10000, "bill": 0, "retry_count": 0, "created_date": datetime.date(2016, 2, 2)},
+# }
+
+# a = change_limit(info)
 # a = add_card_account(info)
 # a = frozen_account(info)
 # a = reset_password(info)
-
-for i in a:
-	print(a[i])
+#
+# for i in a:
+# 	print(a[i])
