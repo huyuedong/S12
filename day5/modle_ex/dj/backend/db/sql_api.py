@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # __author__ = "Q1mi"
 
-from config import settings
+from ...config import settings
 
 
-def db_auth(configs):
-	if configs.DATABASE["user"] == "root" and configs.DATABASE["password"] == "123":
+def db_auth(db):
+	if db["user"] == "root" and db["password"] == "123":
 		print("OK!")
 		return True
 	else:
@@ -14,7 +14,7 @@ def db_auth(configs):
 
 
 def select(table, column):
-	if db_auth(settings):
+	if db_auth(settings.DATABASE):
 		if table == "user":
 			user_info = {
 				"001": ["alex", 22, "ceo"],

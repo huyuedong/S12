@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # __author__ = "Q1mi"
 
-from backend.db.sql_api import select
+from ..db.sql_api import select
 
 
 def home():
