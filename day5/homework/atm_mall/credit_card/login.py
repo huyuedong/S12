@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 # __author__ = "Q1mi"
 
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import setting
 from general_module import db_operater
 from general_module import md5_encryption

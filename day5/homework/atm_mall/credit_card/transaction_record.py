@@ -9,13 +9,14 @@
 import os
 import time
 import json
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from conf import setting
 
 
 # 记录消费记录
 def transaction_record(card_id, description, rmb_amount,):
-	base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-	file_name = "{}\\database\\record.db".format(base_path)
-	print(file_name)
+	file_name = setting.RECORD_dB
 	try:
 		rmb_amount = float(rmb_amount)
 		record_id = str(float(time.time()))    # 生成一个流水号

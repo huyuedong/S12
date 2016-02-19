@@ -17,15 +17,15 @@ import os
 import sys
 import json
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(base_dir)
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from conf import setting
 from general_module import db_operater
 from general_module import md5_encryption
 from general_module import logger
-from . import transaction_record
-from . import login
+from credit_card import transaction_record
+from credit_card import login
 
 
 # 信用卡支付接口

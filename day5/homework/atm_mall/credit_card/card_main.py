@@ -6,9 +6,6 @@
 信用卡的主程序
 """
 
-from . import admin_menu
-from . import user_menu
-
 
 def card_main():
 	print("这是ATM登录程序！")

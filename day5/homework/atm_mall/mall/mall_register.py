@@ -5,7 +5,9 @@
 """
 商城注册
 """
-
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import re
 import datetime
 from general_module import db_operater

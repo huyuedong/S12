@@ -11,10 +11,13 @@
 """
 import datetime
 import re
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import setting
 from general_module import db_operater
 from general_module import logger
-from . import login
+import login
 
 
 # 调整额度
