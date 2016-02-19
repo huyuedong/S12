@@ -34,7 +34,7 @@ def change_limit(admin_id):
 					if option2 == "1":
 						db[card_number]["limit"] = int(option)
 						print("卡号{}的额度修改为{}。".format(card_number, db[card_number]["limit"]))
-						logger.my_logger(card_number, "额度被管理员{}调整为{}。".format(admin_id, db[card_number]["limit"]))
+						logger.my_logger(admin_id, "change the limit of card:{} to {}".format(card_number, db[card_number]["limit"]))
 						db_operater.write_db(file=db_file, data=db)
 					elif option2.upper() == "B":
 						break
@@ -87,7 +87,7 @@ def add_card_account(admin_id):
 					print("正在添加。。。")
 					db.update(db_demo)  # 更新数据
 					print("添加完成！")
-					logger.my_logger("管理员{}", "添加账户，卡号：{}".format(admin_id, card_id))
+					logger.my_logger(admin_id, "add a new card:{}.".format(card_id))
 					db_operater.write_db(file=db_file, data=db)
 				elif option.upper() == "B":
 					break
@@ -116,7 +116,7 @@ def frozen_account(admin_id):
 				option = input("确认冻结按1，B返回，Q退出：").strip()
 				if option == "1":
 					db[card_number]["lock_flag"] = 1
-					logger.my_logger(card_number, "被管理员{}冻结".format(admin_id))
+					logger.my_logger(card_number, "frozen by admin:{}".format(admin_id))
 					db_operater.write_db(file=db_file, data=db)
 				elif option.upper() == "B":
 					break
@@ -147,7 +147,7 @@ def reset_password(admin_id):
 				if option == "1":
 					db[card_number]["password"] = "b8b28fcfe009057f2ef7362b1e91fe7a"
 					print("卡号：{}的密码已重置为初始密码！".format(card_number))
-					logger.my_logger(card_number, "被管理员{}重置为初始密码。".format(admin_id))
+					logger.my_logger(card_number, "password reset by admin:{}.".format(admin_id))
 					db_operater.write_db(file=db_file, data=db)
 				elif option.upper() == "B":
 					break
@@ -160,13 +160,31 @@ def reset_password(admin_id):
 			print("无效的输入，请重新输入！")
 
 
+# 查询ATM日志
+def check_log():
+	str_to_date = lambda str_arg: datetime.datetime.strptime(str_arg, "%Y-%m-%d")
+	start_date_str = input("请输入要查询的开始时间，格式：%Y-%m-%d：")
+	end_date_str = input("请输入要查询的结束时间，格式：%Y-%m-%d：")
+	try:
+		start_date = str_to_date(start_date_str)
+		end_date = str_to_date(end_date_str)
+		with open(setting.LOG_ATM, "r") as f:
+			for line in f:
+				str_date = str_to_date(line.split()[0])
+				if start_date < str_date < end_date:
+					print(line.strip())
+	except TypeError:
+		pass
+
+
 # 管理员界面
 @login.login(2)
 def main_body(admin_id):
 	print("欢迎来到管理员操作界面！")
+	logger.my_logger(admin_id, "log in.")
 	loop_flag = True
 	while loop_flag:
-		option = input("1.调整额度 2.添加账户 3.冻结账户 4.重置密码 Q.退出：").strip()
+		option = input("1.调整额度 2.添加账户 3.冻结账户 4.重置密码 5.查询ATM操作日志 Q.退出：").strip()
 		if option == "1":
 			change_limit(admin_id)
 		elif option == "2":
@@ -175,8 +193,11 @@ def main_body(admin_id):
 			frozen_account(admin_id)
 		elif option == "4":
 			reset_password(admin_id)
+		elif option == "5":
+			check_log()
 		elif option.upper() == "Q":
 			loop_flag = False
+			logger.my_logger(admin_id, "log out.")
 		else:
 			print("无效的输入！")
 

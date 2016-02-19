@@ -184,6 +184,7 @@ def repay_bill(card_id):
 								db[card_id]["balance"] = balance_temp   # 余额
 								db[card_id]["current_limit"] += current_limit_add_temp  # 当前额度
 								print("您已成功还款{}元。".format(option3))
+								logger.my_logger(card_id, "repayment {}.".format(option2))
 								db_operater.write_db(file=db_file, data=db)
 							elif option3.upper() == "B":
 								break
@@ -256,6 +257,7 @@ def transfer_accounts(card_id):
 									if option == "1":
 										db[card_id]["balance"] -= float(transfer_amount)  # 从自己卡的余额里减掉转账的金额
 										db[transfer_card_id]["balance"] += float(transfer_amount)    # 把转账的金额加到对方卡的余额
+										logger.my_logger(card_id, "transfer to {} {}.".format(transfer_card_id, float(transfer_amount)))
 										db_operater.write_db(file=db_file, data=db)
 									elif option.upper() == "B":
 										break
@@ -303,6 +305,7 @@ def enchashment(card_id):
 						# 记录交易流水
 						transaction_record.transaction_record(card_id, "取现", cash_amount)
 						transaction_record.transaction_record(card_id, "手续费", handle_charge)
+						logger.my_logger(card_id, "withdrawal {}, handle charge {}.".format(cash_amount, handle_charge))
 						# 回写数据
 						db_operater.write_db(file=db_file, data=db)
 					elif option.upper() == "B":
@@ -339,6 +342,7 @@ def change_password(card_id):
 					option = input("1确认，B返回，Q退出：").strip()
 					if option == "1":
 						db[card_id]["password"] = md5_encryption.md5_encryption(new_password)
+						logger.my_logger(card_id, "change password.")
 						print("密码修改完成！")
 						# 回写数据
 						db_operater.write_db(file=db_file, data=db)
@@ -359,6 +363,7 @@ def change_password(card_id):
 @login.login(1)
 def main_body(card_id):
 	print("这是用户界面：")
+	logger.my_logger(card_id, "log in.")
 	# 先看有没有产生利息。。。
 	get_interest()
 	loop_flag = True
@@ -380,7 +385,7 @@ def main_body(card_id):
 						start_date_str = input("开始日期：").strip()
 						end_date_str = input("结束日期：").strip()
 						a = check_tran_record(card_id, start_date_str, end_date_str)
-						logger.my_logger(card_id, "查询交易流水")
+						logger.my_logger(card_id, "check the transactions flowing water from {} to {}.".format(start_date_str, end_date_str))
 						if not a:
 							break
 				elif option2.upper() == "B":
@@ -401,6 +406,7 @@ def main_body(card_id):
 		elif option == "5":
 			change_password(card_id)
 		elif option.upper() == "Q":
+			logger.my_logger(card_id, "log out.")
 			loop_flag = False
 		else:
 			print("无效的输入！")

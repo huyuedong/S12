@@ -8,6 +8,7 @@
 
 import logging
 import os
+from conf import setting
 
 
 # 记录ATM机操作记录
@@ -18,9 +19,8 @@ def my_logger(name, str, level=logging.INFO):
 	:param str: 信息体
 	:param level:日志级别，默认为INFO
 	"""
-	base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-	atm_log_file = os.path.join(base_path, "database\log.atm")
-	file_name = atm_log_file
-	logging.basicConfig(filename=file_name, level=level, format="%(asctime)s %(message)s", datefmt="%y-%m-%d %H:%M:%S")
+	file_name = setting.LOG_ATM
+	logging.basicConfig(filename=file_name, level=level, format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 	logging.info("{} {}".format(name, str))
 
+my_logger("88888881", "log in.")

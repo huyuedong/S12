@@ -3,6 +3,6 @@
 # __author__ = "Q1mi"
 
 
-with open("log.atm", "r") as f:
+with open("log.atm", "r", encoding="gbk") as f:
 	for line in f:
-		print(line)
+		print(line.strip())

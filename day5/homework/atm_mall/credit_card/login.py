@@ -13,9 +13,10 @@ def login(arg):
 		def wrapper():
 			loop_flag = True
 			while loop_flag:
-				global db
+				# 访问用户数据库
 				if arg == 1:
 					db = db_operater.read_db(setting.ACCOUNT_DB)
+				# 访问管理员数据库
 				elif arg == 2:
 					db = db_operater.read_db(setting.ADMIN_DB)
 				else:
