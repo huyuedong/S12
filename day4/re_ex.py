@@ -49,6 +49,12 @@ import re
 # # new_content = re.split('\*', content, 1)
 # print(new_content)
 
+# re匹配中文，中文Unicode中中文编码为\u4e00-\u9fa5
+contact = "我是中文"
+result = re.match(r'[\u4e00-\u9fa5]{2}', contact)
+if result:
+	print(result.group())   # 输出：我是
+
 
 # # 从字符串中查找手机号码
 # info = "hey my name is alex, and my phone number is 18651054604, please call me if you are pretty!"
@@ -91,14 +97,14 @@ import re
 # 	print(match.group(3))   # group(3)指的是第3个子串
 # else:
 # 	print("error")
-contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
-match = re.search(r'(?P<name>.+), (?P<addr>.+): (?P<tel>\S+)', contactInfo)
-if match:
-	print(match.group('name'))
-	print(match.group('addr'))
-	print(match.group('tel'))
-else:
-	print("error")
+# contactInfo = "Oldboy School, Beijing Changping Shahe: 010-8343245"
+# match = re.search(r'(?P<name>.+), (?P<addr>.+): (?P<tel>\S+)', contactInfo)
+# if match:
+# 	print(match.group('name'))
+# 	print(match.group('addr'))
+# 	print(match.group('tel'))
+# else:
+# 	print("error")
 
 # 字符串中查找email
 # email_info = "Hey guy, my email address is master@liwenzhou.com, send mail to me!"
