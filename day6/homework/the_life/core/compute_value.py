@@ -8,6 +8,7 @@
 
 from conf import setting
 
+
 def compute_value(account_data, action_type, amounts, **others):
 	"""
 	所有操作属性值的行为都使用这个来计算

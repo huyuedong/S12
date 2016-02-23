@@ -7,7 +7,7 @@
 """
 
 
-class DB_Handler(object):
+class DbHandler(object):
 	def __init__(self, conn_params):
 		self.conn_params = conn_params
 
@@ -17,9 +17,11 @@ class DB_Handler(object):
 		:param conn_params: 数据库参数
 		:return:
 		"""
-		db_path = "{}\{}".format(conn_params["path"], conn_params["name"])
+		db_path = "{}\{}".format(self.conn_params["path"], self.conn_params["name"])
 		return db_path
 
 	def handler(self, conn_params):
 		if conn_params["engine"] == "file_storage":
-			return DB_Handler.file_handler(conn_params)
+			return DbHandler.file_handler(self, conn_params)
+		else:
+			pass

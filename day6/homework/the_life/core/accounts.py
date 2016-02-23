@@ -10,12 +10,17 @@ from core import db_handler
 from conf import setting
 
 
-class Accounts(object):
+# 操作数据文件
+class AccountsDb(object):
 	def __init__(self, db_path):
 		self.db_path = db_path
 
 	def db_read(self):
-		pass
+		with open(self.db_path, "rb") as fp:
+			info = pickle.load(fp)
+			return info
 
-	def db_write(self):
-		pass
+	def db_write(self, db_info):
+		with open(self.db_path, "rb") as fp:
+			pickle.dump(db_info, fp)
+		return True

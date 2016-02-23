@@ -8,13 +8,15 @@
 
 import os
 import datetime
+import sys
 
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_PATH)
 
 DATABASE = {
 	'engine': 'file_storage',   # support mysql,PostgreSQL in the future
-	'name': 'accounts',
-	'path': "%s/db" % BASE_PATH
+	'name': 'accounts.db',
+	'path': "{}\db".format(BASE_PATH)
 }
 
 ACTION_TYPE = {
