@@ -15,7 +15,6 @@ sys.path.append(BASE_PATH)
 
 DATABASE = {
 	'engine': 'file_storage',   # support mysql,PostgreSQL in the future
-	'name': 'accounts.db',
 	'path': "{}\db".format(BASE_PATH)
 }
 
@@ -23,7 +22,7 @@ ACTION_TYPE = {
 	"sleep": {"operator": "plus", "attr": "energy", "per_value": 50},
 	"eat": {"operator": "plus", "attr": "power", "per_value": 30},
 	"work": {"operator": "plus", "attr": "money", "per_value": 30},
-	"learn": {"operator": "plus", "attr": "confidence", "per_value": 5},
+	"learn": {"operator": "plus", "attr": "confidence", "per_value": 2},
 	"consume": {"operator": "minus", "attr": "money", "per_value": 1},
 }
 

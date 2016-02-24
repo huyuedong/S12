@@ -7,21 +7,19 @@
 """
 
 
-class DbHandler(object):
-	def __init__(self, conn_params):
-		self.conn_params = conn_params
+def file_handler(conn_params, file_name):
+	"""
+	使用文件存储时返回文件名
+	:param file_name: 文件名
+	:param conn_params: 数据库参数
+	:return: 以存档时间为名的文件
+	"""
+	db_path = "{}\{}".format(conn_params["path"], file_name)
+	return db_path
 
-	def file_handler(self, conn_params):
-		"""
-		使用文件存储时返回文件名
-		:param conn_params: 数据库参数
-		:return:
-		"""
-		db_path = "{}\{}".format(self.conn_params["path"], self.conn_params["name"])
-		return db_path
 
-	def handler(self, conn_params):
-		if conn_params["engine"] == "file_storage":
-			return DbHandler.file_handler(self, conn_params)
-		else:
-			pass
+def handler(conn_params, file_name):
+	if conn_params["engine"] == "file_storage":
+		return file_handler(conn_params, file_name)
+	else:
+		pass
