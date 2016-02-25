@@ -17,6 +17,6 @@ def db_read(db_path):
 
 # 写存档文件
 def db_write(db_path, db_info):
-	with open(db_path, "rb") as fp:
+	with open(db_path, "ab") as fp:
 		pickle.dump(db_info, fp)
 	return True
