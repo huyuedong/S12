@@ -9,9 +9,12 @@
 
 import os
 import sys
+import time
+from collections import OrderedDict
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from core import db_handler
-from core import compute_value
+from core import save_data
+from conf import setting
 
 
 # 定义一个总的角色类
@@ -73,70 +76,172 @@ class Teacher(Role):
 
 # 定义一个玩家的类
 class Player(Role):
-	def __init__(self, name, age, gender, power, energy, money, confidence):
+	def __init__(self, name, age, gender, power, energy, money, confidence, ability):
 		super(Player, self).__init__(name, age, gender)
 		self.power = power
 		self.energy = energy
 		self.money = money
 		self.confidence = confidence
+		self.ability = ability
+
+	# 显示对象属性信息
+	def show_info(self):
+		print(
+			'''
+			名  字：{}
+			年  龄：{}
+			性  别：{}
+			体力值：{}
+			精力值：{}
+			金  钱：{}
+			信心值：{}
+			能力值：{}
+
+			'''.format(self.name, self.age, self.gender, self.power, self.energy, self.money, self.confidence, self.ability))
+
+	# 存档
+	def save_game(self):
+		print("正在存档...")
+		# 生成一个以当前时间为文件名的存档文件
+		file_name = time.strftime('%Y%m%d_%H%M%S', time.gmtime(time.time()))
+		db_path = db_handler.handler(setting.DATABASE, file_name)
+		save_data.db_write(db_path, self)
+		print("存档完成...此次存档文件名为：{}".format(file_name))
 
 	# 睡觉
-	def to_sleep(self, hour):
+	def to_sleep(self):
 		"""
-		睡觉消耗时间，恢复精力值
-		:param hour:
+		睡觉消耗时间，恢复精力
 		:return:
 		"""
-		print("{} 要睡 {} 小时。".format(self.name, hour))
-		print("{} 小时过去了... ")
+		print("{} 睡觉了。".format(self.name))
+		time.sleep(8)
+		self.set_attr("energy", 100)
 
 	# 吃饭
-	def to_eat(self, food):
+	def to_eat(self):
 		"""
-		消耗食物，增加力量值
-		:param food: 食物类型
+		吃饭：花费金钱，增加力量值
 		:return:
 		"""
-		print("{} 正在吃 {}.".format(self.name, food))
-		print("{} 吃完了...")
+		menu_dic = setting.GOODS_TYPE["eat"]
+		option_dic = OrderedDict()
+		for k, v in enumerate(menu_dic, 1):
+			option_dic[str(k)] = v
+		print("食品目录：")
+		for key in option_dic:
+			print("{}: {}".format(key, option_dic[key]))
+		while True:
+			option = input("==>").strip()
+			if option in option_dic:
+				food_name = option_dic[option]
+				money_amount = menu_dic[option_dic[option]]["price"]
+				power_amount = menu_dic[option_dic[option]]["power_amount"]
+				money_value = self.money - money_amount
+				if money_value >= 0:
+					power_value = self.power + power_amount
+					self.set_attr("money", money_value)
+					self.set_attr("power", power_value)
+					print("{} 花了 {} 吃了 {}，体力值变为 {}。".format(self.name, money_amount, food_name, self.power))
+					break
+				else:
+					print("钱不够，赶紧去赚钱吧。。。")
+					break
 
-	def learn(self, course, days=1):
+	def learn(self):
 		"""
-		学习知识，按天增加自信心值
-		:param course: 学的科目
-		:param days: 学习时间
+		学习：花费金钱，消耗精力，增加能力值
 		:return:
 		"""
-		print("{} 正在学习 {}。".format(self.name, course))
-		print("{} 小时过去了。。。".format(days))
+		menu_dic = setting.GOODS_TYPE["learn"]
+		option_dic = OrderedDict()
+		for k, v in enumerate(menu_dic, 1):
+			option_dic[str(k)] = v
+		print("学习科目：")
+		for key in option_dic:
+			print("{}: {}".format(key, option_dic[key]))
+		while True:
+			option = input("==>").strip()
+			if option in option_dic:
+				course_name = option_dic[option]
+				money_amount = menu_dic[option_dic[option]]["price"]
+				energy_amount = menu_dic[option_dic[option]]["energy_amount"]
+				ability_amount = menu_dic[option_dic[option]]["ability_amount"]
+				money_value = self.money - money_amount
+				if money_value >= 0:
+					ability_value = self.ability + ability_amount
+					energy_value = self.energy - energy_amount
+					self.set_attr("money", money_value)
+					self.set_attr("ability", ability_value)
+					self.set_attr("energy", energy_value)
+					print("{} 花了 {} 学了 {}，能力值变为 {}。".format(self.name, money_amount, course_name, self.ability))
+					break
+				else:
+					print("钱不够，赶紧去赚钱吧。。。")
+					break
 
 	# 工作
-	def work(self, days=1):
+	def work(self):
 		"""
-		工作， 按天取得报酬
-		:param days: 工作时间
+		工作：耗费体力值，消耗精力，取得报酬
 		:return:
 		"""
-		print("{} 工作了 {} 天。".format(self.name, days))
-		print("{} 过去了。。。".format(days))
+		menu_dic = setting.GOODS_TYPE["work"]
+		option_dic = OrderedDict()
+		for k, v in enumerate(menu_dic, 1):
+			option_dic[str(k)] = v
+		print("工作种类：")
+		for key in option_dic:
+			print("{}: {}".format(key, option_dic[key]))
+		while True:
+			option = input("==>").strip()
+			if option in option_dic:
+				work_name = option_dic[option]
+				pay_amount = menu_dic[option_dic[option]]["pay"]
+				print("{} 最终找到了一份 {} 的工作， 月薪：{} 元。".format(self.name, work_name, pay_amount))
+				power_amount = menu_dic[option_dic[option]]["power_amount"]
+				energy_amount = menu_dic[option_dic[option]]["energy_amount"]
+				power_value = self.power - power_amount
+				energy_value = self.energy - energy_amount
+				# 体力值大于0，精力值大于10，才能上班赚钱
+				if power_value >= 0 and energy_value >= 10:
+					money_value = self.money + pay_amount
+					self.set_attr("money", money_value)
+					self.set_attr("power", power_value)
+					self.set_attr("energy", energy_value)
+					print("{} 花了 {}体力 上了一个月班，赚了 {} 元，体力值变为 {}。".format(self.name, power_amount, pay_amount, self.power))
+					break
+				else:
+					print("快去吃点东西或者睡一觉吧，别累坏了。")
+					break
 
 	# 消费
-	def consume(self, goods, money):
+	def consume(self):
 		"""
-		花钱，买东西
-		:param goods: 物品名
-		:param money: 钱的数量
+		消费：花费金钱，增加信心值
 		:return:
 		"""
-		print("{} 花了 {:.2f} 元买了 {}。".format(self.name, money, goods))
-
-# a = Teacher("alex", 18, "male", "Python", 10000)
-# b = Player("alex", 18, "male", 100, 100, 50, 50)
-# print(b.confidence)
-# print(b.get_attr("confidence"))
-# b = compute_value.compute_value(b, "learn", 8)
-# print(b.confidence)
-
-
-
+		menu_dic = setting.GOODS_TYPE["consume"]
+		option_dic = OrderedDict()
+		for k, v in enumerate(menu_dic, 1):
+			option_dic[str(k)] = v
+		print("商品名目：")
+		for key in option_dic:
+			print("{}: {}".format(key, option_dic[key]))
+		while True:
+			option = input("==>").strip()
+			if option in option_dic:
+				goods_name = option_dic[option]
+				money_amount = menu_dic[option_dic[option]]["price"]
+				confidence_amount = menu_dic[option_dic[option]]["confidence_amount"]
+				money_value = self.money - money_amount
+				if money_value >= 0:
+					confidence_value = self.confidence + confidence_amount
+					self.set_attr("money", money_value)
+					self.set_attr("confidence", confidence_value)
+					print("{} 花了 {} 买了 {}，信心值变为 {}。".format(self.name, money_amount, goods_name, self.confidence))
+					break
+				else:
+					print("钱不够，赶紧去赚钱吧。。。")
+					break
 
