@@ -30,7 +30,15 @@ class Role(object):
 		try:
 			return object.__getattribute__(self, key)
 		except:
-			return "{}没有找到！".format(key)
+			return "{} 没有找到！".format(key)
+
+	# 说话
+	def say(self, content, action=''):
+		print("{} {} 说：{}".format(self.name, action, content))
+
+	# 想
+	def think(self, content):
+		print("{} 心想：{}".format(self.name, content))
 
 
 # 定义一个boss类
@@ -55,12 +63,12 @@ class Teacher(Role):
 
 	# 收取学费
 	def take_tuition(self):
-		print("收取学费{:.2f}元。".format(self.tuition))
+		print("收取学费{:.2f} 元。".format(self.tuition))
 
 	# 教授知识
 	def teaching(self, hours):
-		print("{}正在交给你{}...".format(self.name, self.course))
-		print("{}小时过后...".format(hours))
+		print("{} 正在教你 {}...".format(self.name, self.course))
+		print("{} 小时过后...".format(hours))
 
 
 # 定义一个玩家的类
@@ -92,7 +100,7 @@ class Player(Role):
 		print("{} 正在吃 {}.".format(self.name, food))
 		print("{} 吃完了...")
 
-	def learn(self, course, days):
+	def learn(self, course, days=1):
 		"""
 		学习知识，按天增加自信心值
 		:param course: 学的科目
@@ -100,7 +108,7 @@ class Player(Role):
 		:return:
 		"""
 		print("{} 正在学习 {}。".format(self.name, course))
-		print("{} 过去了。。。".format(days))
+		print("{} 小时过去了。。。".format(days))
 
 	# 工作
 	def work(self, days=1):
@@ -122,12 +130,12 @@ class Player(Role):
 		"""
 		print("{} 花了 {:.2f} 元买了 {}。".format(self.name, money, goods))
 
-a = Teacher("alex", 18, "male", "Python", 10000)
-b = Player("alex", 18, "male", 100, 100, 50, 50)
-print(b.confidence)
-print(b.get_attr("confidence"))
-b = compute_value.compute_value(b, "learn", 8)
-print(b.confidence)
+# a = Teacher("alex", 18, "male", "Python", 10000)
+# b = Player("alex", 18, "male", 100, 100, 50, 50)
+# print(b.confidence)
+# print(b.get_attr("confidence"))
+# b = compute_value.compute_value(b, "learn", 8)
+# print(b.confidence)
 
 
 
