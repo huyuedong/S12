@@ -130,7 +130,7 @@ class Player(Role):
 			option_dic[str(k)] = v
 		print("食品目录：")
 		for key in option_dic:
-			print("{}: {}".format(key, option_dic[key]))
+			print("{}: {} 价格：{} 元".format(key, option_dic[key], menu_dic[option_dic[key]]["price"]))
 		while True:
 			option = input("==>").strip()
 			if option in option_dic:
@@ -159,7 +159,7 @@ class Player(Role):
 			option_dic[str(k)] = v
 		print("学习科目：")
 		for key in option_dic:
-			print("{}: {}".format(key, option_dic[key]))
+			print("{}: {} 学费：{} 元。".format(key, option_dic[key], menu_dic[option_dic[key]]["price"]))
 		while True:
 			option = input("==>").strip()
 			if option in option_dic:
@@ -192,7 +192,7 @@ class Player(Role):
 			option_dic[str(k)] = v
 		print("工作种类：")
 		for key in option_dic:
-			print("{}: {}".format(key, option_dic[key]))
+			print("{}: {} 月薪：{} 元".format(key, option_dic[key]), menu_dic[option_dic][key]["pay"])
 		while True:
 			option = input("==>").strip()
 			if option in option_dic:
@@ -227,7 +227,7 @@ class Player(Role):
 			option_dic[str(k)] = v
 		print("商品名目：")
 		for key in option_dic:
-			print("{}: {}".format(key, option_dic[key]))
+			print("{}: {} 价格：{} 元".format(key, option_dic[key]), menu_dic[option_dic[key]]["price"])
 		while True:
 			option = input("==>").strip()
 			if option in option_dic:
