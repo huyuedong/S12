@@ -228,7 +228,7 @@ class Player(Role):
 			option_dic[str(k)] = v
 		print("商品名目：")
 		for key in option_dic:
-			print("{}: {:<15} 价格：{:<15.2f} 元".format(key, option_dic[key], menu_dic[option_dic[key]]["price"]))
+			print("{}: {:<15} 价格：{:<15,.2f} 元".format(key, option_dic[key], menu_dic[option_dic[key]]["price"]))
 		while True:
 			option = input("==>").strip()
 			if option in option_dic:
