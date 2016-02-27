@@ -17,7 +17,7 @@ import logging
 
 # 同时输出到文件和屏幕
 logger = logging.getLogger("LOG-TEST")  # 创建一个logger
-logger.setLevel(logging.DEBUG)  # 设定logging 级别
+logger.setLevel(logging.DEBUG)  # 设定logging 级别，logging的级别以最高的为主
 
 ch = logging.StreamHandler()    # 创建一个输出到屏幕的handler
 ch.setLevel(logging.INFO)   # 设置logging级别
