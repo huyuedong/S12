@@ -16,6 +16,8 @@ ip_port = ('127.0.0.1', 4444)
 client = socket.socket()
 # 连接
 client.connect(ip_port)
+start_data = client.recv(1024)
+print(str(start_data, "utf8"))
 
 flag = True
 while flag:
