@@ -23,8 +23,10 @@ def process_bar(start, end, width=50):
 	# 当前要打印“#“的个数
 	front = int(start * width / end)
 	front_tag = "#" * front
+	end_tag = " " * (width - front)
+	tag = "{}{}".format(front_tag, end_tag)
 	# 生成当前的进度条
-	str_tag = "{} {}\r".format(front_tag, str_num)
+	str_tag = "{:<7} [{}] {:,}\r".format(str_num, tag, end)
 	# 打印当前进度条
 	sys.stdout.write(str_tag)
 	sys.stdout.flush()
