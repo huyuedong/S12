@@ -178,7 +178,10 @@ class MyServer(socketserver.BaseRequestHandler):
 		return m.hexdigest()
 
 
-if __name__ == "__main__":
-
+def run():
 	server = socketserver.ThreadingTCPServer(("127.0.0.1", 4444), MyServer)
 	server.serve_forever()
+
+if __name__ == "__main__":
+	run()
+
