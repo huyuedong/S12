@@ -105,7 +105,7 @@ class MyClient(object):
 							f.write(bytes_data)
 							self.process_bar(recv_size, file_size)
 						else:
-							print("\nreceive done")
+							print("\nreceive done!")
 			except TypeError:
 				pass
 			except Exception:
