@@ -10,6 +10,7 @@ import os
 import sys
 import socketserver
 import subprocess
+import hashlib
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import setting
 from core import db_handler
@@ -170,6 +171,11 @@ class MyServer(socketserver.BaseRequestHandler):
 				conn.send(bytes("Change directory failed,< {} > is not a valid directory".format(command_list[1]), "utf8"))
 		else:
 			conn.send(bytes("Change directory failed,permission denied!".format(command_list[1]), "utf8"))
+
+	def md5_maker(self, f):
+		m = hashlib.md5()
+		m.update(f)
+		return m.hexdigest()
 
 
 if __name__ == "__main__":

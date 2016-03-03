@@ -9,7 +9,7 @@ FTP Client
 import socket
 import os
 import sys
-import time
+import getpass
 
 
 class MyClient(object):
@@ -27,7 +27,7 @@ class MyClient(object):
 	def login(self):
 		while True:
 			username = input("username:").strip()
-			password = input("password:").strip()
+			password = getpass.getpass("password:").strip()
 			send_msg = "login {} {}".format(username, password)
 			try:
 				self.client.send(bytes(send_msg, "utf8"))

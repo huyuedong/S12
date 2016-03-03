@@ -26,3 +26,8 @@ def md5_maker(arg):
 				return m.hexdigest()
 	else:
 		return None
+
+# with open("D:\\qimi_WorkSpace\\S12\day7\\homework\\ftpserver\core\\ftp_log.py", "rb") as f1:
+# 	m1 = hashlib.md5()
+# 	m1.update(f1)
+# 	print(m1.hexdigest())
