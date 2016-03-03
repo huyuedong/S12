@@ -88,7 +88,7 @@ class MyClient(object):
 				if all([bool_a, bool_b]):
 					file_name = info_list[0].split(":")[1]
 					file_size = int(info_list[1].split(":")[1])
-					print("要接收的文件是：{}，文件大小：{}".format(file_name, file_size))
+					print("要接收的文件是：{},文件大小：{}".format(file_name, file_size))
 					# 给server端发送一个回执，准备好开始接收文件
 					self.client.send(b"CLIENT_READY_TO_RECEIVE")
 					file_path = "{}/{}".format(self.store_path, file_name)
