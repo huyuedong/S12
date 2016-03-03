@@ -30,8 +30,10 @@ class MyClient(object):
 		send_msg = "login {} {}".format(username, password)
 		self.client.send(bytes(send_msg, "utf8"))
 		reply_msg = self.client.recv(1024)
-		if str(reply_msg, "utf8").strip() == "Login success.":
+		if str(reply_msg.decode()).strip() == "Login success.":
 			print(str(reply_msg, "utf8"))
+			base_dir = os.path.dirname(os.path.abspath(__file__))
+			self.store_path = "{}/home".format(base_dir)
 			self.name = username
 			self.curr_path = username
 			return True
@@ -46,60 +48,72 @@ class MyClient(object):
 			if command == "exit":
 				exit_flag = True
 			elif hasattr(self, command):
-				func = getattr(str_command, command)
-				func(command_list)
+				func = getattr(self, command)
+				func(str_command)
 			else:
 				print("Unknown command,Please retry!")
 
-	def show(self):
-		recv_msg = self.client.recv(100)
-		str_recv_msg = str(recv_msg.decode()).strip()
-		if str_recv_msg.split("|")[0] == "SHOW_RESULT_SIZE":
-			result_size = int(str_recv_msg.split("|")[1])
-			self.client.send(b"CLIENT_READY_TO_RECEIVE")
-			result = ""
-			recv_size = 0
-			while recv_size < result_size:
-				result_data = self.client.recv(500)
-				recv_size += len(result_data)
-				result += str(result_data.decode())
-			else:
-				print(result)
+	def show(self, str_command):
+		command_list = str_command.split()
+		if len(command_list) == 1:
+			if command_list[0] == "show":
+				self.client.send(bytes(str_command, "utf8"))
+				recv_msg = self.client.recv(100)
+				str_recv_msg = str(recv_msg.decode()).strip()
+				if str_recv_msg.split("|")[0] == "SHOW_RESULT_SIZE":
+					result_size = int(str_recv_msg.split("|")[1])
+					self.client.send(b"CLIENT_READY_TO_RECEIVE")
+					result = ""
+					recv_size = 0
+					while recv_size < result_size:
+						result_data = self.client.recv(500)
+						recv_size += len(result_data)
+						result += str(result_data.decode())
+					else:
+						print(result)
 
 	# 下载
-	def get(self, command_list):
-		# 接收server端发来的文件信息
-		file_info = self.client.recv(1024)
-		try:
-			info_list = str(file_info.decode()).split("|")
-			bool_a = info_list[0].split(":")[0] == "FILE_NAME"
-			bool_b = info_list[1].split(":")[0] == "FILE_SIZE"
-			if all([bool_a, bool_b]):
-				file_name = info_list[0].split(":")[1]
-				file_size = int(info_list[1].split(":")[1])
-				print("要接收的文件是：{}，文件大小：{}".format(file_name, file_size))
-				# 给server端发送一个回执，准备好开始接收文件
-				self.client.send(b"CLIENT_READY_TO_RECEIVE")
-				# 定义一个变量：存储已接收的数据大小
-				recv_size = 0
-				# 打开文件
-				with open(file_name, "ab") as f:
-					# 只要已接收的数据小于文件大小就一直接收
-					while recv_size < file_size:
-						# 接收文件数据
-						self.process_bar(recv_size, file_size)
-						bytes_data = self.client.recv(1024)
-						recv_size += len(bytes_data)
-						f.write(bytes_data)
-					else:
-						print("==========receive done==========")
-		except TypeError:
-			pass
-		except Exception:
-			print("Error!")
+	def get(self, str_command):
+		command_list = str_command.split()
+		if len(command_list) == 2:
+			self.client.send(bytes(str_command, "utf8"))
+			# 接收server端发来的文件信息
+			file_info = self.client.recv(1024)
+			if str(file_info.decode()) == "NO_THIS_FILE":
+				print("There is no file named {}".format(command_list[1]))
+			try:
+				info_list = str(file_info.decode()).split("|")
+				bool_a = info_list[0].split(":")[0] == "FILE_NAME"
+				bool_b = info_list[1].split(":")[0] == "FILE_SIZE"
+				if all([bool_a, bool_b]):
+					file_name = info_list[0].split(":")[1]
+					file_size = int(info_list[1].split(":")[1])
+					print("要接收的文件是：{}，文件大小：{}".format(file_name, file_size))
+					# 给server端发送一个回执，准备好开始接收文件
+					self.client.send(b"CLIENT_READY_TO_RECEIVE")
+					file_path = "{}/{}".format(self.store_path, file_name)
+					# 定义一个变量：存储已接收的数据大小
+					recv_size = 0
+					# 打开文件
+					with open(file_path, "ab") as f:
+						# 只要已接收的数据小于文件大小就一直接收
+						while recv_size < file_size:
+							# 接收文件数据
+
+							bytes_data = self.client.recv(1024)
+							recv_size += len(bytes_data)
+							f.write(bytes_data)
+							self.process_bar(recv_size, file_size)
+						else:
+							print("\nreceive done")
+			except TypeError:
+				pass
+			except Exception:
+				print("Error!")
 
 	# 上传
-	def put(self, command_list):
+	def put(self, str_command):
+		command_list = str_command.split()
 		if len(command_list) == 2:
 			file_name = command_list[1]
 			file_size = os.stat(file_name).st_size
@@ -122,12 +136,15 @@ class MyClient(object):
 						print("=====send done!=====")
 
 	# 切换目录
-	def cd(self, command_list):
-		recv_msg = self.client.recv(100)
-		if str(recv_msg.decode()) == "CHANGE_DIR_OK":
-			self.curr_path = command_list[1]
-		elif str(recv_msg.decode()) == "PERMISSION_DENIED":
-			print("change directory failed, permission denied!")
+	def cd(self, str_command):
+		command_list = str_command.split()
+		if len(command_list) == 2:
+			self.client.send(bytes(str_command), "utf8")
+			recv_msg = self.client.recv(100)
+			if str(recv_msg.decode()) == "CHANGE_DIR_OK":
+				self.curr_path = command_list[1]
+			elif str(recv_msg.decode()) == "PERMISSION_DENIED":
+				print("change directory failed, permission denied!")
 
 	# 进度条
 	def process_bar(self, start, end, width=50):
@@ -157,7 +174,7 @@ class MyClient(object):
 			sys.stdout.flush()
 
 	# 帮助
-	def help(self, command_list):
+	def help(self, str_command):
 		print('''
 		input:help            to get help info
 		input:get filename    to download file from ftp server

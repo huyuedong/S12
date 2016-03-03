@@ -30,15 +30,18 @@ class MyServer(socketserver.BaseRequestHandler):
 		while flag:
 			command_msg = conn.recv(1024)
 			try:
-				str_command = str(command_msg.decode(), "utf8").strip()
+				str_command = str(command_msg.decode()).strip()
+				print(str_command)
 				# 传过来的命令按空格分割，保存到一个列表
 				command_list = str_command.split()
+				print(command_list)
 				# 第一个参数是命令类型
 				command = command_list[0].strip()
+				print(command)
 				# 如果有这个方法就执行
 				if hasattr(self, command):
 					func = getattr(self, command)
-					func(command_list)
+					func(str_command)
 				# 没有就返回提示信息
 				else:
 					conn.send(b"Unknown command,Please retry...")
@@ -49,18 +52,18 @@ class MyServer(socketserver.BaseRequestHandler):
 				print("unknown error")
 				continue
 
-	def login(self, command_list):
-		conn = self.request
+	def login(self, str_command):
+		command_list = str_command.split()
 		if len(command_list) == 3:
 			username = command_list[1]
 			password = command_list[2]
-			accounts_db = db_handler.db_handler(setting.DATABASE)
+			accounts_db = db_handler.handler(setting.DATABASE)
 			if username in accounts_db:
 				if password == accounts_db[username]["password"]:
 					self.login_flag = True
 					self.name = username
-					self.home_path = "{}/{}".format(os.path.abspath(__file__), accounts_db[username]["home_path"])
-					self.curr_path = "{}/{}".format(os.path.abspath(__file__), accounts_db[username]["home_path"])
+					self.home_path = accounts_db[username]["home_path"]
+					self.curr_path = accounts_db[username]["home_path"]
 				else:
 					self.login_flag = False
 			else:
@@ -68,41 +71,44 @@ class MyServer(socketserver.BaseRequestHandler):
 		else:
 			self.login_flag = False
 		if self.login_flag:
-			conn.sendall(b"Login success.")
+			self.request.sendall(b"Login success.")
 		else:
-			conn.sendall(b"Login failed.")
+			self.request.sendall(b"Login failed.")
 
 	# 查看
-	def show(self, command_list):
+	def show(self, str_command):
 		conn = self.request
-		if self.login_flag:
-			command = "ls"
-			result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-			result_msg = result.stdout.read()
-			result_msg_size = len(result_msg)
-			result_msg_info = bytes("SHOW_RESULT_SIZE|{}".format(result_msg_size), "utf8")
-			conn.send(result_msg_info)
-			recv_msg = conn.recv(100)
-			if recv_msg.decode() == "CLIENT_READY_TO_RECEIVE":
-				print("start to send data...")
-				conn.send(result_msg)
-		else:
-			conn.sendall(b"Please login first.")
+		command = "ls {}/{}".format(setting.BASE_DIR, self.curr_path)
+		result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+		result_msg = result.stdout.read()
+		result_msg_size = len(result_msg)
+		result_msg_info = bytes("SHOW_RESULT_SIZE|{}".format(result_msg_size), "utf8")
+		conn.send(result_msg_info)
+		recv_msg = conn.recv(100)
+		if recv_msg.decode() == "CLIENT_READY_TO_RECEIVE":
+			print("start to send data...")
+			conn.send(result_msg)
 
 	# 下载
-	def get(self, command_list):
+	def get(self, str_command):
 		conn = self.request
-		if self.login_flag:
-			if len(command_list) == 2:
-				file_name = command_list[1]
-				file_size = os.stat(file_name).st_size
-				file_info = "FILE_NAME:{}|FILE_SIZE:{}".format(file_name, file_size), "utf8"
+		command_list = str_command.split()
+		print(command_list)
+		if len(command_list) == 2:
+			file_name = command_list[1]
+			file_path = "{}/{}/{}".format(setting.BASE_DIR, self.curr_path, file_name)
+			print(file_path)
+			if os.path.isfile(file_path):
+				file_size = os.path.getsize(file_path)
+				print(file_size)
+				file_info = "FILE_NAME:{}|FILE_SIZE:{}".format(file_name, file_size)
 				file_info_msg = bytes(file_info, "utf8")
+				print(file_info_msg)
 				conn.send(file_info_msg)
 				recv_msg = conn.recv(100)
-				if recv_msg.decode() == "SERVER_READY_TO_RECEIVE":
+				if recv_msg.decode() == "CLIENT_READY_TO_RECEIVE":
 					print("start to send data ...")
-					with open(file_name, "rb") as f:
+					with open(file_path, "rb") as f:
 						bytes_data = f.read(1024)
 						# 有数据就一直传
 						while bytes_data:
@@ -110,52 +116,48 @@ class MyServer(socketserver.BaseRequestHandler):
 							bytes_data = f.read(1024)
 						else:
 							print("=====send done!=====")
-		else:
-			conn.sendall(b"Please login first.")
+			else:
+				conn.send(b"NO_THIS_FILE")
 
 	# 上传
-	def put(self, command_list):
+	def put(self, str_command):
 		conn = self.request
-		if self.login_flag:
-			file_info_msg = conn.recv(100)
-			try:
-				info_list = str(file_info_msg.decode()).split("|")
-				bool_a = info_list[0].split(":")[0] == "FILE_NAME"
-				bool_b = info_list[1].split(":")[0] == "FILE_SIZE"
-				if all([bool_a, bool_b]):
-					file_name = info_list[0].split(":")[1]
-					file_size = int(info_list[1].split(":")[1])
-					print("要接收的文件是：{}，文件大小：{}".format(file_name, file_size))
-					# 给server端发送一个回执，准备好开始接收文件
-					conn.send(b"SERVER_READY_TO_RECEIVE")
-					# 定义一个变量：存储已接收的数据大小
-					recv_size = 0
-					# 打开文件
-					with open(file_name, "ab") as f:
-						# 只要已接收的数据小于文件大小就一直接收
-						while recv_size < file_size:
-							# 接收文件数据
-							bytes_data = conn.recv(1024)
-							recv_size += len(bytes_data)
-							f.write(bytes_data)
-						else:
-							print("==========receive done==========")
-			except TypeError:
-				pass
-			except Exception:
-				print("Error!")
+		file_info_msg = conn.recv(100)
+		try:
+			info_list = str(file_info_msg.decode()).split("|")
+			bool_a = info_list[0].split(":")[0] == "FILE_NAME"
+			bool_b = info_list[1].split(":")[0] == "FILE_SIZE"
+			if all([bool_a, bool_b]):
+				file_name = info_list[0].split(":")[1]
+				file_size = int(info_list[1].split(":")[1])
+				print("要接收的文件是：{}，文件大小：{}".format(file_name, file_size))
+				# 给server端发送一个回执，准备好开始接收文件
+				conn.send(b"SERVER_READY_TO_RECEIVE")
+				# 定义一个变量：存储已接收的数据大小
+				recv_size = 0
+				# 打开文件
+				with open(file_name, "ab") as f:
+					# 只要已接收的数据小于文件大小就一直接收
+					while recv_size < file_size:
+						# 接收文件数据
+						bytes_data = conn.recv(1024)
+						recv_size += len(bytes_data)
+						f.write(bytes_data)
+					else:
+						print("==========receive done==========")
+		except TypeError:
+			pass
+		except Exception:
+			print("Error!")
 
 	# 改变路径
-	def cd(self, command_list):
+	def cd(self, str_command):
 		conn = self.request
-		if self.login_flag:
-			if len(command_list) == 2:
-				if command_list[1].startswith(self.home_path):
-					conn.send(b"CHANGE_DIR_OK")
-				else:
-					conn.send(b"PERMISSION_DENIED")
+		command_list = str_command.split()
+		if command_list[1].startswith(self.home_path):
+			conn.send(b"CHANGE_DIR_OK")
 		else:
-			conn.sendall(b"Please login first.")
+			conn.send(b"PERMISSION_DENIED")
 
 
 if __name__ == "__main__":
