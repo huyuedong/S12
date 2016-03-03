@@ -18,11 +18,15 @@ class MyClient(object):
 		self.port = port
 		self.client = socket.socket()
 		self.client.connect((host, port))
+		welcome_msg = self.client.recv(1024)
+		print(str(welcome_msg.decode()))
+		if self.login():
+			self.menu()
 
 		# 登录
 	def login(self):
 		username = input("username:").strip()
-		password = input("password").strip()
+		password = input("password:").strip()
 		send_msg = "login {} {}".format(username, password)
 		self.client.send(bytes(send_msg, "utf8"))
 		reply_msg = self.client.recv(1024)

@@ -28,16 +28,16 @@ class MyServer(socketserver.BaseRequestHandler):
 		conn.sendall(b"Welcome to qimi FTP....")
 		flag = True
 		while flag:
-			command = conn.recv(1024)
+			command_msg = conn.recv(1024)
 			try:
-				str_command = str(command.decode()).strip()
+				str_command = str(command_msg.decode(), "utf8").strip()
 				# 传过来的命令按空格分割，保存到一个列表
 				command_list = str_command.split()
 				# 第一个参数是命令类型
-				command_type = command_list[0].strip()
+				command = command_list[0].strip()
 				# 如果有这个方法就执行
-				if hasattr(self, command_type):
-					func = getattr(self, command_type)
+				if hasattr(self, command):
+					func = getattr(self, command)
 					func(command_list)
 				# 没有就返回提示信息
 				else:
