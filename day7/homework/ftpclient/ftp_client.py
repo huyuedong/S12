@@ -25,18 +25,24 @@ class MyClient(object):
 
 		# 登录
 	def login(self):
-		username = input("username:").strip()
-		password = input("password:").strip()
-		send_msg = "login {} {}".format(username, password)
-		self.client.send(bytes(send_msg, "utf8"))
-		reply_msg = self.client.recv(1024)
-		if str(reply_msg.decode()).strip() == "Login success.":
-			print(str(reply_msg, "utf8"))
-			base_dir = os.path.dirname(os.path.abspath(__file__))
-			self.store_path = "{}/home".format(base_dir)
-			self.name = username
-			self.curr_path = username
-			return True
+		while True:
+			username = input("username:").strip()
+			password = input("password:").strip()
+			send_msg = "login {} {}".format(username, password)
+			try:
+				self.client.send(bytes(send_msg, "utf8"))
+				reply_msg = self.client.recv(1024)
+				if str(reply_msg.decode()).strip() == "Login success.":
+					print(str(reply_msg, "utf8"))
+					base_dir = os.path.dirname(os.path.abspath(__file__))
+					self.store_path = "{}/home".format(base_dir)
+					self.name = username
+					self.curr_path = username
+					return True
+				else:
+					print(str(reply_msg.decode()))
+			except KeyboardInterrupt:
+				break
 
 	# 菜单
 	def menu(self):
@@ -142,9 +148,10 @@ class MyClient(object):
 			self.client.send(bytes(str_command, "utf8"))
 			recv_msg = self.client.recv(100)
 			if str(recv_msg.decode()) == "CHANGE_DIR_OK":
+				print("Changed current directory to < {} >.".format(command_list[1]))
 				self.curr_path = command_list[1]
-			elif str(recv_msg.decode()) == "PERMISSION_DENIED":
-				print("change directory failed, permission denied!")
+			else:
+				print(str(recv_msg.decode()))
 
 	# 进度条
 	def process_bar(self, start, end, width=50):

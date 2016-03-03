@@ -48,6 +48,8 @@ class MyServer(socketserver.BaseRequestHandler):
 			except UnicodeDecodeError as e:
 				print("decode error!", e)
 				continue
+			except KeyboardInterrupt:
+				flag = False
 			except Exception:
 				print("unknown error")
 				continue
@@ -155,9 +157,12 @@ class MyServer(socketserver.BaseRequestHandler):
 		conn = self.request
 		command_list = str_command.split()
 		if command_list[1].startswith(self.home_path):
-			conn.send(b"CHANGE_DIR_OK")
+			if os.path.isdir("{}/{}".format(setting.BASE_DIR, command_list[1])):
+				conn.send(b"CHANGE_DIR_OK")
+			else:
+				conn.send(bytes("Change directory failed,< {} > is not a valid directory".format(command_list[1]), "utf8"))
 		else:
-			conn.send(b"PERMISSION_DENIED")
+			conn.send(bytes("Change directory failed,permission denied!".format(command_list[1]), "utf8"))
 
 
 if __name__ == "__main__":
