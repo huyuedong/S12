@@ -33,11 +33,12 @@ class MyClient(object):
 				self.client.send(bytes(send_msg, "utf8"))
 				reply_msg = self.client.recv(1024)
 				if str(reply_msg.decode()).strip() == "Login success.":
-					print(str(reply_msg, "utf8"))
 					base_dir = os.path.dirname(os.path.abspath(__file__))
 					self.store_path = "{}/home".format(base_dir)
 					self.name = username
 					self.curr_path = "home/{}".format(username)
+					print("Hi {}, welcome to login qimi's FTP.".format(self.name))
+
 					return True
 				else:
 					print(str(reply_msg.decode()))
@@ -78,7 +79,7 @@ class MyClient(object):
 						recv_size += len(result_data)
 						result += str(result_data.decode())
 					else:
-						print("The directory < {} > has files:".format(self.curr_path))
+						print("The directory < {} > has:".format(self.curr_path))
 						print(result)
 				else:
 					print(str_recv_msg)

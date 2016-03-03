@@ -25,34 +25,37 @@ class MyServer(socketserver.BaseRequestHandler):
 	def handle(self):
 		print("Server waiting...")
 		conn = self.request
-		conn.sendall(b"Welcome to qimi FTP....")
+		conn.sendall(b"This is qimi's FTP, please login....")
 		flag = True
 		while flag:
 			command_msg = conn.recv(1024)
-			try:
-				str_command = str(command_msg.decode()).strip()
-				print(str_command)
-				# 传过来的命令按空格分割，保存到一个列表
-				command_list = str_command.split()
-				print(command_list)
-				# 第一个参数是命令类型
-				command = command_list[0].strip()
-				print(command)
-				# 如果有这个方法就执行
-				if hasattr(self, command):
-					func = getattr(self, command)
-					func(str_command)
-				# 没有就返回提示信息
-				else:
-					conn.send(b"Unknown command,Please retry...")
-			except UnicodeDecodeError as e:
-				print("decode error!", e)
-				continue
-			except KeyboardInterrupt:
+			if not command_msg:
 				flag = False
-			except Exception:
-				print("unknown error")
-				continue
+			else:
+				try:
+					str_command = str(command_msg.decode()).strip()
+					print(str_command)
+					# 传过来的命令按空格分割，保存到一个列表
+					command_list = str_command.split()
+					print(command_list)
+					# 第一个参数是命令类型
+					command = command_list[0].strip()
+					print(command)
+					# 如果有这个方法就执行
+					if hasattr(self, command):
+						func = getattr(self, command)
+						func(str_command)
+					# 没有就返回提示信息
+					else:
+						conn.send(b"Unknown command,Please retry...")
+				except UnicodeDecodeError as e:
+					print("decode error!", e)
+					continue
+				except KeyboardInterrupt:
+					flag = False
+				except Exception:
+					print("unknown error")
+					continue
 
 	def login(self, str_command):
 		command_list = str_command.split()
@@ -86,7 +89,7 @@ class MyServer(socketserver.BaseRequestHandler):
 		result_msg = result.stdout.read()
 		result_msg_size = len(result_msg)
 		if result_msg_size == 0:
-			conn.send(bytes("There is no files under < {} >.".format(command_list[1]), "utf8"))
+			conn.send(bytes("It is empty under < {} >.".format(command_list[1]), "utf8"))
 		else:
 			result_msg_info = bytes("SHOW_RESULT_SIZE|{}".format(result_msg_size), "utf8")
 			conn.send(result_msg_info)
