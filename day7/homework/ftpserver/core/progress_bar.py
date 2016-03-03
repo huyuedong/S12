@@ -30,6 +30,7 @@ def process_bar(start, end, width=50):
 	# 打印当前进度条
 	sys.stdout.write(str_tag)
 	sys.stdout.flush()
+	time.sleep(0.1)
 	# 如果进度完成，则打印换行
 	if len(str_tag) == width:
 		sys.stdout.write("\n")
