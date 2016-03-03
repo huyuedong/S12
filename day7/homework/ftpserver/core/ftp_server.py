@@ -20,8 +20,14 @@ class MyServer(socketserver.BaseRequestHandler):
 
 	login_flag = False
 	name = None
+	# 家目录
 	home_path = None
+	# 当前目录
 	curr_path = None
+	# 总磁盘配额
+	total_space = None
+	# 当前磁盘配额
+	curr_space = None
 
 	def handle(self):
 		print("Server waiting...")
@@ -68,8 +74,17 @@ class MyServer(socketserver.BaseRequestHandler):
 				if password == accounts_db[username]["password"]:
 					self.login_flag = True
 					self.name = username
+					# 获取用户家目录
 					self.home_path = accounts_db[username]["home_path"]
+					# login之后，当前目录默认为家目录
 					self.curr_path = accounts_db[username]["home_path"]
+					# 从数据库中读取用户的磁盘配额
+					self.total_space = accounts_db[username]["total_space"]
+					# 计算用户已使用的磁盘配额
+					usage_space = os.path.getsize("{}/{}".format(setting.BASE_DIR, self.home_path))
+					# 得到用户当前可用的磁盘配额
+					self.curr_space = self.total_space - usage_space
+
 				else:
 					self.login_flag = False
 			else:
@@ -141,20 +156,26 @@ class MyServer(socketserver.BaseRequestHandler):
 				file_name = info_list[0].split(":")[1]
 				file_size = int(info_list[1].split(":")[1])
 				print("要接收的文件是：{}，文件大小：{}".format(file_name, file_size))
-				# 给server端发送一个回执，准备好开始接收文件
-				conn.send(b"SERVER_READY_TO_RECEIVE")
-				# 定义一个变量：存储已接收的数据大小
-				recv_size = 0
-				# 打开文件
-				with open(file_name, "ab") as f:
-					# 只要已接收的数据小于文件大小就一直接收
-					while recv_size < file_size:
-						# 接收文件数据
-						bytes_data = conn.recv(1024)
-						recv_size += len(bytes_data)
-						f.write(bytes_data)
-					else:
-						print("==========receive done==========")
+				# 如果上传的文件小于可用磁盘空间，则准备接收上传的文件
+				if file_size < self.curr_space:
+					# 给server端发送一个回执，准备好开始接收文件
+					conn.send(b"SERVER_READY_TO_RECEIVE")
+					# 定义一个变量：存储已接收的数据大小
+					recv_size = 0
+					# 打开文件
+					with open(file_name, "ab") as f:
+						# 只要已接收的数据小于文件大小就一直接收
+						while recv_size < file_size:
+							# 接收文件数据
+							bytes_data = conn.recv(1024)
+							recv_size += len(bytes_data)
+							f.write(bytes_data)
+						else:
+							print("==========receive done==========")
+				else:
+					# 文件大于可用磁盘空间时，发送空间不足的回执
+					conn.send(b"OUT_OF_SPACE")
+
 		except TypeError:
 			pass
 		except Exception:

@@ -152,6 +152,8 @@ class MyClient(object):
 							self.process_bar(send_size, file_size)
 						else:
 							print("\nsend done!")
+				elif recv_msg.decode() == "OUT_OF_SPACE":
+					print("The server doesn't have enough space to receive this file. ")
 			else:
 				print("There is no files named < {} > in < {} >.".format(file_name, self.store_path))
 
