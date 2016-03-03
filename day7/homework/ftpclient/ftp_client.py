@@ -139,7 +139,7 @@ class MyClient(object):
 	def cd(self, str_command):
 		command_list = str_command.split()
 		if len(command_list) == 2:
-			self.client.send(bytes(str_command), "utf8")
+			self.client.send(bytes(str_command, "utf8"))
 			recv_msg = self.client.recv(100)
 			if str(recv_msg.decode()) == "CHANGE_DIR_OK":
 				self.curr_path = command_list[1]
