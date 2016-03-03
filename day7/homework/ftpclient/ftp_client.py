@@ -37,7 +37,7 @@ class MyClient(object):
 					base_dir = os.path.dirname(os.path.abspath(__file__))
 					self.store_path = "{}/home".format(base_dir)
 					self.name = username
-					self.curr_path = username
+					self.curr_path = "home/{}".format(username)
 					return True
 				else:
 					print(str(reply_msg.decode()))
@@ -63,7 +63,9 @@ class MyClient(object):
 		command_list = str_command.split()
 		if len(command_list) == 1:
 			if command_list[0] == "show":
-				self.client.send(bytes(str_command, "utf8"))
+				# 默认显示显示当前目录的文件
+				str_command_msg = "{} {}".format(str_command, self.curr_path)
+				self.client.send(bytes(str_command_msg, "utf8"))
 				recv_msg = self.client.recv(100)
 				str_recv_msg = str(recv_msg.decode()).strip()
 				if str_recv_msg.split("|")[0] == "SHOW_RESULT_SIZE":
@@ -76,7 +78,10 @@ class MyClient(object):
 						recv_size += len(result_data)
 						result += str(result_data.decode())
 					else:
+						print("The directory < {} > has files:".format(self.curr_path))
 						print(result)
+				else:
+					print(str_recv_msg)
 
 	# 下载
 	def get(self, str_command):
@@ -174,11 +179,7 @@ class MyClient(object):
 		# 打印当前进度条
 		sys.stdout.write(str_tag)
 		sys.stdout.flush()
-		time.sleep(0.1)
-		# 如果进度完成，则打印换行
-		if len(str_tag) == width:
-			sys.stdout.write("\n")
-			sys.stdout.flush()
+
 
 	# 帮助
 	def help(self, str_command):

@@ -80,16 +80,20 @@ class MyServer(socketserver.BaseRequestHandler):
 	# 查看
 	def show(self, str_command):
 		conn = self.request
-		command = "ls {}/{}".format(setting.BASE_DIR, self.curr_path)
+		command_list = str_command.split()
+		command = "ls {}/{}".format(setting.BASE_DIR, command_list[1])
 		result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 		result_msg = result.stdout.read()
 		result_msg_size = len(result_msg)
-		result_msg_info = bytes("SHOW_RESULT_SIZE|{}".format(result_msg_size), "utf8")
-		conn.send(result_msg_info)
-		recv_msg = conn.recv(100)
-		if recv_msg.decode() == "CLIENT_READY_TO_RECEIVE":
-			print("start to send data...")
-			conn.send(result_msg)
+		if result_msg_size == 0:
+			conn.send(bytes("There is no files under < {} >.".format(command_list[1]), "utf8"))
+		else:
+			result_msg_info = bytes("SHOW_RESULT_SIZE|{}".format(result_msg_size), "utf8")
+			conn.send(result_msg_info)
+			recv_msg = conn.recv(100)
+			if recv_msg.decode() == "CLIENT_READY_TO_RECEIVE":
+				print("start to send data...")
+				conn.send(result_msg)
 
 	# 下载
 	def get(self, str_command):
