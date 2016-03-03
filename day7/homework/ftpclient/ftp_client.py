@@ -127,24 +127,32 @@ class MyClient(object):
 		command_list = str_command.split()
 		if len(command_list) == 2:
 			file_name = command_list[1]
-			file_size = os.stat(file_name).st_size
-			file_info = "FILE_NAME:{}|FILE_SIZE:{}".format(file_name, file_size), "utf8"
-			file_info_msg = bytes(file_info, "utf8")
-			self.client.send(file_info_msg)
-			recv_msg = self.client.recv(100)
-			if recv_msg.decode() == "SERVER_READY_TO_RECEIVE":
-				print("start to send data ...")
-				with open(file_name, "rb") as f:
-					send_size = 0
-					bytes_data = f.read(1024)
-					# 有数据就一直传
-					while bytes_data:
-						send_size += len(bytes_data)
-						self.process_bar(send_size, file_size)
-						self.client.send(bytes_data)
+			# 需要上传的文件需要放在与ftpclient下的home目录
+			file_path = "{}/{}".format(self.store_path, file_name)
+			# 判断输入的文件名是否存在
+			if os.path.isfile(file_path):
+				# 发送上传文件的命令，触发server端的put()
+				self.client.send(bytes(str_command, "utf8"))
+				file_size = os.path.getsize(file_path)
+				file_info = "FILE_NAME:{}|FILE_SIZE:{}".format(file_name, file_size)
+				file_info_msg = bytes(file_info, "utf8")
+				self.client.send(file_info_msg)
+				recv_msg = self.client.recv(100)
+				if recv_msg.decode() == "SERVER_READY_TO_RECEIVE":
+					print("start to send data ...")
+					with open(file_path, "rb") as f:
+						send_size = 0
 						bytes_data = f.read(1024)
-					else:
-						print("=====send done!=====")
+						# 有数据就一直传
+						while bytes_data:
+							send_size += len(bytes_data)
+							self.client.send(bytes_data)
+							bytes_data = f.read(1024)
+							self.process_bar(send_size, file_size)
+						else:
+							print("\nsend done!")
+			else:
+				print("There is no files named < {} > in < {} >.".format(file_name, self.store_path))
 
 	# 切换目录
 	def cd(self, str_command):
@@ -180,13 +188,12 @@ class MyClient(object):
 		sys.stdout.write(str_tag)
 		sys.stdout.flush()
 
-
 	# 帮助
 	def help(self, str_command):
 		print('''
 		input:help            to get help info
 		input:get filename    to download file from ftp server
-		input:put filename    to upload file to ftp server
+		input:put filename    to upload file under < ftpclient/home/ > to ftp server
 		input:exit            to exit the system
 		input:show            to show the files in current directory
 		input:cd directory    to change the current directory
