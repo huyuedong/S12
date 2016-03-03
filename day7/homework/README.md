@@ -56,7 +56,8 @@
 
 ###运行说明：
 * 在安装有Python3.0+版本的Linux环境下:
-* * 运行bin下的index.py文件即可。
+* * 运行ftpserver/bin/下的index.py文件启动ftp server程序。
+* * 运行ftpclient/ftp_client.py文件启动ftp client程序。
 
 ###补充说明：
 * 暂不支持断点续传
