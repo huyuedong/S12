@@ -6,7 +6,7 @@ import logging
 from conf import setting
 
 
-class FTPLogger(logging):
+class FTPLogger(object):
 	def __init__(self, log_type):
 		self.log_type = log_type
 
