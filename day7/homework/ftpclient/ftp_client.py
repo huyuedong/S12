@@ -102,14 +102,14 @@ class MyClient(object):
 					file_name = info_list[0].split(":")[1]
 					temp_file_name = "{}.temp".format(file_name)
 					file_size = int(info_list[1].split(":")[1])
+					# 先将文件存为一个以.temp的临时文件
+					temp_file_path = "{}/{}".format(self.store_path, temp_file_name)
+					file_path = "{}/{}".format(self.store_path, file_name)
 					# 如果本地没有这个文件，则准备接收
 					if not os.path.isfile("{}/{}".format(self.store_path, file_name)):
 						print("要接收的文件是：{},文件大小：{}".format(file_name, file_size))
 						# 给server端发送一个回执，准备好开始接收文件
 						self.client.send(b"CLIENT_READY_TO_RECEIVE")
-						# 先将文件存为一个以.temp的临时文件
-						temp_file_path = "{}/{}".format(self.store_path, temp_file_name)
-						file_path = "{}/{}".format(self.store_path, file_name)
 						# 定义一个变量：存储已接收的数据大小
 						recv_size = 0
 						# 打开文件
@@ -144,10 +144,58 @@ class MyClient(object):
 											os.remove(temp_file_path)
 											print("File has changed during the transmission!")
 					# 如果本地有该文件的临时文件，则进入断点续传
-					elif os.path.isfile("{}/{}".format(self.store_path, temp_file_name)):
+					elif os.path.isfile(temp_file_path):
 						print("There is a temp file of {}, try to begin breakpoint resume!".format(file_name))
+						self.client.send(b"BREAKPOINT_RESUME")
+						with open(temp_file_path, "rb") as f2:
+							m2 = hashlib.md5()
+							temp_file_size = 0
+							while temp_file_size < os.path.getsize(temp_file_path):
+								bytes_data2 = f2.read(1024)
+								m2.update(bytes_data2)
+								temp_file_size += len(bytes_data2)
+							else:
+								# 发送本地文件md5值
+								temp_file_md5 = m2.hexdigest()
+								self.client.send(bytes("MD5|{}".format(temp_file_md5), "utf8"))
+						recv_msg2 = self.client.recv(100)
+						str_recv_msg2 = str(recv_msg2.decode())
+						if str_recv_msg2 == "BREAKPOINT_CONSUME_OK":
+							print("Begin to breakpoint consume.")
+							recv_size2 = temp_file_size
+							with open(temp_file_path, "ab") as f3:
+								# 本地文件小于server端文件就一直收
+								while recv_size2 < file_size:
+									bytes_data3 = self.client.recv(1024)
+									m2.update(bytes_data3)
+									recv_size2 += len(bytes_data3)
+									f3.write(bytes_data3)
+									self.process_bar(recv_size2, file_size)
+								else:
+									# 获取本地文件的md5值
+									str_md5 = m2.hexdigest()
+									# 接收server端文件的md5值
+									recv_msg = self.client.recv(100)
+									str_recv_msg = str(recv_msg.decode())
+									if str_recv_msg.startswith("MD5|"):
+										if str_recv_msg.split("|") == 2:
+											file_md5 = str_recv_msg.split("|")[1]
+											# 如果本地文件的md5值与服务端文件的md5值相同，则传输成功
+											if str_md5 == file_md5:
+												# 像服务端发送md5验证通过消息
+												self.client.send(b"CHECK_SUCCESS")
+												os.rename(temp_file_path, file_path)
+												print("\nreceive done!")
+											# md5校验不一致
+											else:
+												self.client.send(b"CHECK_FAILED")
+												os.remove(temp_file_path)
+												print("File has changed during the transmission!")
+						elif str_recv_msg2 == "BREAKPOINT_RESUME_FAILED":
+							print("Breakpoint resume failed, delete local file and retry!")
 					elif os.path.isfile("{}/{}".format(self.store_path, file_name)):
 						print("{} is already exist!".format(file_name))
+						self.client.send(b"TRANSMISSION_CANCEL")
 			except TypeError:
 				pass
 			except Exception:

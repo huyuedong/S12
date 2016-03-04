@@ -149,6 +149,50 @@ class MyServer(socketserver.BaseRequestHandler):
 								print("=====send done!=====")
 							elif str(recv_msg2.decode()) == "CHECK_FAILED":
 								print("md5 value of the file has change during the transmission.")
+				# 如果返回断点续传，就进入断点续传模式
+				elif recv_msg.decode() == "BREAKPOINT_RESUME":
+					print("begin to breakpoint resume!")
+					temp_file_md5_msg = conn.recv(100)
+					str_temp_file_md5 = str(temp_file_md5_msg.decode())
+					if str_temp_file_md5.startswith("MD5|"):
+						if len(str_temp_file_md5.split("|")) == 2:
+							temp_file_md5 = str_temp_file_md5.split("|")[1]
+							with open(file_path, "rb") as f2:
+								# 定义一个匹配到md5值的标签
+								begin_flag = False
+								m2 = hashlib.md5()
+								bytes_data2 = f2.read(1024)
+								while bytes_data2:
+									m2.update(bytes_data2)
+									bytes_data2 = f2.read(1024)
+									# 如果找到md5值，则开始续传
+									if m2.hexdigest() == temp_file_md5:
+										begin_flag = True
+									# 找到对应的md5值就开始发数据
+									elif begin_flag:
+										conn.send(b"BREAKPOINT_CONSUME_OK")
+										# recv_msg3 = conn.recv(100)
+										# str_recv_msg3 = str(recv_msg3.decode())
+										# if str_recv_msg3 == ""
+										conn.send(bytes_data2)
+									else:
+										continue
+								# 循环结束了还是没有匹配到md5值，则断点续传失败。
+								if not begin_flag:
+									conn.send(b"BREAKPOINT_CONSUME_FAILED")
+									print("md5 check failed!")
+								else:
+									str_md5 = m2.hexdigest()
+									conn.send(bytes("MD5|{}".format(str_md5), "utf8"))
+									recv_msg2 = conn.recv(100)
+									if str(recv_msg2.decode()) == "CHECK_SUCCESS":
+										print("=====send done!=====")
+									elif str(recv_msg2.decode()) == "CHECK_FAILED":
+										print("md5 value of the file has change during the transmission.")
+
+				# 返回传输取消，则打印传输取消
+				elif recv_msg.decode() == "TRANSMISSION_CANCEL":
+					print("Transmission cancel!")
 			else:
 				conn.send(b"NO_THIS_FILE")
 
