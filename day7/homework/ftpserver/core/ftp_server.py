@@ -142,13 +142,17 @@ class MyServer(socketserver.BaseRequestHandler):
 							conn.send(bytes_data)
 							bytes_data = f.read(1024)
 						else:
-							str_md5 = m1.hexdigest()
-							conn.send(bytes("MD5|{}".format(str_md5), "utf8"))
-							recv_msg2 = conn.recv(100)
-							if str(recv_msg2.decode()) == "CHECK_SUCCESS":
-								print("=====send done!=====")
-							elif str(recv_msg2.decode()) == "CHECK_FAILED":
-								print("md5 value of the file has change during the transmission.")
+							get_msg = conn.recv(100)
+							str_get_msg = str(get_msg.decode())
+							if str_get_msg == "GET_FILE_MD5":
+								str_md5 = m1.hexdigest()
+								print(str_md5)
+								conn.send(bytes("MD5|{}".format(str_md5), "utf8"))
+								recv_msg2 = conn.recv(100)
+								if str(recv_msg2.decode()) == "CHECK_SUCCESS":
+									print("=====send done!=====")
+								elif str(recv_msg2.decode()) == "CHECK_FAILED":
+									print("md5 value of the file has change during the transmission.")
 				# 如果返回断点续传，就进入断点续传模式
 				elif recv_msg.decode() == "BREAKPOINT_RESUME":
 					print("begin to breakpoint resume!")
