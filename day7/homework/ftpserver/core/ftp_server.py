@@ -134,13 +134,21 @@ class MyServer(socketserver.BaseRequestHandler):
 				if recv_msg.decode() == "CLIENT_READY_TO_RECEIVE":
 					print("start to send data ...")
 					with open(file_path, "rb") as f:
+						m1 = hashlib.md5()
 						bytes_data = f.read(1024)
 						# 有数据就一直传
 						while bytes_data:
+							m1.update(bytes_data)
 							conn.send(bytes_data)
 							bytes_data = f.read(1024)
 						else:
-							print("=====send done!=====")
+							str_md5 = m1.hexdigest()
+							conn.send(bytes("MD5|{}".format(str_md5), "utf8"))
+							recv_msg2 = conn.recv(100)
+							if str(recv_msg2.decode()) == "CHECK_SUCCESS":
+								print("=====send done!=====")
+							elif str(recv_msg2.decode()) == "CHECK_FAILED":
+								print("md5 value of the file has change during the transmission.")
 			else:
 				conn.send(b"NO_THIS_FILE")
 
@@ -192,11 +200,6 @@ class MyServer(socketserver.BaseRequestHandler):
 				conn.send(bytes("Change directory failed,< {} > is not a valid directory".format(command_list[1]), "utf8"))
 		else:
 			conn.send(bytes("Change directory failed,permission denied!".format(command_list[1]), "utf8"))
-
-	def md5_maker(self, f):
-		m = hashlib.md5()
-		m.update(f)
-		return m.hexdigest()
 
 
 def run():
