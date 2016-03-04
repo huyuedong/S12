@@ -7,7 +7,7 @@
 * My Blog:[http://www.cnblogs.com/liwenzhou](http://www.cnblogs.com/liwenzhou "liwenzhou's blog")
 
 ###功能介绍：
-* 基本实现了作业要求
+* 用户加密认证
 * 允许同时多用户登录
 * 每个用户有自己的家目录，且只能访问自己的家目录
 * 对用户进行磁盘配额，每个用户的可用空间不同
@@ -15,7 +15,7 @@
 * 允许用户查看当前目录下的文件
 * 允许上传和下载文件，保证文件一致性
 * 文件传输过程中显示进度条
-
+* 基本实现断点续传（未测试）
 
 ###环境依赖：
 * Python3.0+
@@ -58,6 +58,8 @@
 * 在安装有Python3.0+版本的Linux环境下:
 * * 运行ftpserver/bin/下的index.py文件启动ftp server程序。
 * * 运行ftpclient/ftp_client.py文件启动ftp client程序。
+* * 两个test用户：用户名：alex | 密码：1234；用户名：qimi | 密码：1234
 
 ###补充说明：
-* 暂不支持断点续传
+* 断点续传没来得及测试。。。
+* log部分没来得及写。。。
