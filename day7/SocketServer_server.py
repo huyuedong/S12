@@ -11,6 +11,7 @@ import socketserver
 
 class MyServer(socketserver.BaseRequestHandler):
 
+	# 必须覆写的方法
 	def handle(self):
 		conn = self.request
 		conn.sendall(b"Please input the message:")
