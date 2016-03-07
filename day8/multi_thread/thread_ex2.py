@@ -14,7 +14,6 @@ import time
 class MyThread(threading.Thread):
 
 	def __init__(self, num):
-		# threading.Thread.__init__(self)
 		super(MyThread, self).__init__()
 		self.num = num
 
@@ -30,3 +29,6 @@ if __name__ == "__main__":
 	t2.start()
 
 	print("=======main==========")
+
+	print(t1.getName())
+	print(t2.getName())
