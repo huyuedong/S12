@@ -10,7 +10,12 @@ import threading
 import time
 
 
+# 定义信号灯功能
 def light():
+	"""
+	10秒绿灯，3秒黄灯；7秒红灯
+	:return:
+	"""
 	if not event.isSet():
 		event.set()
 	count = 0
@@ -30,9 +35,15 @@ def light():
 		count += 1
 
 
+# 定义汽车功能
 def car(n):     # no bug version
+	"""
+	绿灯行，红灯停
+	:param n: 汽车的编号
+	:return:
+	"""
 	while True:
-		time.sleep(1)
+		time.sleep(1.1)
 		if event.isSet():
 			print("car {} is running...".format(n))
 		else:
