@@ -6,7 +6,7 @@ import logging
 from conf import setting
 
 
-class FTPLogger(object):
+class MyLogger(object):
 	def __init__(self, log_type):
 		self.log_type = log_type
 
@@ -15,3 +15,4 @@ class FTPLogger(object):
 		logger.setLevel(setting.LOG_LEVEL)
 
 		log_file = "setting.BASE_DIR/log/{}".format(setting.LOG_TYPES[self.log_type])
+		formatter = logging.Formatter('%(asctime)s - %(filename)s - %(name)s - %(levelname)s - %(message)s')
