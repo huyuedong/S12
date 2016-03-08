@@ -17,7 +17,7 @@ def sayhi(num):
 
 if __name__ == "__main__":
 	t1 = threading.Thread(target=sayhi, args=[1, ])     # 生成一个线程实例t1
-	t2 = threading.Thread(target=sayhi, args=[2, ])     # 生成一个线程实例2
+	t2 = threading.Thread(target=sayhi, args=[2, ])     # 生成一个线程实例t2
 
 	t1.start()  # 启动线程t1
 	t2.start()  # 启动线程t2
