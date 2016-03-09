@@ -4,6 +4,7 @@
 
 """
 paramiko练习
+SSHClient：连接远程服务器并执行基本命令
 """
 
 import paramiko

@@ -6,13 +6,14 @@ import logging
 from conf import setting
 
 
-class MyLogger(object):
-	def __init__(self, log_type):
-		self.log_type = log_type
+def my_logger(log_type):
+	logger = logging.getLogger(log_type)
+	logger.setLevel(setting.LOG_LEVEL)
 
-	def my_logger(self):
-		logger = logging.getLogger(self.log_type)
-		logger.setLevel(setting.LOG_LEVEL)
+	log_file = "setting.BASE_DIR/log/{}".format(setting.LOG_TYPES[log_type])
+	fh = logging.FileHandler(log_file)
+	formatter = logging.Formatter('[%(asctime)s] [task_id:%(name)s] [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s')
+	fh.setFormatter(formatter)
+	logger.addHandler(fh)
 
-		log_file = "setting.BASE_DIR/log/{}".format(setting.LOG_TYPES[self.log_type])
-		formatter = logging.Formatter('%(asctime)s - %(filename)s - %(name)s - %(levelname)s - %(message)s')
+	return logger

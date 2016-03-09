@@ -9,8 +9,8 @@
 import json
 
 accounts_info = {
-	"alex": {"password": "1234", "home_path": "home/alex", "total_space": 500000, "curr_space": 500000},
-	"qimi": {"password": "1234", "home_path": "home/qimi", "total_space": 500000, "curr_space": 500000},
+	"alex": {"password": "1234", "home_path": "home/alex", "total_space": 500000, "used_space": 0, "lock_flag": 0},
+	"qimi": {"password": "1234", "home_path": "home/qimi", "total_space": 500000, "used_space": 0, "lock_flag": 0},
 }
 
 

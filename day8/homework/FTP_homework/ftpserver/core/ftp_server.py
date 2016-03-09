@@ -4,6 +4,8 @@
 
 """
 FTP Server端
+version: 1.1
+在v1.0的基础上增加了日志记录
 """
 
 import os
@@ -14,11 +16,13 @@ import hashlib
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import setting
 from core import db_handler
+from core import ftp_log
 
 
 class MyServer(socketserver.BaseRequestHandler):
 
 	login_flag = False
+	lock_flag = False
 	name = None
 	# 家目录
 	home_path = None
@@ -26,8 +30,12 @@ class MyServer(socketserver.BaseRequestHandler):
 	curr_path = None
 	# 总磁盘配额
 	total_space = None
+	# 已用磁盘配额
+	used_space = None
 	# 当前磁盘配额
 	curr_space = None
+	# logger对象
+	logger = ftp_log("server")
 
 	def handle(self):
 		print("Server waiting...")
@@ -36,6 +44,7 @@ class MyServer(socketserver.BaseRequestHandler):
 		flag = True
 		while flag:
 			command_msg = conn.recv(1024)
+			# 收到信息为空，就退出
 			if not command_msg:
 				flag = False
 			else:
@@ -57,11 +66,14 @@ class MyServer(socketserver.BaseRequestHandler):
 						conn.send(b"Unknown command,Please retry...")
 				except UnicodeDecodeError as e:
 					print("decode error!", e)
+					self.logger.info("Command decode error.")
 					continue
 				except KeyboardInterrupt:
+					self.logger.info("Keyboard interrupt.")
 					flag = False
 				except Exception:
 					print("unknown error")
+					self.logger.info("Unknown error.")
 					continue
 
 	def login(self, str_command):
@@ -69,29 +81,36 @@ class MyServer(socketserver.BaseRequestHandler):
 		if len(command_list) == 3:
 			username = command_list[1]
 			password = command_list[2]
-			accounts_db = db_handler.handler(setting.DATABASE)
+			accounts_db = db_handler.file_handler_read(setting.DATABASE)
 			if username in accounts_db:
-				if password == accounts_db[username]["password"]:
-					self.login_flag = True
-					self.name = username
-					# 获取用户家目录
-					self.home_path = accounts_db[username]["home_path"]
-					# login之后，当前目录默认为家目录
-					self.curr_path = accounts_db[username]["home_path"]
-					# 从数据库中读取用户的磁盘配额
-					self.total_space = accounts_db[username]["total_space"]
-					# 计算用户已使用的磁盘配额
-					usage_space = os.path.getsize("{}/{}".format(setting.BASE_DIR, self.home_path))
-					# 得到用户当前可用的磁盘配额
-					self.curr_space = self.total_space - usage_space
-
-				else:
+				# 判断用户是否是锁定的用户
+				if accounts_db[username]["lock_flag"] != 0:
 					self.login_flag = False
+					self.lock_flag = True
+				else:
+					if password == accounts_db[username]["password"]:
+						self.login_flag = True
+						self.logger.info("{} login.".format(username))
+						self.name = username
+						# 获取用户家目录
+						self.home_path = accounts_db[username]["home_path"]
+						# login之后，当前目录默认为家目录
+						self.curr_path = accounts_db[username]["home_path"]
+						# 从数据库中读取用户的磁盘配额
+						self.total_space = accounts_db[username]["total_space"]
+						# 计算用户已使用的磁盘配额
+						self.used_space = accounts_db[username]["used_space"]
+						# 得到用户当前可用的磁盘配额
+						self.curr_space = self.total_space - self.used_space
+					else:
+						self.login_flag = False
 			else:
 				self.login_flag = False
 		else:
 			self.login_flag = False
-		if self.login_flag:
+		if self.lock_flag:
+			self.request.sendall(b"User locked!")
+		elif self.login_flag:
 			self.request.sendall(b"Login success.")
 		else:
 			self.request.sendall(b"Login failed.")
@@ -101,6 +120,7 @@ class MyServer(socketserver.BaseRequestHandler):
 		conn = self.request
 		command_list = str_command.split()
 		command = "ls {}/{}".format(setting.BASE_DIR, command_list[1])
+		self.logger.info("{} show {}".format(self.name, command))
 		result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 		result_msg = result.stdout.read()
 		result_msg_size = len(result_msg)
@@ -118,21 +138,20 @@ class MyServer(socketserver.BaseRequestHandler):
 	def get(self, str_command):
 		conn = self.request
 		command_list = str_command.split()
-		print(command_list)
+		self.logger.info("{} input {}".format(self.name, command_list))
 		if len(command_list) == 2:
 			file_name = command_list[1]
 			file_path = "{}/{}/{}".format(setting.BASE_DIR, self.curr_path, file_name)
-			print(file_path)
 			if os.path.isfile(file_path):
 				file_size = os.path.getsize(file_path)
-				print(file_size)
+				self.logger.info("{} want to download {}".format(self.name, file_name))
 				file_info = "FILE_NAME:{}|FILE_SIZE:{}".format(file_name, file_size)
 				file_info_msg = bytes(file_info, "utf8")
-				print(file_info_msg)
+				self.logger.info("send {} to client.".format(file_info_msg))
 				conn.send(file_info_msg)
 				recv_msg = conn.recv(100)
 				if recv_msg.decode() == "CLIENT_READY_TO_RECEIVE":
-					print("start to send data ...")
+					self.logger.info("start to send data ...")
 					with open(file_path, "rb") as f:
 						m1 = hashlib.md5()
 						bytes_data = f.read(1024)
@@ -146,16 +165,16 @@ class MyServer(socketserver.BaseRequestHandler):
 							str_get_msg = str(get_msg.decode())
 							if str_get_msg == "GET_FILE_MD5":
 								str_md5 = m1.hexdigest()
-								print(str_md5)
+								self.logger.info("{}'s MD5 value is {}.".format(file_name, str_md5))
 								conn.send(bytes("MD5|{}".format(str_md5), "utf8"))
 								recv_msg2 = conn.recv(100)
 								if str(recv_msg2.decode()) == "CHECK_SUCCESS":
-									print("=====send done!=====")
+									self.logger.info("{} send done!".format(file_name))
 								elif str(recv_msg2.decode()) == "CHECK_FAILED":
-									print("md5 value of the file has change during the transmission.")
+									self.logger.info("md5 value of the file has change during the transmission.")
 				# 如果返回断点续传，就进入断点续传模式
 				elif recv_msg.decode() == "BREAKPOINT_RESUME":
-					print("begin to breakpoint resume!")
+					self.logger.info("begin to breakpoint resume {}.".format(file_name))
 					temp_file_md5_msg = conn.recv(100)
 					str_temp_file_md5 = str(temp_file_md5_msg.decode())
 					if str_temp_file_md5.startswith("MD5|"):
@@ -175,6 +194,7 @@ class MyServer(socketserver.BaseRequestHandler):
 									# 找到对应的md5值就开始发数据
 									elif begin_flag:
 										conn.send(b"BREAKPOINT_CONSUME_OK")
+										self.logger.info("Breakpoint consume success.")
 										# recv_msg3 = conn.recv(100)
 										# str_recv_msg3 = str(recv_msg3.decode())
 										# if str_recv_msg3 == ""
@@ -184,24 +204,25 @@ class MyServer(socketserver.BaseRequestHandler):
 								# 循环结束了还是没有匹配到md5值，则断点续传失败。
 								if not begin_flag:
 									conn.send(b"BREAKPOINT_CONSUME_FAILED")
-									print("md5 check failed!")
+									self.logger.info("{} transfer success, but md5 check failed!".format(file_name))
 								else:
 									str_md5 = m2.hexdigest()
 									conn.send(bytes("MD5|{}".format(str_md5), "utf8"))
 									recv_msg2 = conn.recv(100)
 									if str(recv_msg2.decode()) == "CHECK_SUCCESS":
-										print("=====send done!=====")
+										self.logger.info("{} send done.".format(file_name))
 									elif str(recv_msg2.decode()) == "CHECK_FAILED":
-										print("md5 value of the file has change during the transmission.")
+										self.logger.info("md5 value of the file has change during the transmission.")
 
 				# 返回传输取消，则打印传输取消
 				elif recv_msg.decode() == "TRANSMISSION_CANCEL":
-					print("Transmission cancel!")
+					self.logger.info("Transmission cancel by client.")
 			else:
 				conn.send(b"NO_THIS_FILE")
 
 	# 上传
 	def put(self, str_command):
+		accounts_db = db_handler.file_handler_read(setting.DATABASE)
 		conn = self.request
 		file_info_msg = conn.recv(100)
 		try:
@@ -211,7 +232,7 @@ class MyServer(socketserver.BaseRequestHandler):
 			if all([bool_a, bool_b]):
 				file_name = info_list[0].split(":")[1]
 				file_size = int(info_list[1].split(":")[1])
-				print("要接收的文件是：{}，文件大小：{}".format(file_name, file_size))
+				self.logger.info("{} upload {}, the file size is:{}".format(self.name, file_name, file_size))
 				# 如果上传的文件小于可用磁盘空间，则准备接收上传的文件
 				if file_size < self.curr_space:
 					# 给server端发送一个回执，准备好开始接收文件
@@ -227,15 +248,21 @@ class MyServer(socketserver.BaseRequestHandler):
 							recv_size += len(bytes_data)
 							f.write(bytes_data)
 						else:
-							print("==========receive done==========")
+							self.logger.info("{} receive done.".format(file_name))
+							self.used_space += file_size
+							accounts_db[self.name]["used_space"] = self.used_space
+							db_handler.file_handler_write(accounts_db, setting.DATABASE)
+							self.logger.info("The used space of {} is update.".format(self.name))
 				else:
 					# 文件大于可用磁盘空间时，发送空间不足的回执
 					conn.send(b"OUT_OF_SPACE")
+					self.logger.info("Don't have enough space to receive {}.".format(file_name))
 
 		except TypeError:
+			self.logger.info("Type error when try to parse the command from client.")
 			pass
 		except Exception:
-			print("Error!")
+			self.logger.info("Unknown Error occur durring to parse the command from client.")
 
 	# 改变路径
 	def cd(self, str_command):

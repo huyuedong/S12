@@ -8,7 +8,7 @@
 import json
 
 
-def file_handler(db_params):
+def file_handler_read(db_params):
 	"""
 	使用文件存储时返回文件名
 	:param db_params: 数据库参数
@@ -20,8 +20,14 @@ def file_handler(db_params):
 	return info
 
 
-def handler(db_params):
-	if db_params["engine"] == "file_storage":
-		return file_handler(db_params)
-	else:
-		pass
+def file_handler_write(info, db_params):
+	db_path = "{}/{}".format(db_params["path"], db_params["name"])
+	with open(db_path, "w") as f:
+		json.dump(info, f)
+
+
+# def handler(db_params):
+# 	if db_params["engine"] == "file_storage":
+# 		return file_handler(db_params)
+# 	else:
+# 		pass

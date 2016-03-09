@@ -1,1 +1,1 @@
-{"alex": {"total_space": 500000, "curr_space": 500000, "home_path": "home/alex", "password": "1234"}, "qimi": {"total_space": 500000, "curr_space": 500000, "home_path": "home/qimi", "password": "1234"}}
+{"alex": {"total_space": 500000, "home_path": "home/alex", "lock_flag": 0, "password": "1234", "used_space": 0}, "qimi": {"total_space": 500000, "home_path": "home/qimi", "lock_flag": 0, "password": "1234", "used_space": 0}}
