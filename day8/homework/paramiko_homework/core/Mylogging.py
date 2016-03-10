@@ -3,7 +3,7 @@
 # __author__ = "Q1mi"
 
 """
-
+logging配置
 """
 
 import os
@@ -39,7 +39,7 @@ LOGGING_DIC = {
 		'default': {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',    # 保存到文件
-			'filename': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'all.log'),
+			'filename': os.path.join("{}/log".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'all.log'),
 			'maxBytes': 1024*1024*5,    # 5M
 			'backupCount': 5,
 			'formatter': 'standard',
@@ -50,11 +50,6 @@ LOGGING_DIC = {
 			'handlers': ['default', 'console'],
 			'level': 'DEBUG',
 			'propagate': True,
-		},
-		'lib.plugins.JX_dev': {
-			'handlers': ['default', 'console'],
-			'level': 'DEBUG',
-			'propagate': False,
 		},
 	},
 }
