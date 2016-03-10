@@ -17,7 +17,7 @@ loger = logging.getLogger(__name__)
 
 # 读配置文件
 def read():
-	with open(setting.CONF, "r") as f:
+	with open(setting.CONFIG, "r") as f:
 		config = json.load(f)
 	return config
 
@@ -25,7 +25,15 @@ def read():
 # 写配置文件
 def write(configure):
 	if type(configure) == dict:
-		with open(setting.CONF, "w") as f:
+		pop_list = []
+		for k in configure:
+			configure[k] = list(set(configure[k]))  # 将主机列表去重
+			if not configure[k]:
+				pop_list.append(k)
+		# 去掉空的组
+		for i in pop_list:
+			configure.pop(i)
+		with open(setting.CONFIG, "w") as f:
 			json.dump(configure, f)
 	else:
 		loger.error("afferent a invalid configure.")

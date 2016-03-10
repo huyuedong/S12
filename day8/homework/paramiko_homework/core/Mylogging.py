@@ -47,7 +47,7 @@ LOGGING_DIC = {
 	},
 	'loggers': {
 		'': {
-			'handlers': ['default', 'console'],
+			'handlers': ['default', ],
 			'level': 'DEBUG',
 			'propagate': True,
 		},

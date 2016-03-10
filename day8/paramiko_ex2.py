@@ -15,7 +15,7 @@ transport.connect(username="root", password="rootroot")
 sftp = paramiko.SFTPClient.from_transport(transport)
 
 # 上传文件
-# sftp.put("D:\\qimi_WorkSpace\\S12\\tab.py", "/home/qimi/python/tab.py")
+sftp.put("D:\\qimi_WorkSpace\\S12\\tab.py", "/home/qimi/python/tab.py")
 
 # 下载文件
 sftp.get("/home/lwz/tab.py", "D:\\GitHub\\S12\\tab2.py")

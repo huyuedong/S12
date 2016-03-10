@@ -13,18 +13,32 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import setting
 
 config = {}
-config["default"] = {}
-config["db"] = {}
-config["db"]["hostname1"] = {}
-config["db"]["hostname1"]["ip"] = "172.18.26.193"
-config["db"]["hostname1"]["port"] = "22"
-config["db"]["hostname2"] = {}
-config["db"]["hostname2"]["ip"] = "192.168.183.131"
-config["db"]["hostname2"]["port"] = "22"
-config["nginx"] = {}
-config["nginx"]["hostname1"] = {}
-config["nginx"]["hostname1"]["ip"] = "172.18.26.193"
-config["nginx"]["hostname1"]["port"] = "22"
+config["default"] = []
+config["db"] = ["172.18.26.193", "192.168.183.131", ]
+config["nginx"] = ["172.18.26.193", ]
+config["tomcat"] = ["192.168.183.131", ]
+
 with open(setting.CONFIG, "w") as f:
 	json.dump(config, f)
 
+# with open(setting.CONFIG, "r") as f:
+# 	dic = json.load(f)
+# for k in dic:
+# 	print(k, dic[k])
+
+
+"""
+config = {
+	"default": [],
+	"db": [
+		"172.18.26.193",
+		"192.168.183.131",
+	],
+	"nginx": [
+		"172.18.26.193",
+	],
+	"tomcat": [
+		"192.168.183.131",
+	],
+}
+"""

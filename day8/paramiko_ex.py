@@ -9,6 +9,9 @@ SSHClient：连接远程服务器并执行基本命令
 
 import paramiko
 
+amd = "cmd -g xxx xcx -c xxx;xxx;xxx"
+command = []
+
 # 创建SSH对象
 ssh = paramiko.SSHClient()
 
@@ -19,7 +22,7 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ssh.connect(hostname="192.168.183.131", port=22, username="root", password="rootroot")
 
 # 执行命令
-stdin, stdout, stderr = ssh.exec_command("df")
+stdin, stdout, stderr = ssh.exec_command('free;ifconfig;df -h')
 result = stdout.read()
 
 ssh.close()
