@@ -60,17 +60,25 @@ class QClient(object):
 		configure = config_handler.read()
 		# 只有一个show的时候默认打印所有的组名
 		if len(instructions) == 1:
+			print("{:*^50}".format("groups"))
 			for k in configure:
-				print("group:{}".format(k))
+				print(k)
+			print("-" * 50)
 		elif "-g" in instructions:
 			# 获取用户输入的组名
-			group_name = instructions[instructions.index("-g") + 1]
+			group_list = instructions[instructions.index("-g")+1:]
 			# 如果有这个组名，就遍历打印出这个组下的所有主机记录
 			try:
-				print("group:{}".format(group_name))
-				for i in configure[group_name]:
-					print(i)
-					loger.info("{} checkout the host of the group:{}.".format(self.login_name, group_name))
+				# 遍历用户输入的组名列表
+				for i in group_list:
+					# 如果配置文件中有这个组名
+					if i in configure:
+						print("{:*^50}".format(i))
+						# 遍历打印该组的主机记录
+						for j in configure[i]:
+							print(j)
+							loger.info("{} checkout the host of the group:{}.".format(self.login_name, i))
+						print("-" * 50)
 			# 如果没有这个组，就打印提示信息。
 			except (ValueError, KeyError):
 				print("invalid group name!")
@@ -214,7 +222,6 @@ class QClient(object):
 
 	# 分发文件
 	def sftp(self, instructions):
-		sftp_flag = True
 		if len(instructions) < 6:
 			print("Lack of arguments")
 		else:
@@ -279,9 +286,13 @@ class QClient(object):
 		show -g group_name               : show the hosts under the specified group,
 											all group name will show if no group been specified.
 		add -g group_name -h hostname    : add the host to the group.
+
 		delete -g group_name -h hostname : delete the host from the group.
+
 		cmd -g group_name -c cmd         : all hosts under the group will execute the command.
+
 		sftp -g group_name -f src dsc    : send the file to all hosts under the group.
+
 		exit                             : exit this system.
 
 		'''
