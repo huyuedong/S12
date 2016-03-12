@@ -29,7 +29,7 @@ class Producer(threading.Thread):
 				if products < 10:
 					products += 1
 					print("Producer:{} deliver one, now products:{}.".format(self.name, products))
-					condition.notify()      # 唤醒一个挂起的线程，这里就是喊人来消费
+					condition.notify()      # 唤醒一个挂起的线程，这里就是喊人来消费。
 				else:
 					print("Producer:{} already 10, stop deliver, now products:{}.".format(self.name, products))
 					condition.wait()    # 释放线程锁，并挂起线程。

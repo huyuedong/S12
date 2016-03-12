@@ -4,6 +4,9 @@
 
 """
 Manager：
+进程间去改一个Manager的数据
+改同一个字典，同一个列表
+Manager是进程安全的。
 """
 
 from multiprocessing import Process, Manager
