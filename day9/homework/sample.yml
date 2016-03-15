@@ -1,0 +1,18 @@
+
+game_server:
+  file.recurse:
+    - name: /data/www/game_server
+    - source: salt://code/game_server
+    - user: nobody
+    - group: nobody
+    - file_mode: 644
+    - dir_mode: 755
+
+resource:
+  file.recurse:
+   - name: /data/www/resource
+   - source: salt://code/resource
+   - user: nobody
+   - group: nobody
+   - file_mode: 644
+   - dir_mode: 755
