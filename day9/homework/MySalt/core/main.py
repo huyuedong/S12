@@ -5,6 +5,9 @@
 """
 可以对机器进行分组
 可以对指定的一组或多组机器执行批量命令，分发文件(发送\接收)
+使用SaltStack的模式,实现上节课的远程管理主机
+MySalt "operate object" module.func "instruction"
+配置文件使用yaml格式
 纪录操作日志
 version: v0.1
 """
@@ -16,6 +19,7 @@ import getpass
 import multiprocessing
 import paramiko
 import logging
+import importlib
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core import config_handler
 from conf import setting
@@ -36,22 +40,22 @@ class QClient(object):
 			'302': "302...",
 		}
 		self.login_name = None
-		self.exit_flag = False
+		self.__exit_flag = False
 		if self.login():
 			self.menu()
 
 	# 主菜单
 	def menu(self):
 		print("This is a batch host management tool.")
-		while not self.exit_flag:
-			input_cmd = input("[{}]==>".format(self.login_name)).strip()
-			self.instruction_parse(input_cmd)
+		while not self.__exit_flag:
+			user_input = input("[{}]==>".format(self.login_name)).strip()
+			self.instruction_parse(user_input)
 
 	# 退出
 	def exit(self, instructions):
 		print("Bye~")
 		loger.info("{} logout.".format(self.login_name))
-		self.exit_flag = True
+		self.__exit_flag = True
 
 	# 查看主机分组
 	def show(self, instructions):
@@ -196,30 +200,6 @@ class QClient(object):
 						print("give up this operation.")
 						loger.debug("{} input {}, and give up to delete the group:{} in this operation.".format(self.login_name, pop_list))
 
-	# 批量执行命令
-	def cmd(self, instructions):
-		print("Execute the command in batch.")
-		cmd_flag = True
-		if len(instructions) < 5:
-			print("Lack of arguments")
-		else:
-			configure = config_handler.read()
-			mandatory_filed = ["-g", "-c"]
-			for i in mandatory_filed:
-				if i not in instructions:
-					print("invalid instruction")
-					cmd_flag = False
-			if cmd_flag:
-				index_g = instructions.index("-g")
-				index_c = instructions.index("-c")
-				group_list = instructions[index_g+1:index_c]
-				command = instructions[index_c+1]
-				for i in group_list:
-					if configure.get(i):
-						for j in configure[i]:
-							self.amd_func(j, command)
-							loger.info("{} {}:{} {}.".format(self.login_name, i, j, command))
-
 	# 分发文件
 	def sftp(self, instructions):
 		if len(instructions) < 6:
@@ -268,20 +248,32 @@ class QClient(object):
 
 	# 命令解析
 	def instruction_parse(self, instructions):
-		instruction_list = instructions.split()
-		try:
-			func_str = instruction_list[0]
-			if hasattr(self, func_str):
-				func = getattr(self, func_str)
-				func(instruction_list)
-			else:
-				print("Invalid instruction...")
-		except IndexError as e:
-			print("Invalid instruction")
-			loger.debug("{} input {},{}".format(self.login_name, instructions, e))
+		if instructions.strip().startswith("mysalt"):
+			# 得到去掉mysalt的列表
+			instruction_list = instructions.split()[1:]
+			try:
+				module_func = instruction_list[1]
+				module_name = module_func.split(".")[0]
+				func_name = module_func.split(".")[1]
+				# 导入命令中需要的包
+				module = importlib.import_module("mysalt.{}".format(module_name))
+				# 判断是否有命令中的方法
+				if hasattr(module, func_name):
+					func = getattr(self, func_name)
+					func(instruction_list)
+				else:
+					print("Invalid instruction...")
+					self.instruction_msg()
+			except IndexError as e:
+				print("Invalid instruction")
+				loger.debug("{} input {},{}".format(self.login_name, instructions, e))
+		else:
+			print("Invalid instruction.")
+			self.instruction_msg()
 
 	# 命令介绍
 	def instruction_msg(self):
+		print("The help info:")
 		msg = '''
 		show -g group_name               : show the hosts under the specified group,
 											all group name will show if no group been specified.
@@ -326,23 +318,6 @@ class QClient(object):
 		else:
 			return False
 
-	# 执行命令
-	def amd_func(self, ip, cmd):
-		# 创建SSH对象
-		ssh = paramiko.SSHClient()
-		# 允许连接不在know_hosts文件中的主机
-		ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-		# 连接服务器
-		ssh.connect(hostname=ip, port=22, username="root", password="rootroot")
-		# 执行命令
-		stdin, stdout, stderr = ssh.exec_command(cmd)
-		result1, result2 = stdout.read(), stderr.read()
-		ssh.close()
-		print("IP:{} return==>:".format(ip))
-		if result2:
-			print(result2.decode())
-		else:
-			print(result1.decode())
 
 	# 发送文件
 	def sftp_put(self, ip, localpath, remotepath):
