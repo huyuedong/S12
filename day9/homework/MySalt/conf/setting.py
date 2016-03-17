@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 # __author__ = "Q1mi"
 
-import sys
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-CONFIG = "{}\conf\config.json".format(BASE_DIR)
+GROUPS_INFO = "{}{}conf{}groups.sls".format(BASE_DIR, os.sep, os.sep)
 
 USER_ACCOUNT = {
 	"alex": {
@@ -17,3 +16,5 @@ USER_ACCOUNT = {
 		"password": "1234", "lock_flag": "0", "limits": [],
 	},
 }
+
+print(GROUPS_INFO)

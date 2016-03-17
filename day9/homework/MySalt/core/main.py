@@ -200,73 +200,45 @@ class QClient(object):
 						print("give up this operation.")
 						loger.debug("{} input {}, and give up to delete the group:{} in this operation.".format(self.login_name, pop_list))
 
-	# 分发文件
-	def sftp(self, instructions):
-		if len(instructions) < 6:
-			print("Lack of arguments")
-		else:
-			configure = config_handler.read()
-			if "-get" in instructions:
-				try:
-					print("This is the func of get file from remote path.")
-					index_g = instructions.index("-g")
-					index_get = instructions.index("-get")
-					group_list = instructions[index_g+1:index_get]
-					path_list = instructions[index_get+1:]
-					if len(path_list) == 2:
-						for i in group_list:
-							if configure.get(i):
-								for j in configure[i]:
-									self.sftp_get(j, path_list[0], path_list[1])
-					else:
-						print("Invalid instruction.")
-						loger.debug("{} input {} ,and can't parse the path.".format(self.login_name, instructions))
-				except ValueError as e:
-					print("Invalid instruction.")
-					loger.debug("{} input {},and raise error {}.".format(self.login_name, instructions, e))
-			elif "-put" in instructions:
-				try:
-					print("This is the func of put file to remote path.")
-					index_g = instructions.index("-g")
-					index_get = instructions.index("-put")
-					group_list = instructions[index_g+1:index_get]
-					path_list = instructions[index_get+1:]
-					if len(path_list) == 2:
-						for i in group_list:
-							if configure.get(i):
-								for j in group_list[i]:
-									self.sftp_get(j, path_list[0], path_list[1])
-					else:
-						print("Invalid instruction.")
-						loger.debug("{} input {} ,and can't parse the path.".format(self.login_name, instructions))
-				except ValueError as e:
-					print("Invalid instruction.")
-					loger.debug("{} input {},and raise error {}.".format(self.login_name, instructions, e))
-			else:
-				print("Invalid instruction")
-				loger.debug("{} input {}.".format(self.login_name, instructions))
-
 	# 命令解析
 	def instruction_parse(self, instructions):
+		# 判断命令是否是有效命令
 		if instructions.strip().startswith("mysalt"):
-			# 得到去掉mysalt的列表
-			instruction_list = instructions.split()[1:]
-			try:
-				module_func = instruction_list[1]
-				module_name = module_func.split(".")[0]
-				func_name = module_func.split(".")[1]
-				# 导入命令中需要的包
-				module = importlib.import_module("mysalt.{}".format(module_name))
-				# 判断是否有命令中的方法
-				if hasattr(module, func_name):
-					func = getattr(self, func_name)
-					func(instruction_list)
-				else:
-					print("Invalid instruction...")
-					self.instruction_msg()
-			except IndexError as e:
-				print("Invalid instruction")
-				loger.debug("{} input {},{}".format(self.login_name, instructions, e))
+			# 按空格分割得到列表
+			instruction_list = instructions.split()
+			# 过滤掉<' " ,>
+			arg_list = list(map(lambda t: re.sub(r'[,"\']', "", t), instruction_list))
+			go_flag = False     # 定义一个继续解析的标志
+			count_point_item = 0    # 确保只有一项是包含.的
+			global module_func  # 指令列表中包含<包名.方法>的那一项
+			for i in arg_list:
+				if i.count(".") > 0:
+					go_flag = True
+					module_func = i
+					count_point_item += 1
+			# 当且仅当有一项是包含.的时候，继续解析
+			if go_flag and count_point_item == 1:
+				cmd_list = arg_list[arg_list.index(module_func)+1:]     # 得到出指令的列表
+				obj_list = arg_list[arg_list.index("mysalt")+1:arg_list.index(module_func)]     # 得到操作对象的列表
+				arg = (obj_list, cmd_list)  # 将操作对象列表和指令列表放到元祖中
+				module_name = module_func.split(".")[0]     # 获取到包名
+				func_name = module_func.split(".")[1]   # 获取到方法名
+				try:
+					# 导入命令中需要的包
+					module = importlib.import_module("mysalt.mysalt_{}".format(module_name))
+					# 判断是否有命令中的方法
+					if hasattr(module, func_name):
+						func = getattr(self, func_name)
+						func(arg)
+					else:
+						print("Invalid instruction...")
+						self.instruction_msg()
+				except ImportError as e:
+					print("Can't find that module.")
+					loger.info("input:{}, error:{}".format(instructions, e))
+			else:
+				print("Invalid instruction.")
+				self.instruction_msg()
 		else:
 			print("Invalid instruction.")
 			self.instruction_msg()
@@ -317,25 +289,6 @@ class QClient(object):
 				retry_count += 1
 		else:
 			return False
-
-
-	# 发送文件
-	def sftp_put(self, ip, localpath, remotepath):
-		transport = paramiko.Transport(ip, 22)
-		transport.connect(username="root", password="rootroot")
-		sftp = paramiko.SFTPClient.from_transport(transport)
-		# 上传文件
-		sftp.put(localpath, remotepath)
-		transport.close()
-
-	# 接收文件
-	def sftp_get(self, ip, remotepath, localpath):
-		transport = paramiko.Transport(ip, 22)
-		transport.connect(username="root", password="rootroot")
-		sftp = paramiko.SFTPClient.from_transport(transport)
-		# 下载文件
-		sftp.get(remotepath, localpath)
-		transport.close()
 
 
 def run():

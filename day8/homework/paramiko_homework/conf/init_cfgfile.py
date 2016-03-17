@@ -6,20 +6,20 @@
 初始化配置文件
 """
 
-import json
+import yaml
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import setting
 
-config = {}
-config["default"] = []
+groups = {}
+groups["default"] = []
 config["db"] = ["172.18.26.193", "192.168.183.131", ]
 config["nginx"] = ["172.18.26.193", ]
 config["tomcat"] = ["192.168.183.131", ]
 
 with open(setting.CONFIG, "w") as f:
-	json.dump(config, f)
+	json.dump(groups, f)
 
 # with open(setting.CONFIG, "r") as f:
 # 	dic = json.load(f)
