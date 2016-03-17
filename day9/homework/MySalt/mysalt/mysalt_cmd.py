@@ -24,17 +24,17 @@ def cmd_func(ip, cmd):
 	# 允许连接不在know_hosts文件中的主机
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	# 连接服务器
-	ssh.connect(hostname=i, port=22, username="root", password="rootroot")
+	ssh.connect(hostname=ip, port=22, username="root", password="rootroot")
 	# 执行命令
 	stdin, stdout, stderr = ssh.exec_command(cmd)
-	result = stdout.read() if stdout.read() else stderr.read()
+	# result = stdout.read() if stdout.read() else stderr.read()
+	result = list(filter(lambda t: t is not None, [stdout.read(), stderr.read()]))[0]
 	ssh.close()
 	print("IP:{} return==>:".format(ip))
 	print(result.decode())
 
 
 def run(arg):
-	pool = Pool(5)
 	print("Execute the command in batch.")
 	if len(arg) != 2:
 		loger.info("Lack of arguments.acquired arg:{}".format(arg))
@@ -42,7 +42,13 @@ def run(arg):
 		obj_list, cmd_list = arg
 		ip_list = handler.myhandler(obj_list)
 		cmd = " ".join(cmd_list)
-		for i in ip_list:
-			pool.apply_async(cmd_func, args=(i, cmd))
-		pool.close()
-		pool.join()
+		if len(ip_list) >= 1:
+			# pool = Pool(5)
+			for i in ip_list:
+				cmd_func(i, cmd)
+				pool.apply_async(cmd_func, args=(i, cmd))
+			# pool.close()
+			# pool.join()
+		else:
+			print("No host to connect.")
+			loger.info("ip list is empty.")

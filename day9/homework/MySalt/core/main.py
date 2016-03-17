@@ -16,8 +16,7 @@ import os
 import sys
 import re
 import getpass
-import multiprocessing
-import paramiko
+import yaml
 import logging
 import importlib
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -34,8 +33,8 @@ class QClient(object):
 			'200': "Invalid username or password!",
 			'201': "Too many retry!",
 			'202': "202...",
-			'300': "300...",
-			'301': "301...",
+			'300': "Invalid instruction.",
+			'301': "Can't find that module.",
 			'302': "302...",
 		}
 		self.login_name = None
@@ -51,167 +50,26 @@ class QClient(object):
 			self.instruction_parse(user_input)
 
 	# 退出
-	def exit(self, instructions):
+	def exit(self):
 		print("Bye~")
 		loger.info("{} logout.".format(self.login_name))
 		self.__exit_flag = True
 
-	# 查看主机分组
-	def show(self, instructions):
-		print("show group of host...")
-		# 读取配置
-		configure = config_handler.read()
-		# 只有一个show的时候默认打印所有的组名
-		if len(instructions) == 1:
-			print("{:*^50}".format("groups"))
-			for k in configure:
-				print(k)
-			print("-" * 50)
-		elif "-g" in instructions:
-			# 获取用户输入的组名
-			group_list = instructions[instructions.index("-g")+1:]
-			# 如果有这个组名，就遍历打印出这个组下的所有主机记录
-			try:
-				# 遍历用户输入的组名列表
-				for i in group_list:
-					# 如果配置文件中有这个组名
-					if i in configure:
-						print("{:*^50}".format(i))
-						# 遍历打印该组的主机记录
-						for j in configure[i]:
-							print(j)
-							loger.info("{} checkout the host of the group:{}.".format(self.login_name, i))
-						print("-" * 50)
-			# 如果没有这个组，就打印提示信息。
-			except (ValueError, KeyError):
-				print("invalid group name!")
-				loger.debug("{}=>:{}".format(self.login_name, instructions))
-		# 命令错误打印提示
-		else:
-			print("invalid instructions!")
-			self.instruction_msg()
-
-	# 增加主机记录
-	def add(self, instructions):
-		print("add host record to the group...")
-		add_flag = True
-		# 参数小于5，就提示参数不足
-		if len(instructions) < 5:
-			print("Lack of arguments")
-		else:
-			mandatory_filed = ["-g", "-h"]
-			for i in mandatory_filed:
-				if i not in instructions:
-					print("invalid instruction")
-					add_flag = False
-			if add_flag:
-				index_g = instructions.index("-g")
-				index_h = instructions.index("-h")
-				# 得到用户输入的组名列表
-				group_list = instructions[index_g+1:index_h]
-				# 得到用户输入的主机名列表
-				host_list = instructions[index_h+1:]
-				# 判断host_list中的ip是否都是有效ip
-				p = re.compile(r'^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$')
-				flag_h = True
-				for i in host_list:
-					# 如果匹配到不合法的IP,就把flag_h置为False
-					if not p.match(i):
-						flag_h = False
-				# 如果用户输入的全为合法IP，则增加记录
-				if flag_h:
-					configure = config_handler.read()
-					for i in group_list:
-						# 如果存在分组就将主机记录更新
-						if i in configure.keys():
-							configure.keys().append(host_list)
-							loger.info("{} update hosts:{} in group:{}.".format(self.login_name, host_list, i))
-						# 如果不存在该分组就新增
-						else:
-							print("There is no group named {},will you want to add?".format(i))
-							option = input("Type [Y/y] to confirm, otherwise discard.").strip()
-							# 新加分组需要确认
-							if option.upper() == "Y":
-								configure[i] = host_list
-								config_handler.write(configure)
-								loger.info("{} input {},and add a new group:{} hosts:{}".format(self.login_name, instructions, i, host_list))
-							# 放弃修改就打印提示
-							else:
-								print("give up this operation.")
-								loger.debug("{} input {}, and give up to add a group:() in this operation.".format(self.login_name, i))
-				# 提示用户输入了无效的IP
-				else:
-					print("Your input instruction has some invalid IP.")
-					loger.debug("{} input {}, and it has some invalid IP.")
-
-	# 删除主机
-	def delete(self, instructions):
-		print("delete some hosts in the group,and the empty group will be delete. ")
-		delete_flag = True
-		configure = config_handler.read()
-		if len(instructions) < 5:
-			print("Lack of arguments")
-		else:
-			mandatory_filed = ["-g", "-h"]
-			for i in mandatory_filed:
-				if i not in instructions:
-					print("invalid instruction")
-					delete_flag = False
-			if delete_flag:
-				index_g = instructions.index("-g")
-				index_h = instructions.index("-h")
-				group_list = instructions[index_g+1:index_h]
-				host_list = instructions[index_h+1:]
-				# 删除整个组
-				if instructions[index_h+1].upper() == "ALL":
-					pop_list = []
-					for i in group_list:
-						if i in configure.keys():
-							pop_list.append(i)
-							configure.pop(i)
-						else:
-							print("There is no group named {}.".format(i))
-					print("This operation will delete the group {}.".format(pop_list))
-					option = input("Type [Y/y] to confirm, otherwise discard.").strip()
-					if option.upper() == "Y":
-						print("deleting...")
-						config_handler.write(configure)
-						loger.info("{} input {}, and delete the group:{}.".format(self.login_name, instructions, pop_list))
-					else:
-						print("give up this operation.")
-						loger.debug("{} input {}, and give up to delete the group:{} in this operation.".format(self.login_name, pop_list))
-				else:
-					pop_list = []
-					for i in group_list:
-						for j in host_list:
-							if j in configure.get(i, []):
-								configure.get(i, []).remove(j)
-								pop_list.append({i: j})
-					print("This operation will delete the group:the host.")
-					for i in pop_list:
-						print(i)
-					option = input("Type [Y/y] to confirm, otherwise discard.").strip()
-					if option.upper() == "Y":
-						print("deleting...")
-						config_handler.write(configure)
-						loger.info("{} input {}, and delete the host:{}.".format(self.login_name, instructions, pop_list))
-					else:
-						print("give up this operation.")
-						loger.debug("{} input {}, and give up to delete the group:{} in this operation.".format(self.login_name, pop_list))
-
 	# 命令解析
 	def instruction_parse(self, instructions):
+		loger.debug("{} input {}.".format(self.login_name, instructions))
 		# 判断命令是否是有效命令
 		if instructions.strip().startswith("mysalt"):
 			# 按空格分割得到列表
 			instruction_list = instructions.split()
 			# 过滤掉<' " ,>
-			arg_list = list(map(lambda t: re.sub(r'[,"\']', "", t), instruction_list))
+			arg_list = list(map(lambda t: re.sub(r'[,\"\']', "", t), instruction_list))
 			go_flag = False     # 定义一个继续解析的标志
 			count_point_item = 0    # 确保只有一项是包含.的
 			global module_func  # 指令列表中包含<包名.方法>的那一项
+			p = re.compile(r'[a-zA-Z_]+\.[a-zA-Z_]+')
 			for i in arg_list:
-				if i.count(".") > 0:
+				if p.match(i):
 					go_flag = True
 					module_func = i
 					count_point_item += 1
@@ -227,30 +85,37 @@ class QClient(object):
 					module = importlib.import_module("mysalt.mysalt_{}".format(module_name))
 					# 判断是否有命令中的方法
 					if hasattr(module, func_name):
-						func = getattr(self, func_name)
+						print("=" * 50)
+						func = getattr(module, func_name)
+						print("-" * 50)
 						func(arg)
 					else:
-						print("Invalid instruction...")
+						print(self.response_code["300"])
 						self.instruction_msg()
 				except ImportError as e:
-					print("Can't find that module.")
+					print(self.response_code["301"])
 					loger.info("input:{}, error:{}".format(instructions, e))
 			else:
-				print("Invalid instruction.")
+				print(self.response_code["300"])
 				self.instruction_msg()
+		elif instructions.strip().upper() == "EXIT":
+			self.exit()
+		elif instructions.strip() == "?" or instructions.strip().upper() == "HELP":
+			self.instruction_msg()
 		else:
-			print("Invalid instruction.")
+			print(self.response_code["300"])
 			self.instruction_msg()
 
 	# 命令介绍
 	def instruction_msg(self):
 		print("The help info:")
 		msg = '''
-		salt "*" cmd.run "instructions"                          : run the instructions on all hosts
-		salt -g "group_name" cmd.run "instructions"              : run instruction on hosts under the group
-		salt "*" file.put "filename"                             : put the specified file to all hosts
-		salt "*" file.get "filename"                             : get the specified file from all hosts
-		exit                                                     : exit this system.
+		mysalt "*" cmd.run "instructions"                          : run the instructions on all hosts
+		mysalt -g "group_name" cmd.run "instructions"              : run instruction on hosts under the group
+		mysalt -h "host_name" cmd.run "instructions"               : run instruction on the specified hosts
+		mysalt "*" file.put "filename"                             : put the specified file to all hosts
+		mysalt "*" file.get "filename"                             : get the specified file from all hosts
+		exit                                                       : exit this system.
 
 		'''
 		print(msg)
