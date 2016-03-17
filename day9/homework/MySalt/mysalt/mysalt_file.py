@@ -13,7 +13,28 @@ import logging
 from multiprocessing import Pool
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core import handler
+from core import parse_file
 loger = logging.getLogger(__name__)
+
+
+# 发送文件
+def sftp_put(ip, localpath, remotepath):
+	transport = paramiko.Transport(ip, 22)
+	transport.connect(username="root", password="rootroot")
+	sftp = paramiko.SFTPClient.from_transport(transport)
+	# 上传文件
+	sftp.put(localpath, remotepath)
+	transport.close()
+
+
+# 接收文件
+def sftp_get(ip, remotepath, localpath):
+	transport = paramiko.Transport(ip, 22)
+	transport.connect(username="root", password="rootroot")
+	sftp = paramiko.SFTPClient.from_transport(transport)
+	# 下载文件
+	sftp.get(remotepath, localpath)
+	transport.close()
 
 
 def get(arg):
@@ -22,11 +43,13 @@ def get(arg):
 	if len(arg) != 2:
 		loger.info("Lack of arguments.acquired arg:{}".format(arg))
 	else:
-		obj_list, cmd_list = arg
+		obj_list, file_list = arg
 		ip_list = handler.myhandler(obj_list)
-		cmd = " ".join(cmd_list)
+		src_dst_list = parse_file.parse_file("get", file_list)
 		for i in ip_list:
-			pool.apply_async(sftp_get, args=(i, cmd))
+			for j in src_dst_list:
+				pool.apply_async(sftp_get, args=(i, j[0], j[1]))
+				loger.info("get {} from {}.".format(j[0], j[1]))
 		pool.close()
 		pool.join()
 
@@ -37,30 +60,12 @@ def put(arg):
 	if len(arg) != 2:
 		loger.info("Lack of arguments.acquired arg:{}".format(arg))
 	else:
-		obj_list, cmd_list = arg
+		obj_list, file_list = arg
 		ip_list = handler.myhandler(obj_list)
-		cmd = " ".join(cmd_list)
+		src_dst_list = parse_file.parse_file("put", file_list)
 		for i in ip_list:
-			pool.apply_async(sftp_put, args=(i, cmd))
+			for j in src_dst_list:
+				pool.apply_async(sftp_get, args=(i, j[0], j[1]))
+				loger.info("put {} from {}.".format(j[0], j[1]))
 		pool.close()
 		pool.join()
-
-
-# 发送文件
-def sftp_put(self, ip, localpath, remotepath):
-	transport = paramiko.Transport(ip, 22)
-	transport.connect(username="root", password="rootroot")
-	sftp = paramiko.SFTPClient.from_transport(transport)
-	# 上传文件
-	sftp.put(localpath, remotepath)
-	transport.close()
-
-
-# 接收文件
-def sftp_get(self, ip, remotepath, localpath):
-	transport = paramiko.Transport(ip, 22)
-	transport.connect(username="root", password="rootroot")
-	sftp = paramiko.SFTPClient.from_transport(transport)
-	# 下载文件
-	sftp.get(remotepath, localpath)
-	transport.close()

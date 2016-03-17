@@ -21,7 +21,6 @@ import paramiko
 import logging
 import importlib
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from core import config_handler
 from conf import setting
 
 loger = logging.getLogger(__name__)
@@ -32,8 +31,8 @@ class QClient(object):
 	# 错误代码
 	def __init__(self):
 		self.response_code = {
-			'200': "200...",
-			'201': "201...",
+			'200': "Invalid username or password!",
+			'201': "Too many retry!",
 			'202': "202...",
 			'300': "300...",
 			'301': "301...",
@@ -247,17 +246,11 @@ class QClient(object):
 	def instruction_msg(self):
 		print("The help info:")
 		msg = '''
-		show -g group_name               : show the hosts under the specified group,
-											all group name will show if no group been specified.
-		add -g group_name -h hostname    : add the host to the group.
-
-		delete -g group_name -h hostname : delete the host from the group.
-
-		cmd -g group_name -c cmd         : all hosts under the group will execute the command.
-
-		sftp -g group_name -f src dsc    : send the file to all hosts under the group.
-
-		exit                             : exit this system.
+		salt "*" cmd.run "instructions"                          : run the instructions on all hosts
+		salt -g "group_name" cmd.run "instructions"              : run instruction on hosts under the group
+		salt "*" file.put "filename"                             : put the specified file to all hosts
+		salt "*" file.get "filename"                             : get the specified file from all hosts
+		exit                                                     : exit this system.
 
 		'''
 		print(msg)
@@ -280,14 +273,15 @@ class QClient(object):
 					self.login_name = username
 					return True
 				else:
-					print("valid username or password!")
+					print(self.response_code["200"])
 					loger.info("{} input password wrong...")
 					retry_count += 1
 			else:
-				print("valid username or password!")
+				print(self.response_code["200"])
 				loger.info("wrong username {}".format(username))
 				retry_count += 1
 		else:
+			print(self.response_code["201"])
 			return False
 
 

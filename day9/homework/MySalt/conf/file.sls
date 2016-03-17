@@ -1,4 +1,4 @@
-file_put:
+put:
   default:
     source: /usr/local/src/
     name: /usr/local/src/
@@ -10,13 +10,13 @@ file_put:
     name: /data/www/
 
 
-file_get:
+get:
   default:
     source: /usr/local/src/
     name: /usr/local/src/
   db:
-    source: /usr/local/src/
-    name: /usr/local/db/
+    source: /usr/local/db/
+    name: /usr/local/src/
   tomcat:
-    source: /usr/local/src/
-    name: /data/www/
+    source: /data/www/
+    name: /usr/local/src/

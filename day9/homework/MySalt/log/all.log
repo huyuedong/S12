@@ -474,3 +474,5 @@
 [2016-03-16 19:51:07,558][MainThread:6148][task_id:core.main][main.py:80][INFO][alex checkout the host of the group:db.]
 [2016-03-16 19:51:07,559][MainThread:6148][task_id:core.main][main.py:80][INFO][alex checkout the host of the group:tomcat.]
 [2016-03-16 19:52:30,034][MainThread:6148][task_id:core.main][main.py:53][INFO][alex logout.]
+[2016-03-17 16:59:41,088][MainThread:9148][task_id:core.Mylogging][Mylogging.py:58][INFO][It works!]
+[2016-03-17 16:59:44,584][MainThread:9148][task_id:core.main][main.py:271][INFO][alex login success.]
