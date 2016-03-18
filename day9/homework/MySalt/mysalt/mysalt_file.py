@@ -39,7 +39,7 @@ def sftp_get(ip, remotepath, localpath):
 
 def get(arg):
 	print("This is the func of get file from remote path.")
-	pool = Pool(5)
+	# pool = Pool(5)
 	if len(arg) != 2:
 		loger.info("Lack of arguments.acquired arg:{}".format(arg))
 	else:
@@ -48,15 +48,16 @@ def get(arg):
 		src_dst_list = parse_file.parse_file("get", file_list)
 		for i in ip_list:
 			for j in src_dst_list:
-				pool.apply_async(sftp_get, args=(i, j[0], j[1]))
+				sftp_get(i, j[0], j[1])
+				# pool.apply_async(sftp_get, args=(i, j[0], j[1]))
 				loger.info("get {} from {}.".format(j[0], j[1]))
-		pool.close()
-		pool.join()
+		# pool.close()
+		# pool.join()
 
 
 def put(arg):
 	print("This is the func of put file to remote path.")
-	pool = Pool(5)
+	# pool = Pool(5)
 	if len(arg) != 2:
 		loger.info("Lack of arguments.acquired arg:{}".format(arg))
 	else:
@@ -65,7 +66,8 @@ def put(arg):
 		src_dst_list = parse_file.parse_file("put", file_list)
 		for i in ip_list:
 			for j in src_dst_list:
-				pool.apply_async(sftp_get, args=(i, j[0], j[1]))
+				sftp_put(i, j[0], j[1])
+				# pool.apply_async(sftp_get, args=(i, j[0], j[1]))
 				loger.info("put {} from {}.".format(j[0], j[1]))
-		pool.close()
-		pool.join()
+		# pool.close()
+		# pool.join()

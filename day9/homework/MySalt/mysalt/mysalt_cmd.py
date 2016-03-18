@@ -46,7 +46,7 @@ def run(arg):
 			# pool = Pool(5)
 			for i in ip_list:
 				cmd_func(i, cmd)
-				pool.apply_async(cmd_func, args=(i, cmd))
+				# pool.apply_async(cmd_func, args=(i, cmd))
 			# pool.close()
 			# pool.join()
 		else:
