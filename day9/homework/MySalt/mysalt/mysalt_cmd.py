@@ -30,8 +30,9 @@ def cmd_func(ip, cmd):
 	# result = stdout.read() if stdout.read() else stderr.read()
 	result = list(filter(lambda t: t is not None, [stdout.read(), stderr.read()]))[0]
 	ssh.close()
-	print("IP:{} return==>:".format(ip))
+	print("IP:{} return==>:\n".format(ip))
 	print(result.decode())
+	print("-" * 50)
 
 
 def run(arg):
@@ -39,8 +40,11 @@ def run(arg):
 	if len(arg) != 2:
 		loger.info("Lack of arguments.acquired arg:{}".format(arg))
 	else:
+		# 从元组里拆分出对象列表和指令列表
 		obj_list, cmd_list = arg
+		# 得到要操作的IP列表
 		ip_list = handler.myhandler(obj_list)
+		# 得到要操作的命令
 		cmd = " ".join(cmd_list)
 		if len(ip_list) >= 1:
 			# pool = Pool(5)

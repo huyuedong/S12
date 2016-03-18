@@ -18,6 +18,7 @@ loger = logging.getLogger(__name__)
 
 def myhandler(arg):
 	ip_list = list()
+	loger.debug("get the arg:{}".format(arg))
 	with open(setting.GROUPS_INFO) as f:
 		info = yaml.load(f)
 	try:
@@ -28,9 +29,11 @@ def myhandler(arg):
 				ip_list = list(set(ip_list))
 		# 如果以-g开头的话，就返回指定组名的IP
 		elif arg[0] == "-g":
+			loger.debug("begin to get group name: {}".format(arg))
 			arg = arg[1:]
+			loger.debug("get the group list: {}".format(arg))
 			for i in arg:
-				if info.get(i):
+				if info["groups"].get(i):
 					ip_list.extend(info["groups"][i])
 					ip_list = list(set(ip_list))
 		# 如果以-h开头的话，就返回指定IP

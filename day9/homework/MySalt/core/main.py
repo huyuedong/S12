@@ -73,7 +73,7 @@ class QClient(object):
 					go_flag = True
 					module_func = i
 					count_point_item += 1
-			# 当且仅当有一项是包含.的时候，继续解析
+			# 当且仅当有一项是module.func的时候，继续解析
 			if go_flag and count_point_item == 1:
 				cmd_list = arg_list[arg_list.index(module_func)+1:]     # 得到出指令的列表
 				obj_list = arg_list[arg_list.index("mysalt")+1:arg_list.index(module_func)]     # 得到操作对象的列表
@@ -85,10 +85,9 @@ class QClient(object):
 					module = importlib.import_module("mysalt.mysalt_{}".format(module_name))
 					# 判断是否有命令中的方法
 					if hasattr(module, func_name):
-						print("=" * 50)
 						func = getattr(module, func_name)
-						print("-" * 50)
 						func(arg)
+						print("=" * 50)
 					else:
 						print(self.response_code["300"])
 						self.instruction_msg()
