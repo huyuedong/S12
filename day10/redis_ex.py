@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 # __author__ = "Q1mi"
 
+"""
+redis练习
+"""
+
 import redis
 
 r = redis.Redis()
