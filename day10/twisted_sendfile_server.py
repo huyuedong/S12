@@ -58,7 +58,7 @@ class PoetryProtocol(Protocol):
 # 定义server端的工厂类，继承ServerFactory
 class PoetryFactory(ServerFactory):
 
-	protocol = PoetryProtocol  # 重写了协议
+	protocol = PoetryProtocol  # 重写协议(类)
 
 	def __init__(self, poem):  # 构造方法
 		self.poem = poem  # 将传过来的参数赋值给自身
