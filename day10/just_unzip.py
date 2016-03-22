@@ -26,4 +26,18 @@ def get_zip(arg):
 
 get_zip("E:\\学习资料\\11期视频")
 
+unzip_cmd = '7z x "E:\\test\\上.7z" -p"ayBo(76twspUS*zy(ouzB&zy08yS98ax8U" -y -aos -o"E:\\temp"'  # 解压命令
+"""
+x:完整路径下解压文件
+
+-y:所有确认选项都默认为是（即不出现确认提示）
+
+-p:设置密码
+
+-aos:跳过已存在的文件
+
+-o:设置输出目录
+"""
+os.system(unzip_cmd)
+
 
