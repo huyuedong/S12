@@ -10,22 +10,23 @@ import redis
 
 r = redis.Redis()
 print(r.keys())
+r.set("name", "alex")
 
 print(r.get("name").decode())
 
 # setbit修改的是ASCII码对应的二进制的指定下标的值
 r.set("ID", 3)
 print(r.get("ID"))
-print(ord(r.get("ID").decode()))    # 获得ID值对应的ASCII码
-print(bin(ord(r.get("ID").decode())))    # 获得ID值对应的ASCII码的二进制值
+print("ASCII=>{}".format(ord(r.get("ID").decode())))    # 获得ID值对应的ASCII码
+print("ASCII码的二进制=>{}".format(bin(ord(r.get("ID").decode()))))    # 获得ID值对应的ASCII码的二进制值
 print("=" * 50)
-print(r.get("ID").decode())
+print("初始ID=>{}".format(r.get("ID").decode()))
 # 修改3对应的ASCII码对应的二进制值的下标1的值为1
 r.setbit("ID", 1, 1)
-print(bin(ord(r.get("ID").decode())))   # 打印修改后的ID值对应的ASCII码的二进制值
-print(ord(r.get("ID").decode()))    # 打印ID值对应的ASCII码
+print("ASCII码的二进制=>{}".format(bin(ord(r.get("ID").decode()))))   # 打印修改后的ID值对应的ASCII码的二进制值
+print("ASCII=>{}".format(ord(r.get("ID").decode())))   # 打印ID值对应的ASCII码
 print("=" * 50)
-print(r.get("ID").decode())
+print("修改后的ID=>{}".format(r.get("ID").decode()))
 
 
 # setbit的应用==>：UV_count 独立访问用户,

@@ -3,13 +3,12 @@
 # __author__ = "Q1mi"
 
 """
-接收端
+RabbitMQ实现最简单的队列通信--接收端
 """
 
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-               'localhost'))
+connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
 
@@ -17,11 +16,13 @@ channel = connection.channel()
 # We could avoid that if we were sure that the queue already exists. For example if send.py program
 # was run before. But we're not yet sure which program to run first. In such cases it's a good
 # practice to repeat declaring the queue in both programs.
+# 声明了一个队列
 channel.queue_declare(queue='hello')
 
 
+# 定义一个方法
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
+    print(" [x] Received %r" % body)  # 打印从队列中接收到的信息
 
 channel.basic_consume(callback,
                       queue='hello',

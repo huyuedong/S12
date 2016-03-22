@@ -3,12 +3,14 @@
 # __author__ = "Q1mi"
 
 """
-发送端
+RabbitMQ实现简单的队列通信--发送端
 """
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-               'localhost'))
+# 建立链接
+connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+
+# 实例化链接
 channel = connection.channel()
 
 # 声明queue
@@ -18,6 +20,6 @@ channel.queue_declare(queue='hello')
 # RabbitMQ的消息并不能直接发送到队列，它需要经过交换机的分发。
 channel.basic_publish(exchange='',
                       routing_key='hello',
-                      body='Hello World!')
+                      body='hahaha')
 print(" [x] Sent 'Hello World!'")
 connection.close()

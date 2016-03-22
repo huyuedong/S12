@@ -10,6 +10,6 @@ import redis
 
 r = redis.Redis()   # 主播上班了
 r.publish("fm104.5", "Hello everyone.")    # 主播跟听众打招呼
-r.publish("fm104.5", "Hey man, What's up...")   # 主播开始hip-hop
+r.publish("fm104.5", "Good man is me, I am alex...")   # 主播开始hip-hop
 
 
