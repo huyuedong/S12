@@ -20,6 +20,6 @@ channel.queue_declare(queue='hello')
 # RabbitMQ的消息并不能直接发送到队列，它需要经过交换机的分发。
 channel.basic_publish(exchange='',
                       routing_key='hello',
-                      body='hahaha')
+                      body='Hello World!')
 print(" [x] Sent 'Hello World!'")
 connection.close()
