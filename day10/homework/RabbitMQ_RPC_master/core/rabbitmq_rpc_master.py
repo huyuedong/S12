@@ -9,21 +9,25 @@ master端向server端发送一个数，并接收server端返回命令的执行�
 """
 import pika
 import uuid
+import logging
+logger = logging.getLogger(__name__)
 
 
 class CmdRpcMaster(object):
     def __init__(self):
-        self.credentials = pika.PlainCredentials("test", "test")
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host="172.18.18.18",
-                                                                            port=5672,
-                                                                            credentials=self.credentials))  # 声明一个链接
+        # self.credentials = pika.PlainCredentials("test", "test")
+        # self.connection = pika.BlockingConnection(pika.ConnectionParameters(host="172.18.18.18",
+        #                                                                     port=5672,
+        #                                                                     credentials=self.credentials))  # 声明一个链接
+
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost", port=5672))
         self.channel = self.connection.channel()  # 声明一个频道
         # 不指定queue名字,rabbit会随机分配一个名字,exclusive=True会在使用此queue的消费者断开后,自动将queue删除
         result = self.channel.queue_declare(exclusive=True)
 
         self.channel.exchange_declare(exchange="cmd", exchange_type="fanout")  # 声明交换机名和交换机类型
 
-        self.callback_queue = result.method.queue  # 为回复声明一个独享的回调队列
+        self.callback_queue = result.method.queue  # 为回复的消息声明一个独享的回调队列
         # 订阅回调队列，以便接收RPC响应
         self.channel.basic_consume(self.on_response, no_ack=True, queue=self.callback_queue)
 
@@ -58,6 +62,6 @@ class CmdRpcMaster(object):
 if __name__ == "__main__":
     cmd = input("Input the instruction:").strip()
     cmd_rpc = CmdRpcMaster()
-    print(" [x] sent instruction:{}".format(cmd))
+    logger.info(" [x] sent instruction:{}".format(cmd))
     response = cmd_rpc.call(cmd)
-    print(" [.] Got {}.".format(response))
+    logger.info(" [.] Got {}.".format(response))
