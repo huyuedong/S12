@@ -22,6 +22,7 @@ class CmdRpcMaster(object):
 
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost", port=5672))
         self.channel = self.connection.channel()  # 声明一个频道
+        self.channel.queue_declare(queue='rpc_queue', durable=True)
         # 不指定queue名字,rabbit会随机分配一个名字,exclusive=True会在使用此queue的消费者断开后,自动将queue删除
         result = self.channel.queue_declare(exclusive=True)
 
@@ -64,6 +65,8 @@ def run():
     cmd_rpc = CmdRpcMaster()
     logger.info(" [x] sent instruction:{}".format(cmd))
     response = cmd_rpc.call(cmd)
+    response = str(response.decode())
+    print(response)  # 打印结果
     logger.info(" [.] Got {}.".format(response))
 
 

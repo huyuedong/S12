@@ -26,7 +26,7 @@ print("[*] Waiting for message.To exit press CTRL+C.")
 
 
 def callback(ch, method, properties, body):
-    print("[x] {}".format(body))
+    print("[x] {}".format(str(body.decode())))
 
 channel.basic_consume(callback, queue=queue_name, no_ack=True)
 
