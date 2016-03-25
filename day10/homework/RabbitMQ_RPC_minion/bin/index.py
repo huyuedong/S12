@@ -10,4 +10,4 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core import rabbitmq_rpc_minion
 from core import Mylogging
 
-rabbitmq_rpc_monion.run()
+rabbitmq_rpc_minion.run()

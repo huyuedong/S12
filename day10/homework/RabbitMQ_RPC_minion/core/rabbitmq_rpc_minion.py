@@ -4,8 +4,8 @@
 # Email: master@liwenzhou.com
 
 """
-RPC server端：消息的订阅者
-master端向server端发送一个数，并接收server端返回斐波那契数列的和
+RPC minion端：消息的订阅者
+master端向minion端发送一个命令，并接收minion端返回的命令执行结果
 """
 
 import pika
@@ -17,19 +17,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 logger = logging.getLogger(__name__)
 
-# credentials = pika.PlainCredentials('test', 'test')  # 建立认证
-# connection = pika.BlockingConnection(pika.ConnectionParameters(host="", port=5672, credentials=credentials))
-connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost", port=5672))
-
-channel = connection.channel()
-
-channel.exchange_declare(exchange="cmd", exchange_type="fanout",)
-
-channel.queue_bind(exchange="cmd", queue="rpc_queue")  # 绑定交换机和队列
-
 
 # 定义一个运行命令的方法
-def run(cmd):
+def excute(cmd):
 	result = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
 	logger.info("Running {} ...".format(cmd))
 	# result = os.system(cmd)
@@ -41,7 +31,7 @@ def run(cmd):
 def on_request(ch, method, props, body):
 	body = str(body)
 	logger.info(" [.] Get the instruction:{}".format(body))  # 打印提示信息
-	response = run(body)  # 计算得到结果
+	response = excute(body)  # 计算得到结果
 	# 发送结果信息
 	ch.basic_publish(
 			exchange="",
@@ -52,8 +42,16 @@ def on_request(ch, method, props, body):
 	ch.basic_ack(delivery_tag=method.delivery_tag)  # 发送应答
 
 
-channel.basic_qos(prefetch_count=1)  # 公平分发
-channel.basic_consume(on_request, queue="rpc_queue")  # 将回调函数传入basic_consume
+def run():
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost", port=5672))  # 链接RabbitMQ
 
-logger.info(" [x] waiting RPC requests.")
-channel.start_consuming()
+	channel = connection.channel()  # 声明频道
+
+	channel.exchange_declare(exchange="cmd", exchange_type="fanout",)  #
+
+	channel.queue_bind(exchange="cmd", queue="rpc_queue")  # 绑定交换机和队列
+	channel.basic_qos(prefetch_count=1)  # 公平分发
+	channel.basic_consume(on_request, queue="rpc_queue")  # 将回调函数传入basic_consume
+
+	logger.info(" [x] waiting RPC requests.")
+	channel.start_consuming()

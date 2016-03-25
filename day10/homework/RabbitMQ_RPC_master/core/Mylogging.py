@@ -39,7 +39,7 @@ LOGGING_DIC = {
 		'default': {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',    # 保存到文件
-			'filename': os.path.join("{}/log".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'all.log'),
+			'filename': os.path.join("{}/log".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'master.log'),
 			'maxBytes': 1024*1024*5,    # 5M
 			'backupCount': 5,
 			'formatter': 'standard',
@@ -47,7 +47,7 @@ LOGGING_DIC = {
 	},
 	'loggers': {
 		'': {
-			'handlers': ['default',],
+			'handlers': ['default', 'console'],
 			'level': 'DEBUG',
 			'propagate': True,
 		},

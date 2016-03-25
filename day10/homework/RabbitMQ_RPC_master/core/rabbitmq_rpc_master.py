@@ -59,9 +59,13 @@ class CmdRpcMaster(object):
         return str(self.response)
 
 
-if __name__ == "__main__":
+def run():
     cmd = input("Input the instruction:").strip()
     cmd_rpc = CmdRpcMaster()
     logger.info(" [x] sent instruction:{}".format(cmd))
     response = cmd_rpc.call(cmd)
     logger.info(" [.] Got {}.".format(response))
+
+
+if __name__ == "__main__":
+    run()
