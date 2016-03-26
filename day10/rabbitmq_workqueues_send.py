@@ -29,7 +29,7 @@ channel.basic_publish(
 	routing_key="task_queue",
 	body=message,  # 发送的消息
 	properties=pika.BasicProperties(
-		delivery_mode=2,  # 消息持久化
+		delivery_mode=2,  # 设置消息持久化
 	)
 )
 

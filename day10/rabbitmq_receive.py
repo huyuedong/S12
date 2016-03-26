@@ -23,12 +23,20 @@ channel.queue_declare(queue='hello')  # 声明一个队列
 
 # 定义一个方法
 def callback(ch, method, properties, body):
+    """
+    参数都为必须
+    :param ch: 频道
+    :param method: 方法
+    :param properties: 特殊属性
+    :param body: 消息体
+    :return:
+    """
     print(" [x] Received %r" % body)  # 打印从队列中接收到的信息
 
 # 如果从队列里取到了数据就会执行callback函数
-channel.basic_consume(callback,
+channel.basic_consume(callback,  # 收到消息后执行的操作
                       queue='hello',
-                      no_ack=True)
+                      no_ack=True)  # 不需要应答
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()

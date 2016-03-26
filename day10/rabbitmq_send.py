@@ -18,8 +18,8 @@ channel.queue_declare(queue='hello')
 
 # n RabbitMQ a message can never be sent directly to the queue, it always needs to go through an exchange.
 # RabbitMQ的消息并不能直接发送到队列，它需要经过交换机的分发。
-channel.basic_publish(exchange='',
-                      routing_key='hello',
+channel.basic_publish(exchange='',  # 默认为direct
+                      routing_key='hello',  # 告诉exchange发送的消息要送到哪一个queue
                       body='Hello World!')
 print(" [x] Sent 'Hello World!'")
 connection.close()

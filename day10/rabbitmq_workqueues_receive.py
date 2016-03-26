@@ -21,7 +21,7 @@ def callback(ch, method, properties, body):
 
 	time.sleep(body.count(b'.'))
 	print("[x] Done!")
-	ch.basic_ack(delivery_tag=method.delivery_tag)
+	ch.basic_ack(delivery_tag=method.delivery_tag)  # 因为设置了消息持久化，所以需要返回确认以便消息生产者知道此时可以删除此条消息
 
 
 channel.basic_consume(callback, queue="task_queue",)

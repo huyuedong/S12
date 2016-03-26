@@ -38,7 +38,7 @@ class FibonacciRpcClient(object):
                                          ),
                                    body=str(n))
         while self.response is None:
-            self.connection.process_data_events()
+            self.connection.process_data_events()  # 有消息就break，非阻塞区别于之前的start_consuming方法的全阻塞
         return int(self.response)
 
 fibonacci_rpc = FibonacciRpcClient()

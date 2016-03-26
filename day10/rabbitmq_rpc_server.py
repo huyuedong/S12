@@ -32,7 +32,7 @@ def on_request(ch, method, props, body):
 	n = int(body)  # 把收到的消息转成int类型
 	print("[.] fib({})".format(n))  # 打印提示信息
 	response = fib(n)  # 计算得到结果
-	# 发送结果信息
+	# 返回结果信息
 	ch.basic_publish(
 			exchange="",  # 交换机为空
 			routing_key=props.reply_to,  # 关键字为reply_to
