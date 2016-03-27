@@ -22,7 +22,8 @@ import shutil
 
 # 找到top_path目录下所有的7z文件，并解压到指定目录下的__tmp目录。
 def get_zip_file(top_path, dst_path, password):
-	dst_tmp = None
+	unzip_flag = False
+	global dst_tmp
 	for i in os.walk(top_path):
 		for j in i[2]:  # 遍历文件
 			if j.endswith(".7z"):
@@ -32,7 +33,11 @@ def get_zip_file(top_path, dst_path, password):
 				# 7z命令单引号里面用双引号，路径名必须要用双引号。
 				unzip_cmd = '7z x "{}" -p"{}" -y -aos -o"{}"'.format(file_path, password, dst_tmp)  # 解压命令
 				os.system(unzip_cmd)  # 解压
-	return dst_tmp
+				unzip_flag = True
+	if unzip_flag:
+		return dst_tmp
+	else:
+		return None
 
 
 # 按照学期和上课时间归类解压好的.pbb文件==>dst_path\s1*\day**\**.pbb
@@ -89,11 +94,11 @@ def main():
 	password_12 = "&&&SQbtXB1316IPMg%BZHYZnYBB5w7912"  # 12期密码
 # =========================运行前请修改下面的配置=====================================
 
-	top_path = "E:\\学习资料\\s11视频"  # 此处填写所有压缩包的存放目录，双反斜杠！！！
+	top_path = "E:\\Downloads"  # 此处填写所有压缩包的存放目录，双反斜杠！！！
 
 	dst_path = "E:\\学习资料"  # 此处填写要将视频文件存放的目录，双反斜杠！！！
 
-	password = password_11  # 此处修改解压的密码
+	password = password_12  # 此处修改解压的密码
 
 # =========================运行前请修改上面的配置=====================================
 	unzip_files_path = get_zip_file(top_path, dst_path, password)
