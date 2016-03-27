@@ -20,7 +20,7 @@ import re
 import shutil
 
 
-# 找到top_path目录下所有的7z文件，并解压到指定目录。
+# 找到top_path目录下所有的7z文件，并解压到指定目录下的__tmp目录。
 def get_zip_file(top_path, dst_path, password):
 	dst_tmp = None
 	for i in os.walk(top_path):
@@ -89,9 +89,9 @@ def main():
 	password_12 = "&&&SQbtXB1316IPMg%BZHYZnYBB5w7912"  # 12期密码
 # =========================运行前请修改下面的配置=====================================
 
-	top_path = "E:\\test"  # 此处填写所有压缩包的存放目录，双反斜杠！！！
+	top_path = "E:\\学习资料\\s11视频"  # 此处填写所有压缩包的存放目录，双反斜杠！！！
 
-	dst_path = "E:\\temp"  # 此处填写要将视频文件存放的目录，双反斜杠！！！
+	dst_path = "E:\\学习资料"  # 此处填写要将视频文件存放的目录，双反斜杠！！！
 
 	password = password_11  # 此处修改解压的密码
 
