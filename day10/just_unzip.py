@@ -49,7 +49,7 @@ def sort_file(dst_path, unzip_files_path):
 	:param unzip_files_path: 解压文件的临时存放目录
 	:return:
 	"""
-	p = re.compile(r'(s\d+).+(day[\d]+)')  # 贪婪匹配day**
+	p = re.compile(r'(s\d+).+(day.?[\d]+)')  # 贪婪匹配day**
 	for i in os.walk(unzip_files_path):
 		for j in i[2]:
 			result = p.search(j)
