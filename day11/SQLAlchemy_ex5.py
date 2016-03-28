@@ -15,9 +15,6 @@ engine = create_engine("mysql+pymysql://root:rootroot@localhost:3306/test01", ma
 Base = declarative_base()
 
 
-
-
-
 # 创建一个中间表，关联其他两个表
 host2group = Table("host_2_group", Base.metadata,
                    Column("host_id", ForeignKey("host.id"), primary_key=True),  # 双主键
