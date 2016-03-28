@@ -11,7 +11,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy import create_engine
 
-engine = create_engine("mysql+pymysql://root:rootroot@localhost:3306/test01", max_overflow=5)
+engine = create_engine("mysql+pymysql://root:1234@localhost:3306/test01", max_overflow=5, echo=True)
 Base = declarative_base()
 
 
@@ -31,13 +31,21 @@ class Host(Base):
 	# group_id = Column(Integer, ForeignKey("group_id"))
 	groups = relationship("Group", secondary=host2group, backref="host_list")
 
+	def __init__(self, hostname, ip_addr, port=22):
+		self.hostname = hostname
+		self.ip_addr = ip_addr
+		self.port = port
+
 
 class Group(Base):
 	__tablename__ = "group"
 	id = Column(Integer, primary_key=True)
 	name = Column(String(64), unique=True, nullable=False)
 
-Base.metadata.create_all(engine)
+	def __init__(self, name):
+		self.name = name
+
+# Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -50,12 +58,13 @@ session = Session()
 # session.add_all([g1, g2, g3, g4])
 # session.commit()
 
-#
+
 # 添加主机记录
 # h1 = Host(hostname="localhost", ip_addr="127.0.0.1")
 # h2 = Host(hostname="Ubuntu", ip_addr="192.168.0.1", port=10000)
 # h3 = Host(hostname="CentOS", ip_addr="192.168.10.1",)
-h4 = Host(hostname="CentOS2", ip_addr="192.168.10.12", port=11, groups=[1, ])
+h4 = Host(hostname="CentOS3", ip_addr="192.168.10.13", port=11)
+h4.groups.append(Group("g1"))
 
 # session.add_all([h1, h2, h3])
 session.add(h4)
