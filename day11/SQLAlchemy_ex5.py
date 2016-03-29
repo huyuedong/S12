@@ -8,17 +8,17 @@
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, query
 from sqlalchemy import create_engine
 
-engine = create_engine("mysql+pymysql://root:1234@localhost:3306/test01", max_overflow=5, echo=True)
+engine = create_engine("mysql+pymysql://root:1234@localhost:3306/test01", max_overflow=5, echo=False)
 Base = declarative_base()
 
 
 # 创建一个中间表，关联其他两个表
 host2group = Table("host_2_group", Base.metadata,
-                   Column("host_id", ForeignKey("host.id"), primary_key=True),  # 双主键
-                   Column("group_id", ForeignKey("group.id"), primary_key=True),  # 双主键
+                   Column("host_id", ForeignKey("host.id"), primary_key=True),  # 两个一起为主键
+                   Column("group_id", ForeignKey("group.id"), primary_key=True),  # 两个一起为主键
                    )
 
 
@@ -31,10 +31,11 @@ class Host(Base):
 	# group_id = Column(Integer, ForeignKey("group_id"))
 	groups = relationship("Group", secondary=host2group, backref="host_list")
 
-	def __init__(self, hostname, ip_addr, port=22):
-		self.hostname = hostname
-		self.ip_addr = ip_addr
-		self.port = port
+	# def __init__(self, hostname, ip_addr, groups, port=22):
+	# 	self.hostname = hostname
+	# 	self.ip_addr = ip_addr
+	# 	self.port = port
+	# 	self.groups = groups
 
 
 class Group(Base):
@@ -63,9 +64,23 @@ session = Session()
 # h1 = Host(hostname="localhost", ip_addr="127.0.0.1")
 # h2 = Host(hostname="Ubuntu", ip_addr="192.168.0.1", port=10000)
 # h3 = Host(hostname="CentOS", ip_addr="192.168.10.1",)
-h4 = Host(hostname="CentOS3", ip_addr="192.168.10.13", port=11)
-h4.groups.append(Group("g1"))
-
 # session.add_all([h1, h2, h3])
+# session.commit()
+
+
+h4 = Host(hostname="CentOS3", ip_addr="192.168.10.13")
+h4.groups.append(session.query(Group).filter(Group.name == "g1").first())
+
 session.add(h4)
 session.commit()
+
+# h = session.query(Host).filter(Host.hostname == "localhost").first()
+# print(h.id)
+# print(h.groups)
+# for i in h.groups:
+# 	print(i.name)
+# g = session.query(Group).filter(Group.name == "g1").first()
+# print(g.id)
+# h.groups.append(g1)
+# session.commit()
+# print(h.groups)
