@@ -1,0 +1,17 @@
+
+alex:
+  password: 1234
+  admin_tag: True
+  #groups:
+  #  - web_servers
+  #  - db_servers
+  #bind_hosts:
+  #  - h1
+  #  - h2
+  #  - h3
+
+qimi:
+  password: 4321
+  #bind_hosts:
+  #  - h1
+  #  - h3
