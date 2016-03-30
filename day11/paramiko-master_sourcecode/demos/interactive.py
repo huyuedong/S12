@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+# -*0 coding:utf8 -*-
+
 # Copyright (C) 2003-2007  Robey Pointer <robeypointer@gmail.com>
 #
 # This file is part of paramiko.
@@ -72,7 +75,7 @@ def posix_shell(chan):
                     if x == '\t':
                         tab_flag = True
                 else:
-                    print("==>", cmd)
+                    print("get the instruction==>", cmd)
                     cmd = ""
 
                 if len(x) == 0:
@@ -96,7 +99,7 @@ def windows_shell(chan):
                 sys.stdout.write('\r\n*** EOF ***\r\n\r\n')
                 sys.stdout.flush()
                 break
-            sys.stdout.write(data)
+            sys.stdout.write(str(data.decode()))  # 将bytes转为str
             sys.stdout.flush()
         
     writer = threading.Thread(target=writeall, args=(chan,))
@@ -108,6 +111,7 @@ def windows_shell(chan):
             if not d:
                 break
             chan.send(d)
+            print(d)
     except EOFError:
         # user hit ^Z or F6
         pass

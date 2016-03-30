@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*-coding:utf8 -*-
 
 # Copyright (C) 2003-2007  Robey Pointer <robeypointer@gmail.com>
 #
@@ -180,5 +181,3 @@ except Exception as e:
     except:
         pass
     sys.exit(1)
-
-

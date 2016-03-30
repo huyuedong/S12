@@ -1693,7 +1693,7 @@ class Transport (threading.Thread, ClosingContextManager):
         # indefinitely, creating a GC cycle and not letting Transport ever be
         # GC'd. it's a bug in Thread.)
 
-        # Hold reference to 'sys' so we can test sys.modules to detect
+        # Hold reference to 'sys' so we can test sys.core to detect
         # interpreter shutdown.
         self.sys = sys
 
@@ -1809,7 +1809,7 @@ class Transport (threading.Thread, ClosingContextManager):
         except:
             # Don't raise spurious 'NoneType has no attribute X' errors when we
             # wake up during interpreter shutdown. Or rather -- raise
-            # everything *if* sys.modules (used as a convenient sentinel)
+            # everything *if* sys.core (used as a convenient sentinel)
             # appears to still exist.
             if self.sys.modules is not None:
                 raise

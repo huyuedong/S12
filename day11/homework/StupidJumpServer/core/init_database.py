@@ -11,9 +11,33 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, UniqueConstraint, DateTime
 from sqlalchemy.orm import sessionmaker, relationship, query
 from sqlalchemy import create_engine
+from sqlalchemy_utils import ChoiceType, PasswordType
+
 
 engine = create_engine("mysql+pymysql://root:1234@localhost:3306/test01", max_overflow=5, echo=False)
-Base = declarative_base()
+Base = declarative_base()  # 生成一个SQLORM基类
+
+# 堡垒机用户与主机组之间的对应表
+UserProfile_2_HostGroup = Table(
+		"userprofile_2_hostgroup", Base.metada,
+		Column("hostgroup_id", ForeignKey("hostgroup.id"), primary_key=True),
+		Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
+)
+
+# 堡垒机用户与主机及主机用户一一对应的表，用于指定临时用户
+UserProfile_2_HostSysuser = Table(
+	"userprofile_2_hostsysuser", Base.metada,
+	Column("host_id", ForeignKey("host.id"), primary_key=True),
+	Column("sysuser_id", ForeignKey("sysuser.id"), primary_key=True),
+	Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
+)
+
+# 主机组与主机及主机用户的对应表
+HostGroup_2_HostSysuser = Table(
+	"hostgroup_2_hostsysuser", Base.metada,
+	Column("hostgroup_id", ForeignKey("hostgroup.id"), primary_key=True),
+	Column("host_id", ForeignKey("host.id"), primary_key=True),
+)
 
 
 # 主机表
@@ -30,9 +54,9 @@ class Host(Base):
 
 # 主机组表
 class HostGroup(Base):
-	__tablename__ = "group"
-	id = Column(Integer,primary_key=True)
-	name = Column(String(64),unique=True,nullable=False)
+	__tablename__ = "host_group"
+	id = Column(Integer, primary_key=True)
+	name = Column(String(64), unique=True, nullable=False)
 
 	def __repr__(self):
 		return "<id={},name={}>".format(self.id, self.name)
@@ -40,7 +64,7 @@ class HostGroup(Base):
 
 # 堡垒机用户信息表
 class UserProfile(Base):
-	__tablename__ = "User"
+	__tablename__ = "user_profile"
 	id = Column(Integer, primary_key=True)
 	username = Column(String(64), unique=True, nullable=False)
 	password = Column(String(255), nullable=False)
@@ -51,16 +75,22 @@ class UserProfile(Base):
 		return "<id={},name={}>".format(self.id, self.username)
 
 
-# 主机&用户表
-class HoserUser(Base):
-	__tablename__ = "HostUser"
+# 主机与主机用户表
+class HostSysuser(Base):
+	__tablename__ = "host_sysuser"
 	id = Column(Integer, primary_key=True)
 	host_id = Column(Integer, ForeignKey("host.id"))
-	username = Column(String(64), unique=True, nullable=False)
-	password = Column(String(255), nullable=False)
+
 	# host_id和username联合唯一
 	__table_args__ = UniqueConstraint("host_id", "username", name="Host_User")
 
+
+# 主机用户表
+class Sysuser(Base):
+	__tablename__ = "sys_user"
+	id = Column(Integer, primary_key=True)
+	username = Column(String(64), unique=True, nullable=False)
+	password = Column(String(255), nullable=False)
 
 # log表
 class AuditLog(Base):
