@@ -19,7 +19,12 @@
 
 import socket
 import sys
+import datetime
 from paramiko.py3compat import u
+import logging
+import db_modles
+
+logger = logging.getLogger(__name__)
 
 # windows does not have termios...
 try:
@@ -30,14 +35,14 @@ except ImportError:
     has_termios = False
 
 
-def interactive_shell(chan):
+def interactive_shell(chan, user_obj, host_and_sysuser_obj, log_recording):
     if has_termios:
-        posix_shell(chan)
+        posix_shell(chan, user_obj, host_and_sysuser_obj, log_recording)
     else:
         windows_shell(chan)
 
 
-def posix_shell(chan):
+def posix_shell(chan, user_obj, host_and_sysuser_obj, log_recording):
     import select
     
     oldtty = termios.tcgetattr(sys.stdin)
@@ -73,7 +78,19 @@ def posix_shell(chan):
                         tab_flag = True
                 else:
                     print("==>", cmd)
+                    # 生成日志的表格
+                    log_info = db_modles.AuditLog(
+                        userprofile_id=user_obj.id,
+                        hostandsysuser_id=host_and_sysuser_obj.id,
+                        cmd=cmd,
+                        data=datetime.datetime.now()
+                    )
+                    log_info_caches.append(log_info)
                     cmd = ""
+
+                    if len(log_info_caches) >= 10:
+                        log_recording(log_info_caches)
+                        log_info_caches = []
 
                 if len(x) == 0:
                     break

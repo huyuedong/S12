@@ -30,6 +30,9 @@ import sys
 import time
 import traceback
 from paramiko.py3compat import input
+import logging
+logger = logging.getLogger(__name__)
+
 
 import paramiko
 try:
