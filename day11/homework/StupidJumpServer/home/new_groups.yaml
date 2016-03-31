@@ -1,5 +1,5 @@
 test2:
-  #bind_hosts:
+  #host_list:
   #  - h1
   #  - h2
   user_profiles:
@@ -7,7 +7,7 @@ test2:
     - alex
 
 test1:
-  #bind_hosts:
+  #host_list:
   #  - h1
   #  - ubuntu test
   user_profiles:

@@ -43,10 +43,10 @@
     │   └── views.py #功能核心
     ├── home #yaml配置文件目录
     │   ├── __init__.py
-    │   ├── new_users.yml
-    │   ├── new_groups.yml
-    │   ├── new_hostandsysuser.yml
-    │   └── new_hosts.yml
+    │   ├── new_users.yaml
+    │   ├── new_groups.yaml
+    │   ├── new_hostandsysuser.yaml
+    │   └── new_hosts.yaml
     └── log #堡垒机程序日志目录
         ├── __init__.py
         └── StupidJumpServer.log #堡垒机程序日志

@@ -24,6 +24,7 @@ from core import db_modles, db_conn
 from core.db_conn import StupidJumpServerDB
 from core import utils
 from core import start_ssh
+from core import info_filter
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +96,7 @@ def create_users(argvs):
 				# 如果在数据库中没有找到了这个组名
 				if not groups:
 					logger.debug("Can't find <{}> in the host_group table.".format(source[key].get("HostGroups")))
-					raise SystemExit("Invalid hostgroup name.")
+					raise SystemExit("Invalid hostgroup parameters in the cfg_file.")
 				obj.groups = groups
 			if source[key].get("bind_hosts"):
 				pass
@@ -111,12 +112,14 @@ def create_groups(argvs):
 		for key in source:
 			logger.debug("{}==>key:{}, value:{}".format(source, key, source[key]))
 			obj = db_modles.HostGroup(name=key)
-			if source[key].get("bind_hosts"):
-				pass
-
+			# 如果配置文件中有host_list选项
+			if source[key].get("host_list"):
+				host_list = info_filter.get_host_list(source[key])
+				obj.host_and_sysusers = host_list
+			# 如果配置文件中有user_profiles选项
 			if source[key].get("user_profiles"):
-				pass
-
+				user_profiles = info_filter.get_user_profiles(source[key])
+				obj.user_profiles = user_profiles
 			session.add(obj)
 		session.commit()
 
@@ -154,11 +157,59 @@ def creae_hostandsysuser(argvs):
 		session = StupidJumpServerDB().session()
 		for key in source:
 			logger.debug("{}==>key:{}, value:{}".format(source, key, source[key]))
-			obj = db_modles.HostandSysuser()
+			# 先根据配置文件中的hostname从Host表中找到host对象
+			host_obj = session.query(db_modles.Host).filter(
+				db_modles.Host.hostname == source[key].get("hostname")
+			).first()
+			assert host_obj  # 确保找得到该host对象
+			sys_users_list = source[key]["sys_users"]
+			for item in sys_users_list:
+				assert item["auth_type"]  # 确保item有"auth_type"这个项
+				if item.get("auth_type") == "ssh-password":
+					sys_user_obj = session.query(db_modles.Sysuser).filter(
+						db_modles.Sysuser.username == item.get("username"),
+						db_modles.Sysuser.password == item.get("password"),
+					).first()
+				else:
+					sys_user_obj = session.query(db_modles.Sysuser).filter(
+						db_modles.Sysuser.username == item.get("username"),
+						db_modles.Sysuser.auth_type == item.get("auth_type"),
+					).first()
+				if not sys_user_obj:
+					logger.info("Can't find {} in <> table.".format(item.get("username")))
+					raise SystemExit("Invalid sys_users parameters in cfg_file.")
+				host_and_sysusers_obj = db_modles.HostandSysuser(host_id=host_obj.id, sysuser_id=sys_user_obj.id)
+				session.add(host_and_sysusers_obj)
+				# 如果配置文件中有groups项
+				if source[key].get("groups"):
+					host_group_objs = session.query(db_modles.Group).filter(
+						db_modles.Group.name.in_(source[key].get("groups"))
+					).all()
+					assert host_group_objs
+					host_and_sysusers_obj.groups = host_group_objs
+				# 如果配置文件中有user_profiles项
+				if source[key].get("user_profiles"):
+					user_profiles_objs = session.query(db_modles.UserProfile).filter(
+						db_modles.UserProfile.username.in_(source[key].get("user_profiles"))
+					).all()
+					assert user_profiles_objs
+					host_and_sysusers_obj.user_profiles = user_profiles_objs
+			session.commit()
 
 
 def create_sysuser(argvs):
-	pass
+	cfg_file = argv_parser(argvs)
+	source = utils.yaml_parser(cfg_file)
+	if source:
+		session = StupidJumpServerDB().session()
+		for key in source:
+			obj = db_modles.Sysuser(
+				username=source[key].get("username"),
+				auth_type=source[key].get("auth_type"),
+				password=source[key].get("password"),
+			)
+			session.add(obj)
+		session.commit()
 
 
 def start(argv):
@@ -240,6 +291,6 @@ def start(argv):
 
 
 def syncdb(argvs):
-	print("init database...")
+	print("init database, create table structure...")
 	engine = db_conn.StupidJumpServerDB().engine()
 	db_modles.Base.metadata.create_all(engine)

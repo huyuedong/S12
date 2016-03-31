@@ -34,8 +34,8 @@ def get_hostgroup(user_obj):
 def get_sysuser_id(arg):
 	session = db_conn.StupidJumpServer().session()
 	logger.debug("get the id of sysuser in cfg_file from Sysuser table.")
-	sysuser_id = session.query(db_modles.Sysuser.id).filter(
-		db_modles.Sysuser.username.in_(arg.get("sysuser")["username"])
+	sysuser_id = session.query(db_modles.Sysuser).filter(
+		db_modles.Sysuser.username.in_(arg.get("sys_users")["username"])
 	)
 	if not sysuser_id:
 		logger.debug("Can't find {} in the Sysuser table.".format(arg.get("sys_users")["username"]))
@@ -55,3 +55,24 @@ def get_host_id(arg):
 		raise SystemExit("Invalid hostname!")
 	return host_id
 
+
+def get_host_list(vals):
+	session = db_conn.StupidJumpServerDB().session()
+	host_list = session.query(db_modles.HostandSysuser).filter(
+			db_modles.Host.hostname.in_(vals.get("host_list"))
+	).all()
+	if not host_list:
+		logger.warn("Can't find {} in the <HostandSysuser> table".format(vals.get("host_list")))
+		raise SystemExit("Invalid host_list parameters in the cfg_file.")
+	return host_list
+
+
+def get_user_profiles(vals):
+	session = db_conn.StupidJumpServerDB().session()
+	user_profiles = session.query(db_modles.UserProfile).filter(
+			db_modles.UserProfile.username.in_(vals.get("user_profiles"))
+	).all()
+	if not user_profiles:
+		logger.warn("Can't find {} in the <UserProfile> table".format(vals.get("user_profiles")))
+		raise SystemExit("Invalid user_profiles parameters in the cfg_file.")
+	return user_profiles
