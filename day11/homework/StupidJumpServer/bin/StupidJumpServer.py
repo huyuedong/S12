@@ -14,7 +14,7 @@ from core import Mylogging
 
 if __name__ == "__main__":
 	from core.actions import start_by_command
-	start_by_command()
+	start_by_command(sys.argv)
 
 
 

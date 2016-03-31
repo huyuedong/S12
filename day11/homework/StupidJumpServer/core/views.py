@@ -25,6 +25,7 @@ from core.db_conn import StupidJumpServerDB
 from core import utils
 from core import start_ssh
 from core import info_filter
+import sqlalchemy.exc
 
 logger = logging.getLogger(__name__)
 
@@ -40,18 +41,25 @@ def login():
 		if len(username) == 0:
 			continue
 		password = input("PassWord:").strip()
-		my_db = StupidJumpServerDB()
-		# 按输入的用户名和密码去数据库中查询
-		user_obj = my_db.session().query(db_modles.UserProfile).filter(
-				db_modles.UserProfile.username == username,
-				db_modles.UserProfile.password == password
-		).first()
+		try:
+			session = StupidJumpServerDB().session()
+			# 按输入的用户名和密码去数据库中查询
+			user_obj = session.query(db_modles.UserProfile).filter(
+					db_modles.UserProfile.username == username,
+					db_modles.UserProfile.password == password
+			).first()
 
-		if user_obj:  # 如果查找到记录，就说明用户存在。
-			return user_obj
-		else:
-			print("Invalid username or password!")
-			count += 1
+			if user_obj:  # 如果查找到记录，就说明用户存在。
+				return user_obj
+			else:
+				print("Invalid username or password!")
+				count += 1
+		except sqlalchemy.exc.ArgumentError as e:
+			logger.warn(e)
+			raise SystemExit("Plaes start the database first.")
+		except Exception as e:
+			logger.warn(e)
+			raise SystemExit("Please client to the database.Error:{}".format(e))
 	else:
 		print("Sorry, too many attempts.")
 
@@ -140,7 +148,7 @@ def create_hosts(argvs):
 		session.commit()
 
 
-def creae_hostandsysuser(argvs):
+def create_hostandsysuser(argvs):
 	"""
 	host.id -- sysuser.id 将Host表和Sysuser表通过id关联起来
 	eq:
@@ -197,7 +205,7 @@ def creae_hostandsysuser(argvs):
 			session.commit()
 
 
-def create_sysuser(argvs):
+def create_sysusers(argvs):
 	cfg_file = argv_parser(argvs)
 	source = utils.yaml_parser(cfg_file)
 	if source:

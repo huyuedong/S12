@@ -20,11 +20,12 @@ logger = logging.getLogger(__name__)
 
 
 actions = {
-	"start_session": views.start_session,
-	"stop": views.stop_server,
+	"start": views.start,
+	# "stop": views.stop_server,
 	"syncdb": views.syncdb,
 	"create_users": views.create_users,
 	"create_groups": views.create_groups,
 	"create_hosts": views.create_hosts,
-	"create_sysusers": views.creat_sysusers,
+	"create_sysusers": views.create_sysusers,
+	"create_create_hostandsysuser": views.create_hostandsysuser,
 }

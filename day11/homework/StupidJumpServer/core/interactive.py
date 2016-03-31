@@ -18,11 +18,13 @@
 
 
 import socket
+import os
 import sys
 import datetime
 from paramiko.py3compat import u
 import logging
-import db_modles
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from core import db_modles
 
 logger = logging.getLogger(__name__)
 
