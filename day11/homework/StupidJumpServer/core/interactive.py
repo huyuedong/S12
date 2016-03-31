@@ -35,14 +35,14 @@ except ImportError:
     has_termios = False
 
 
-def interactive_shell(chan, user_obj, host_and_sysuser_obj, log_recording):
+def interactive_shell(chan, user_obj, host_and_sysuser_obj, log_info_caches, log_record):
     if has_termios:
-        posix_shell(chan, user_obj, host_and_sysuser_obj, log_recording)
+        posix_shell(chan, user_obj, host_and_sysuser_obj, log_info_caches, log_record)
     else:
         windows_shell(chan)
 
 
-def posix_shell(chan, user_obj, host_and_sysuser_obj, log_recording):
+def posix_shell(chan, user_obj, host_and_sysuser_obj, log_info_caches, log_record):
     import select
     
     oldtty = termios.tcgetattr(sys.stdin)
@@ -77,11 +77,12 @@ def posix_shell(chan, user_obj, host_and_sysuser_obj, log_recording):
                     if x == '\t':
                         tab_flag = True
                 else:
-                    print("==>", cmd)
+                    # print("==>", cmd)
                     # 生成日志的表格
                     log_info = db_modles.AuditLog(
                         userprofile_id=user_obj.id,
                         hostandsysuser_id=host_and_sysuser_obj.id,
+                        action_type="cmd",
                         cmd=cmd,
                         data=datetime.datetime.now()
                     )
@@ -89,7 +90,7 @@ def posix_shell(chan, user_obj, host_and_sysuser_obj, log_recording):
                     cmd = ""
 
                     if len(log_info_caches) >= 10:
-                        log_recording(log_info_caches)
+                        log_record(log_info_caches)
                         log_info_caches = []
 
                 if len(x) == 0:

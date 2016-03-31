@@ -75,6 +75,7 @@ class HostGroup(Base):
 	__tablename__ = "host_group"
 	id = Column(Integer, primary_key=True)
 	name = Column(String(64), unique=True, nullable=False)
+	host_list = relationship("Host", secondary=HostGroup_2_Host, backref="groups")
 
 	def __repr__(self):
 		return "<id={},groupname={}>".format(self.id, self.name)
