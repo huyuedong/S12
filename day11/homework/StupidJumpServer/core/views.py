@@ -70,6 +70,12 @@ def argv_parser(argvs):
 		raise SystemExit("Invalid agrvs!")
 
 
+def loge_rcord(logs):
+	session = StupidJumpServerDB().session()
+	session.add_all(logs)
+	session.commit()
+
+
 def create_users(argvs):
 	cfg_file = argv_parser(argvs)
 	source = utils.yaml_parser(cfg_file)

@@ -11,8 +11,8 @@ import logging
 import logging.config
 import logging.handlers
 
-standard_format = '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]' \
-                  '[%(levelname)s][%(message)s]'
+standard_format = '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s]' \
+                  '[%(filename)s:%(lineno)d][%(levelname)s][%(message)s]'
 
 simple_format = '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
 
@@ -39,7 +39,9 @@ LOGGING_DIC = {
 		'default': {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',    # 保存到文件
-			'filename': os.path.join("{}/log".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'master.log'),
+			'filename': os.path.join("{}/log".format(
+					os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'StupidJumpServer.log'
+			),
 			'maxBytes': 1024*1024*5,    # 5M
 			'backupCount': 5,
 			'formatter': 'standard',
