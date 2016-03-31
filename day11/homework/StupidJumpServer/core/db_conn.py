@@ -35,6 +35,6 @@ class StupidJumpServerDB(object):
 		return engine
 
 	def session(self):
-		session = sessionmaker(bind=self.engine())
-		return session
+		Session = sessionmaker(bind=self.engine())
+		return Session()
 

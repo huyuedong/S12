@@ -2,10 +2,10 @@
 alex:
   password: 1234
   admin_tag: True
-  #groups:
+  #HostGroups:
   #  - web_servers
   #  - db_servers
-  #bind_hosts:
+  #Hosts:
   #  - h1
   #  - h2
   #  - h3

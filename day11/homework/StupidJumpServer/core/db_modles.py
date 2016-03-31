@@ -36,22 +36,25 @@ logger = logging.getLogger(__name__)
 Base = declarative_base()  # 生成一个SQLORM基类
 
 # 堡垒机用户与主机组之间的对应表
-UserProfile_2_HostGroup = Table("userprofile_2_hostgroup", Base.metadata,
-                                Column("hostgroup_id", ForeignKey("host_group.id"), primary_key=True),
-                                Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
-                                )
+UserProfile_2_HostGroup = Table(
+		"userprofile_2_hostgroup", Base.metadata,
+		Column("hostgroup_id", ForeignKey("host_group.id"), primary_key=True),
+		Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
+)
 
 # 堡垒机用户与主机及主机用户一一对应的表，用于指定临时用户
-UserProfile_2_HostSysuser = Table("userprofile_2_hostsysuser", Base.metadata,
-                                  Column("hostandsysuser_id", ForeignKey("host_and_sysuser.id"), primary_key=True),
-                                  Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
-                                  )
+UserProfile_2_HostSysuser = Table(
+		"userprofile_2_hostsysuser", Base.metadata,
+		Column("hostandsysuser_id", ForeignKey("host_and_sysuser.id"), primary_key=True),
+		Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
+)
 
-# 主机组与主机及主机用户的对应表
-HostGroup_2_HostSysuser = Table("hostgroup_2_hostsysuser", Base.metadata,
-                                Column("hostgroup_id", ForeignKey("host_group.id"), primary_key=True),
-                                Column("hostandsysuser_id", ForeignKey("host_and_sysuser.id"), primary_key=True),
-                                )
+# 主机组与主机的对应表
+HostGroup_2_Host = Table(
+		"hostgroup_2_host", Base.metadata,
+		Column("hostgroup_id", ForeignKey("host_group.id"), primary_key=True),
+		Column("host_id", ForeignKey("host.id"), primary_key=True),
+)
 
 
 # 主机表
@@ -97,12 +100,11 @@ class UserProfile(Base):
 class HostandSysuser(Base):
 	__tablename__ = "host_and_sysuser"
 	id = Column(Integer, primary_key=True)
-	host_id = Column(Integer, ForeignKey("host.id"))
-	sysuser_id = Column(Integer, ForeignKey("sys_user.id"))
+	host_id = Column(Integer, ForeignKey("host.id"))  # 主机id
+	sysuser_id = Column(Integer, ForeignKey("sys_user.id"))  # 主机用户id,默认同样的主机用户名为同样的密码
 
 	host = relationship("Host")
 	sysuser = relationship("Sysuser")
-	groups = relationship("HostGroup", secondary=HostGroup_2_HostSysuser, backref="host_and_sysusers")
 	user_profiles = relationship("UserProfile", secondary=UserProfile_2_HostSysuser)
 	audit_logs = relationship("AuditLog")
 
