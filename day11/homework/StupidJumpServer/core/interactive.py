@@ -45,6 +45,15 @@ def interactive_shell(chan, user_obj, host_and_sysuser_obj, log_info_caches, log
 
 
 def posix_shell(chan, user_obj, host_and_sysuser_obj, log_info_caches, log_record):
+    """
+
+    :param chan: 连接实例
+    :param user_obj: 用户实例
+    :param host_and_sysuser_obj: 主机及主机用户实例
+    :param log_info_caches: log缓存
+    :param log_record: log_record方法
+    :return:
+    """
     import select
     
     oldtty = termios.tcgetattr(sys.stdin)

@@ -27,6 +27,8 @@ def help_msg():
 def start_by_command(argvs):
 	if len(argvs) < 2:
 		help_msg()
+	elif argvs[1] == "?" or argvs[1] == "/?":
+		help_msg()
 	elif argvs[1] not in action_registers.actions:
 		raise SystemExit("Invalid command:{}".format(argvs[1]))
 	else:

@@ -17,24 +17,16 @@ from conf.setting import DATABASE
 
 logger = logging.getLogger(__name__)
 
+engine_info = "{}+{}://{}:{}@{}:{}/{}".format(
+		DATABASE.get("db_type"),
+		DATABASE.get("engine"),
+		DATABASE.get("username"),
+		DATABASE.get("password"),
+		DATABASE.get("host"),
+		DATABASE.get("port"),
+		DATABASE.get("db_name"),
+)
 
-class StupidJumpServerDB(object):
-	def __init__(self):
-		self.__engine_info = "{}+{}://{}:{}@{}:{}/{}".format(
-				DATABASE.get("db_type"),
-				DATABASE.get("engine"),
-				DATABASE.get("username"),
-				DATABASE.get("password"),
-				DATABASE.get("host"),
-				DATABASE.get("port"),
-				DATABASE.get("db_name"),
-		)
-
-	def engine(self):
-		engine = create_engine(self.__engine_info, max_overflow=5, echo=False)
-		return engine
-
-	def session(self):
-		Session = sessionmaker(bind=self.engine())
-		return Session()
-
+engine = create_engine(engine_info, echo=False)
+SessionCls = sessionmaker(bind=engine)
+session = SessionCls()

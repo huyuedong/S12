@@ -23,7 +23,7 @@ def get_hostgroup(user_obj):
 	:return: 该用户关联的host group信息
 	"""
 	print("Loading HosGroups...")
-	session = db_conn.StupidJumpServer().session()
+	session = db_conn.session
 	hostgroup_list = session.query(db_modles.HostGroup).filter(
 			db_modles.HostGroup.user_profiles.username.in_(user_obj.username)
 	)
@@ -32,7 +32,7 @@ def get_hostgroup(user_obj):
 
 # 根据配置文件中指定的主机用户名从<Sysuser>表中取出该主机用户信息的id
 def get_sysuser_id(arg):
-	session = db_conn.StupidJumpServer().session()
+	session = db_conn.session
 	logger.debug("get the id of sysuser in cfg_file from Sysuser table.")
 	sysuser_id = session.query(db_modles.Sysuser).filter(
 		db_modles.Sysuser.username.in_(arg.get("sys_users")["username"])
@@ -45,7 +45,7 @@ def get_sysuser_id(arg):
 
 # 根据配置文件中指定的主机名从<Host>表中取出该主机对应的id
 def get_host_id(arg):
-	session = db_conn.StupidJumpServer().session()
+	session = db_conn.session
 	logger.debug("try to get the id of sysuser in cfg_file from Sysuser table.")
 	host_id = session.query(db_modles.Host.id).filter(
 		db_modles.Host.hostname.in_(arg.get("hostname"))
@@ -57,7 +57,7 @@ def get_host_id(arg):
 
 
 def get_host_list(vals):
-	session = db_conn.StupidJumpServerDB().session()
+	session = db_conn.session
 	host_list = session.query(db_modles.HostandSysuser).filter(
 			db_modles.Host.hostname.in_(vals.get("host_list"))
 	).all()
@@ -68,7 +68,7 @@ def get_host_list(vals):
 
 
 def get_user_profiles(vals):
-	session = db_conn.StupidJumpServerDB().session()
+	session = db_conn.session
 	user_profiles = session.query(db_modles.UserProfile).filter(
 			db_modles.UserProfile.username.in_(vals.get("user_profiles"))
 	).all()

@@ -21,7 +21,6 @@ import sys
 import logging
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core import db_modles, db_conn
-from core.db_conn import StupidJumpServerDB
 from core import utils
 from core import start_ssh
 from core import info_filter
@@ -81,7 +80,7 @@ def argv_parser(argvs):
 
 
 def log_record(logs):
-	session = StupidJumpServerDB().session()
+	session = db_conn.session
 	session.add_all(logs)
 	session.commit()
 
@@ -91,11 +90,14 @@ def create_users(argvs):
 	source = utils.yaml_parser(cfg_file)
 	# 如果解析出内容就将配置文件中的数据更新到数据库
 	if source:
-		session = StupidJumpServerDB().session()
+		session = db_conn.session
 		for key in source:
 			logger.debug("{}==>key:{},value:{}".format(source, key, source[key]))
-			# 堡垒机用户的信息
-			obj = db_modles.UserProfile(username=key, password=source[key].get("password"))
+			if source[key].get("admin_tag"):
+				# 判断配置文件中是否有管理员的项
+				obj = db_modles.UserProfile(username=key, password=source[key].get("password"), admin_tag=True)
+			else:
+				obj = db_modles.UserProfile(username=key, password=source[key].get("password"))
 			# 如果在配置文件中有组信息
 			if source[key].get("HostGroups"):
 				groups = session.query(db_modles.HostGroup).filter(
@@ -116,7 +118,7 @@ def create_groups(argvs):
 	cfg_file = argv_parser(argvs)
 	source = utils.yaml_parser(cfg_file)
 	if source:
-		session = StupidJumpServerDB().session()
+		session = db_conn.session
 		for key in source:
 			logger.debug("{}==>key:{}, value:{}".format(source, key, source[key]))
 			obj = db_modles.HostGroup(name=key)
@@ -136,7 +138,7 @@ def create_hosts(argvs):
 	cfg_file = argv_parser(argvs)
 	source = utils.yaml_parser(cfg_file)
 	if source:
-		session = StupidJumpServerDB().session()
+		session = db_conn.session
 		for key in source:
 			logger.debug("{}==>key:{}, value:{}".format(source, key, source[key]))
 			obj = db_modles.Host(
@@ -162,7 +164,7 @@ def create_hostandsysuser(argvs):
 	cfg_file = argv_parser(argvs)
 	source = utils.yaml_parser(cfg_file)
 	if source:
-		session = StupidJumpServerDB().session()
+		session = db_conn.session
 		for key in source:
 			logger.debug("{}==>key:{}, value:{}".format(source, key, source[key]))
 			# 先根据配置文件中的hostname从Host表中找到host对象
@@ -209,7 +211,7 @@ def create_sysusers(argvs):
 	cfg_file = argv_parser(argvs)
 	source = utils.yaml_parser(cfg_file)
 	if source:
-		session = StupidJumpServerDB().session()
+		session = db_conn.session
 		for key in source:
 			obj = db_modles.Sysuser(
 				username=source[key].get("username"),
@@ -230,7 +232,7 @@ def start(argv):
 		x_flag = False  # 是否有未分组的菜单的标志，如果有未分组的主机，就启用x菜单
 		while not exit_flag:
 			# 如果有未分组的主机，就打印一个x选项，列出未分组的主机数量
-			if user.host_list:
+			if user.host_and_sysusers:
 				print("[x]. Ungroup hosts: {}.".format(len(user.host_list)))
 				x_flag = True
 			# 如果有分组的主机，就打印选项和主机
@@ -300,5 +302,5 @@ def start(argv):
 
 def syncdb(argvs):
 	print("init database, create table structure...")
-	engine = db_conn.StupidJumpServerDB().engine()
+	engine = db_conn.engine
 	db_modles.Base.metadata.create_all(engine)

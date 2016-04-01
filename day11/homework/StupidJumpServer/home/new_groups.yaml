@@ -1,9 +1,9 @@
 test2:
-  #host_list:
-  #  - h1
+  host_and_sysusers:
+    - h1
   #  - h2
   user_profiles:
-    - rain
+    - qimi
     - alex
 
 test1:

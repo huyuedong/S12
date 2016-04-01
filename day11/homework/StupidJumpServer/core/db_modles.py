@@ -18,9 +18,8 @@ import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from core.db_conn import StupidJumpServerDB
-mydb = StupidJumpServerDB()
-engine = mydb.engine()
+from core import db_conn
+engine = db_conn.engine
 # from conf.setting import DATABASE
 logger = logging.getLogger(__name__)
 #
@@ -38,22 +37,22 @@ Base = declarative_base()  # 生成一个SQLORM基类
 # 堡垒机用户与主机组之间的对应表
 UserProfile_2_HostGroup = Table(
 		"userprofile_2_hostgroup", Base.metadata,
-		Column("hostgroup_id", ForeignKey("host_group.id"), primary_key=True),
-		Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
+		Column("host_group_id", ForeignKey("host_group.id"), primary_key=True),
+		Column("user_profile_id", ForeignKey("user_profile.id"), primary_key=True),
 )
 
 # 堡垒机用户与主机及主机用户一一对应的表，用于指定临时用户
 UserProfile_2_HostandSysuser = Table(
 		"userprofile_2_hostsysuser", Base.metadata,
-		Column("hostandsysuser_id", ForeignKey("host_and_sysuser.id"), primary_key=True),
-		Column("userprofile_id", ForeignKey("user_profile.id"), primary_key=True),
+		Column("host_and_sysuser_id", ForeignKey("host_and_sysuser.id"), primary_key=True),
+		Column("user_profile_id", ForeignKey("user_profile.id"), primary_key=True),
 )
 
 # 主机组与主机的对应表
 HostGroup_2_HostandSysuser = Table(
 		"hostgroup_2_hostandsysuser", Base.metadata,
-		Column("hostgroup_id", ForeignKey("host_group.id"), primary_key=True),
-		Column("hostandsysuser_id", ForeignKey("host_and_sysuser.id"), primary_key=True),
+		Column("host_group_id", ForeignKey("host_group.id"), primary_key=True),
+		Column("host_and_sysuser_id", ForeignKey("host_and_sysuser.id"), primary_key=True),
 )
 
 
@@ -75,7 +74,8 @@ class HostGroup(Base):
 	__tablename__ = "host_group"
 	id = Column(Integer, primary_key=True)
 	name = Column(String(64), unique=True, nullable=False)
-	host_and_sysusers = relationship("Host", secondary=HostGroup_2_HostandSysuser, backref="groups")
+	host_and_sysusers = relationship("HostandSysuser", secondary=HostGroup_2_HostandSysuser, backref="groups")
+	user_profiles = relationship("UserProfile", secondary=UserProfile_2_HostGroup)
 
 	def __repr__(self):
 		return "<id={},groupname={}>".format(self.id, self.name)
@@ -84,13 +84,15 @@ class HostGroup(Base):
 # 堡垒机用户信息表
 class UserProfile(Base):
 	__tablename__ = "user_profile"
-	id = Column(Integer, primary_key=True)
+	id = Column(Integer, primary_key=True, autoincrement=True)
 	username = Column(String(64), unique=True, nullable=False)
 	password = Column(String(255), nullable=False)
 	lock_tag = Column(Boolean, default=False)  # 是否锁定
 	admin_tag = Column(Boolean, default=False)  # 是否为管理员
-	host_and_sysusers = relationship('HostandSysuser', secondary=UserProfile_2_HostandSysuser, backref='user_profiles')
-	groups = relationship('HostGroup', secondary=UserProfile_2_HostGroup, backref='user_profiles')
+	# host_and_sysusers = relationship('HostandSysuser', secondary=UserProfile_2_HostandSysuser, backref='user_profiles')
+	host_and_sysusers = relationship('HostandSysuser', secondary=UserProfile_2_HostandSysuser)
+	# groups = relationship('HostGroup', secondary=UserProfile_2_HostGroup, backref='user_profiles')
+	groups = relationship('HostGroup', secondary=UserProfile_2_HostGroup)
 	audit_logs = relationship("AuditLog")
 
 	def __repr__(self):

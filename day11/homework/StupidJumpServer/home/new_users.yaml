@@ -5,7 +5,7 @@ alex:
   #HostGroups:
   #  - web_servers
   #  - db_servers
-  #Hosts:
+  #host_and_sysusers:
   #  - h1
   #  - h2
   #  - h3

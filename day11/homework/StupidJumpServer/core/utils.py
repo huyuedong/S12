@@ -22,7 +22,7 @@ def yaml_parser(yaml_file_name):
 	:param yaml_file_name: the name of the yaml file
 	:return: data in yaml file
 	"""
-	yaml_file_path = os.path.join(setting.CONFIGBASEPATH, yaml_file_name)
+	yaml_file_path = os.path.join(setting.CONFIG_BASE_PATH, yaml_file_name)
 	try:
 		with open(yaml_file_path, "r") as f:
 			data = yaml.load(f)
