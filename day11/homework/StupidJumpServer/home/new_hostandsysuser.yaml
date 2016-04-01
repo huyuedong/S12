@@ -1,13 +1,13 @@
 
 
 bind1:
-  hostname: ubuntu test
+  hostname: h1
   sys_users:
     - user1:
-      username: alex
-      auth_type: ssh-passwd
-      password: alex3714
+      username: root
+      auth_type: ssh-password
+      password: rootroot
   groups:
-    - test group
+    - test1
   #user_profiles:
   #  - alex

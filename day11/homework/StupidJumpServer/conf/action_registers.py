@@ -27,5 +27,5 @@ actions = {
 	"create_groups": views.create_groups,
 	"create_hosts": views.create_hosts,
 	"create_sysusers": views.create_sysusers,
-	"create_create_hostandsysuser": views.create_hostandsysuser,
+	"create_hostandsysuser": views.create_hostandsysuser,
 }

@@ -41,7 +41,7 @@ def login():
 			continue
 		password = input("PassWord:").strip()
 		try:
-			session = StupidJumpServerDB().session()
+			session = db_conn.session
 			# 按输入的用户名和密码去数据库中查询
 			user_obj = session.query(db_modles.UserProfile).filter(
 					db_modles.UserProfile.username == username,
@@ -186,7 +186,7 @@ def create_hostandsysuser(argvs):
 						db_modles.Sysuser.auth_type == item.get("auth_type"),
 					).first()
 				if not sys_user_obj:
-					logger.info("Can't find {} in <> table.".format(item.get("username")))
+					logger.info("Can't find {} in <sys_user> table.".format(item.get("username")))
 					raise SystemExit("Invalid sys_users parameters in cfg_file.")
 				host_and_sysusers_obj = db_modles.HostandSysuser(host_id=host_obj.id, sysuser_id=sys_user_obj.id)
 				session.add(host_and_sysusers_obj)
@@ -278,7 +278,7 @@ def start(argv):
 						if choice < len(user.groups):
 							# 打印出该主机组的主机列表
 							print("Group: {}".format(user.groups[choice].name))
-							for index, host in enumerate(user.groups[choice].host_list):
+							for index, host in enumerate(user.groups[choice].host_and_sysusers):
 								print("[{}]. {}@{}({})".format(index, host.sysuser.username, host.host.hostname, host.host.ip_addr))
 							# 等待用户选择主机
 							while not exit_flag:
@@ -288,7 +288,7 @@ def start(argv):
 								if choice2.upper() == "B":
 									break
 								elif choice2.upper() == "Q":
-									logger.info("{] quit.".format(user.username))
+									logger.info("{} quit.".format(user.username))
 									exit_flag = True
 								elif choice2.isdigit():
 									choice2 = int(choice2)

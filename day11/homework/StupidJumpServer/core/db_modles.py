@@ -122,8 +122,8 @@ class HostandSysuser(Base):
 class Sysuser(Base):
 	__tablename__ = "sys_user"
 	AuthTypes = [
-		(u'ssh-password', u'SSH/Password'),
-		(u'ssh-key', u'SSH/KEY'),
+		("ssh-password", "SSH/Password"),
+		("ssh-key", "SSH/KEY"),
 	]
 	id = Column(Integer, primary_key=True)
 	auth_type = Column(ChoiceType(AuthTypes))
