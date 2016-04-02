@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页</title>
+</head>
+<body>
+
+    <div>
+        <p style="height: 50px;color: deeppink;"></p>
+    </div>
+    <div style="width: 20%;float: left;background-color: green"></div>
+    <div style="width: 80%;float: left;background-color: olivedrab">
+        <form action="http://10.0.4.42:8000/django_form/" enctype="multipart/form-data" method="post">
+        <p>
+            <input type="text" name="name"/>
+            <input type="password" name="password"/>
+        </p>
+
+        <div style="background-color: dodgerblue;color: white;">
+            <h4>爱好</h4>
+            篮球：<input name="favour" type="checkbox" value="1"/>
+            足球：<input name="favour" type="checkbox" value="1"/>
+            排球：<input name="favour" type="checkbox" value="1"/>
+        </div>
+
+        <div>
+            <h4>性别</h4>
+            男：<input name="gender" type="radio" value="1"><br>
+            女：<input name="gender" type="radio" value="0"><br>
+        </div>
+
+        <div>
+        <h4>城市</h4>
+            <select name="city">
+                <option value="010">北京</option>
+                <option value="020">上海</option>
+                <optgroup label="山东">
+                    <option value="0531">济南</option>
+                    <option value="0631">威海</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div>
+            <textarea name="mono"></textarea>
+        </div>
+
+        <div>
+            <h4>文件</h4>
+            <input name="file" type="file" value="filename"/>
+
+        </div>
+
+        <input type="submit" value="submit"/>
+
+    </form>
+    </div>
+</body>
+</html>
