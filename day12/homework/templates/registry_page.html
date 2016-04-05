@@ -3,8 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <title>欢迎注册</title>
+    <style>
+        /*定义默认的样式*/
+        * {
+            font-family: 微软雅黑;
+        }
+        body {
+            margin: 8px;
+            display: block;
+        }
+        /*定义页眉区块的样式*/
+        .header {
+            height: 110px;  /*高110px*/
+            margin: 0 auto;
+            background: url("../static/img/headbg.jpg") repeat-x bottom;  /*背景图片url，沿x轴重复，位于底部*/
+
+        }
+        /*定义页眉处logo内容区块的样式*/
+        .header .logo-con {
+            width: 70%;  /*宽度占页面70%*/
+            margin: 0 auto;  /*外边距，上下为0，左右自动*/
+        }
+        /*定义页眉处logo区块的样式*/
+        .header .logo {
+            width: 160px;  /*宽度160px*/
+            height: 50px;  /*高度50px*/
+            float: left;  /*左float*/
+            margin-top: 24px;  /*上部外边距24px*/
+            background: url("../static/img/sanbao.png") no-repeat;  /*设置背景图片，不重复*/
+        }
+        /*定义页眉处logo标题区块的样式*/
+        .header .logo-title {
+            float: left;  /*左loft*/
+            height: 34px;  /*高度34px*/
+            line-height: 34px;  /*行高34px*/
+            font-size: 18px;  /*字体大小18px*/
+            color: #000;  /*颜色*/
+            border-left: solid 1px #bbb;  /*左边界 1px 实线*/
+            margin-left: 25px;  /*左侧外边距25px*/
+            padding-left: 25px;  /*左侧内填充25px*/
+            margin-top: 34px;  /*顶部外边距34px*/
+        }
+        /*定义主页面区块的样式*/
+        .container {
+            margin: 0 auto;  /*上下外边距0px,左右外边距自动*/
+        }
+        /*定义主页面内容区块的样式*/
+        .container-content {
+            width: 30%;  /*宽度为页面的30%*/
+            margin: 50px auto 60px;  /*顶部外边距50px,左右外边距自动，底部外边距60px*/
+        }
+        /*定义表单区块样式*/
+        .form-item {
+            position: relative;  /*相对定位*/
+            border: solid 1px #ddd;  /*边框实线、1px、颜色为#ddd*/
+            width: 398px;  /*宽度为398px*/
+            height: 52px;  /*高度为52px*/
+        }
+        /*设置label样式*/
+        label {
+            width: 90px;  /*宽度90px*/
+            height: 52px;  /*高度52px*/
+            position: relative;  /*相对定位*/
+            float: left;  /*左float*/
+            line-height: 52px;  /*行高52px*/
+            padding-left: 20px;  /*左侧填充20px*/
+            margin-left: auto;  /*左侧外边距自动*/
+            margin-right: auto;  /*右侧外边距自动*/
+        }
+        /*定义input的样式*/
+        input {
+            border: none;  /*无边框*/
+            margin: 5px 20px;  /*上下外边距5px,左右外边距20px*/
+            line-height: 14px;  /*行高14px*/
+            font-size: 14px;  /*字体大小14px*/
+            padding-bottom: 11px;  /*底部填充11px*/
+            padding-top: 11px;  /*顶部填充11px*/
+            outline: none;  /*去掉聚焦边框*/
+        }
+        /*定义radio和checkbox类型的input样式*/
+        input[type="radio"], [type="checkbox"] {
+            margin: 20px 0 20px 15px;  /*顶部外边距20px,右侧外边距0px,底部外边距20px,左侧外边距15px*/
+        }
+        /*定义select的样式*/
+        select {
+            height: 28px;  /*高度28px*/
+            line-height: 28px;  /*行高28px*/
+            font-size: 14px;  /*字体大小14px*/
+            margin: 15px;  /*所有外边距15px*/
+        }
+        /*定义button的样式*/
+        button {
+            width: 100%;  /*宽度100%*/
+            height: 54px;  /*高度54px*/
+            font-size: 16px;  /*字体大小16px*/
+            background-color: #8AC007;  /*背景颜色#8AC007*/
+            border: none;  /*无边框*/
+            cursor: pointer;  /*设置动作为链接*/
+        }
+        .footer {
+            width: 100%;
+            border-top: solid 1px #bbb;
+            font-size: 14px;
+            text-align: center;
+            position: fixed;
+            bottom: 30px;
+            padding-top: 10px;
+            margin-bottom: -6px;
+        }
+    </style>
 </head>
 <body>
-    <h1>这是注册页。。。。</h1>
+    <div class="header">
+        <div class="logo-con">
+            <a href="main_page.html" class="logo">
+            </a>
+            <div class="logo-title">欢 迎 注 册</div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="container-content">
+            <form method="post" action="registry_success_page.html">
+                <div class="form-item">
+                    <label for="regName">用　户　名:</label>
+                    <input id="regName" type="text" name="regName"/><br/>
+                </div>
+                <div><p></p></div>
+                <div class="form-item">
+                    <label for="pwd">设 置 密 码:</label>
+                        <input id="pwd" type="password" name="pwd"/><br/>
+                </div>
+                <p></p>
+                <div class="form-item">
+                    <label for="pwdRepeat">确 认 密 码:</label>
+                        <input id="pwdRepeat" type="password" name="pwdRepeat"/><br/>
+                </div>
+                <p></p>
+                <div class="form-item">
+                    <label>性　　　别:</label>
+                    <input type="radio" name="gender" value="male"/>
+                    男
+                    <input type="radio" name="gender" value="female"/>
+                    女
+                    <input type="radio" name="gender" value="secret"/>
+                    保密
+                </div>
+                <p></p>
+                <div class="form-item">
+                    <label>省　　　份:</label>
+                        <select>
+                            <optgroup label="北京">北京</optgroup>
+                            <option>北京</option>
+                            <optgroup label="天津">天津</optgroup>
+                            <option>天津</option>
+                            <optgroup label="上海">上海</optgroup>
+                            <option>上海</option>
+                            <optgroup label="重庆">重庆</optgroup>
+                            <option>重庆</option>
+                            <optgroup label="山东">山东</optgroup>
+                            <option>济南</option>
+                            <option>青岛</option>
+                            <option>烟台</option>
+                            <option>威海</option>
+                        </select>
+                </div>
+                <p></p>
+                <div class="form-item">
+                    <label>爱　　　好:</label>
+                    <input type="checkbox"/>
+                    Python
+                    <input type="checkbox"/>
+                    Python
+                    <input type="checkbox"/>
+                    Python
+                </div>
+                <p style="height: 50px"></p>
+                <div class="form-item">
+                    <button type="submit">立即注册</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        Author:liwenzhou &nbsp;Date:2016/04/05
+    </div>
 </body>
 </html>
