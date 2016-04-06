@@ -7,15 +7,21 @@
         * {
             font-family: 微软雅黑;
         }
+        body {
+            margin: 0;
+        }
+        div {
+            display: block;
+        }
         a:link {
             text-decoration: none;
-            /*display: block;*/
         }
         .header {
             width: 100%;
             height: 30px;
             line-height: 30px;
             background-color: #F1F1F1;
+            margin: 0;
         }
         .hw {
             width: 70%;
@@ -32,9 +38,61 @@
         .hr a {
             padding-right: 10px;
         }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            float: right;
+        }
+        li {
+            display: inline;
+            float: left;
+            padding-left: 15px;
+        }
         .window {
             width: 70%;
+            height: 100px;
             margin: 0 auto;
+            padding: 20px 0;
+        }
+        .wl {
+            float: left;
+        }
+        .wl a {
+            display: block;
+        }
+        .search {
+            float: left;
+            width: auto;
+
+        }
+        .form {
+            width: 360px;
+            line-height: 30px;
+            border: 1px solid #CCC;
+            float: left;
+            margin: 20px 0 20px 100px;
+        }
+        .icon-search {
+
+        }
+        .form input {
+           float: left;
+        }
+        .form button {
+            float: right;
+            /*line-height: 30px;*/
+            font-family: 'icomoon';
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            font-size: 16px;
+            color: #ccc;
+            vertical-align: middle;
+            -webkit-font-smoothing: antialiased;
         }
     </style>
 </head>
@@ -44,20 +102,36 @@
             <div class="hl">
                 <a href="main_page.html">&hearts;收藏本站</a>
             </div>
-            <div class="hr">
-                <a href="main_page.html">登陆</a>
-                <a href="main_page.html">注册</a>
-                <a href="main_page.html">我的订单</a>
-                <a href="main_page.html">我的收藏</a>
-                <a href="main_page.html">VIP会员俱乐部</a>
-                <a href="main_page.html">客户服务</a>
-                <a href="main_page.html">关注</a>
-                <a href="main_page.html">手机版</a>
-            </div>
+            <ul>
+                <li><a href="main_page.html">登陆</a></li>
+                <li><a href="main_page.html">注册</a></li>
+                <li><a href="main_page.html">我的订单</a></li>
+                <li><a href="main_page.html">我的收藏</a></li>
+                <li><a href="main_page.html">VIP会员俱乐部</a></li>
+                <li><a href="main_page.html">客户服务</a></li>
+                <li><a href="main_page.html">关注</a></li>
+                <li><a href="main_page.html">手机版</a></li>
+            </ul>
         </div>
     </div>
     <div class="window">
-        <div>window</div>
+        <div class="wl">
+            <a href="main_page.html">
+                <img src="../static/img/4.gif">
+            </a>
+        </div>
+        <div class="search">
+            <ul style="display: none"></ul>
+            <div class="form icon-search">
+                <input type="hidden"/>
+                <button type="submit">
+                    search
+                </button>
+            </div>
+        </div>
+        <div class="wr">
+
+        </div>
     </div>
 </body>
 </html>
