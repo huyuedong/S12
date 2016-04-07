@@ -27,7 +27,7 @@
             height: 50px;  /*高度50px*/
             float: left;  /*左float*/
             margin-top: 24px;  /*上部外边距24px*/
-            background: url("../static/img/sanbao.png") no-repeat;  /*设置背景图片，不重复*/
+            background: url("../static/img/logo-1.png")  no-repeat;  /*设置背景图片，不重复*/
         }
         /*定义页眉处logo标题区块的样式*/
         .header .logo-title {
@@ -44,18 +44,23 @@
         /*定义协议内容标题区块的样式*/
         .protocol-title {
             background: #8AC007;  /*背景色*/
-            font-size: 14px;  /*协议标题的字体大小*/
-            font-weight: 700;  /*字体宽度*/
+            font-size: 18px;  /*协议标题的字体大小*/
+            font-weight: bold;  /*字体宽度*/
             width: 70%;  /*页面70%*/
             margin: auto;  /*自动外边距*/
             padding: 1px;  /*内填充*/
             text-align: center;  /*文字居中*/
+            color: white;
+        }
+        /*定义协议体区块的样式*/
+        .protocol-body {
+            width: 70%;  /*宽度占页面的70%*/
+            margin: 0 auto;  /*上下外边距为0,左右外边距自动*/
+            bottom: 100px;  /*距底部100px*/
         }
         /*定义协议内容区块的样式*/
         .protocol-con {
-            height: 600px;  /*协议内容高600px*/
-            margin: 0 auto 120px;  /*外边距：20-自动-120-自动*/
-            width: 70%;  /*宽度占页面70%*/
+            height: 650px;  /*协议内容高600px*/
             bottom: 100px;  /*距底部100px*/
             overflow-x: hidden;  /*隐藏x轴的滚动条*/
             overflow-y: auto;  /*显示滚动条*/
@@ -64,15 +69,20 @@
         }
         /*定义我同意区块的样式*/
         .protocol-button {
-            position: absolute;  /*固定到页面底部*/
+            position: fixed;  /*固定到页面底部*/
             bottom: 30px;  /*距页面底部30px*/
-            left: 40%;  /*距左边40%*/
-            text-align: center;  /*文本居中*/
-            line-height: 50px;  /*垂直居中*/
+            left: 45%;  /*距左边45%*/
             border-radius: 25px;  /*圆角*/
             background-color: #8AC007;  /*背景颜色*/
             width: 200px;  /*区块宽度*/
             height: 50px;  /*区块高度*/
+        }
+        .protocol-button a {
+            color: white;  /*字体颜色白色*/
+            font-weight: bold;  /*字体加粗*/
+            text-align: center;  /*文本居中*/
+            line-height: 48px;  /*行高48px*/
+
         }
         /*定义a标签链接的样式*/
         a:link {
@@ -93,7 +103,8 @@
     <div class="protocol-title">
         <p>乳山三宝商城用户注册协议</p>
     </div>
-    <div class="protocol-con">
+    <div class="protocol-body">
+        <div class="protocol-con">
         <h4>乳山三宝商城用户注册协议</h4>
 
         <p> 本协议是您与乳山三宝商城商城网站（简称"本站"，网址：www.hereisrushan.com）所有者之间就乳山三宝商城网站服务等相关事宜所订立的契约，请您仔细阅读本注册协议，您点击"同意并继续"按钮后，本协议即构成对双方有约束力的法律文件。</p>
@@ -238,10 +249,10 @@
 
         <p><strong>12.4</strong><span>您点击本协议下方的"同意并继续"按钮即视为您完全接受本协议，在点击之前请您再次确认已知悉并完全理解本协议的全部内容。</span>
         </p>
-
     </div>
-    <div class="protocol-button">
+        <div class="protocol-button">
         <a id="我同意" href="registry_page.html">我同意</a>
+    </div>
     </div>
 </body>
 </html>
