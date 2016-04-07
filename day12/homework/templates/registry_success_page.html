@@ -2,11 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>注册成功！</title>
+    <title>欢迎注册！</title>
     <meta http-equiv="Refresh" content="5;url=main_page.html"/>
+    <style>
+        /*定义默认的样式*/
+        * {
+            /*font-family: 微软雅黑;*/
+            font-family: "Microsoft YaHei";
+        }
+        /*定义页眉区块的样式*/
+        .header {
+            height: 110px;  /*高110px*/
+            margin: 0 auto;
+            background: url("../static/img/headbg.jpg") repeat-x bottom;  /*背景图片url，沿x轴重复，位于底部*/
+        }
+        /*定义页眉处logo内容区块的样式*/
+        .header .logo-con {
+            width: 70%;  /*宽度占页面70%*/
+            margin: 0 auto;  /*外边距，上下为0，左右自动*/
+        }
+        /*定义页眉处logo区块的样式*/
+        .header .logo {
+            width: 160px;  /*宽度160px*/
+            height: 50px;  /*高度50px*/
+            float: left;  /*左float*/
+            margin-top: 24px;  /*上部外边距24px*/
+            background: url("../static/img/logo-1.png")  no-repeat;  /*设置背景图片，不重复*/
+        }
+        /*定义页眉处logo标题区块的样式*/
+        .header .logo-title {
+            float: left;  /*左loft*/
+            height: 34px;  /*高度34px*/
+            line-height: 34px;  /*行高34px*/
+            font-size: 18px;  /*字体大小18px*/
+            color: #000;  /*颜色*/
+            border-left: solid 1px #bbb;  /*左边界 1px 实线*/
+            margin-left: 25px;  /*左侧外边距25px*/
+            padding-left: 25px;  /*左侧内填充25px*/
+            margin-top: 34px;  /*顶部外边距34px*/
+        }
+        .notice {
+            text-align: center;
+            margin-top: 100px;
+        }
+    </style>
 </head>
 <body>
-    <h1>恭喜您注册成功！正在跳转至商城首页。。。</h1>
-
+    <div class="header">
+        <div class="logo-con">
+            <a href="main_page.html" class="logo">
+            </a>
+            <div class="logo-title">欢 迎 注 册</div>
+        </div>
+    </div>
+    <div class="notice">
+        <h3>恭喜您注册成功！正在跳转至商城首页...</h3>
+    </div>
 </body>
 </html>
