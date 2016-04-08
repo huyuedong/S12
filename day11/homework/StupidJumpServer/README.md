@@ -1,24 +1,24 @@
-#这是一个利用paramiko实现的简易跳板机程序
+# 这是一个利用paramiko实现的简易跳板机程序
 
-###作者介绍：
+### 作者介绍：
 * author：liwenzhou
 * nickname:Q1mi
 * My Page:[liwenzhou.com](http://liwenzhou.com "liwenzhou's page")
 * My Blog:[http://blog.liwenzhou.com](http://blog.liwenzhou.com "liwenzhou's blog")
 
-###功能介绍：
+### 功能介绍：
 * 所有的用户操作日志记录在数据库中
 * 用户登录堡垒机，只需选择要连接的主机即可，无需再输入远程主机的用户名和密码。
 * 用户对不同的目标设备有不同的访问权限。
 * 对目标设备可以进行分组管理，允许用户访问某组设备，但是对组内的不同设备依然有不同的访问权限。
 
-###环境依赖：
+### 环境依赖：
 * Python3.0+
 * Paramiko
 * Yaml
 * MySQL
 
-###目录结构：
+### 目录结构：
 
     StupidJumpServer
     ├── __init__.py
