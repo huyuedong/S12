@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我最辉煌的时刻就是现在！</title>
+</head>
+<body>
+
+
+    <input type="button"  onclick="stopInterval();" value="停止！"/>
+    <script type="text/javascript">
+//        setInterval("MyInterval();", 1000);
+
+        obj0 = setInterval("MyInterval();", 1000);
+
+        //五秒钟之后停止
+        //setTimeout本质是等待多少毫秒执行指定的函数
+        obj1 = setTimeout("stopInterval()", 5000);
+
+        function stopInterval(){
+            clearInterval(obj0);
+        }
+
+        function MyInterval(){
+            var text = document.title;
+            var firstChar = text.charAt(0);
+            var otherChar = text.substring(1, text.length);
+            var newText = otherChar + firstChar;
+            document.title = newText
+        }
+//        function MyInterval2(){
+//            setInterval("MyInterval();", 1000);
+//        }
+    </script>
+</body>
+</html>

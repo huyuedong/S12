@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dom demo3</title>
+</head>
+<body>
+    <h1>设置属性</h1>
+
+    <div>
+        <div id="container" class="test" style="font-size: 18px; background-color: #8AC007">
+            我最辉煌的时刻就是现在。
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        obj = document.getElementById("container");
+        obj.className = "demo";
+        obj.setAttribute("name", "alex");
+
+
+        obj.style.fontSize = "60px";
+        obj.style.backgroundColor = "pink";
+    </script>
+</body>
+</html>

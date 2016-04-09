@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <h1>DOM 的两个例子</h1>
+
+    <h3>1.搜索框的onfocus和onblur事件</h3>
+    <input type="text" id="search" value="请输入关键字" onfocus="Focus();" onblur="Blur();" />
+
+    <h3>=================================================================</h3>
+    <script type="text/javascript">
+        function Focus(){
+            var nid=document.getElementById("search");
+            var val = nid.value;
+            if(val == "请输入关键字"){
+                nid.value = ""
+            }
+        }
+
+        function Blur(){
+            var nid = document.getElementById("search");
+            var val = nid.value;
+            if(!val.trim()){
+                nid.value = "请输入关键字"
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dom demo2</title>
+</head>
+<body>
+    <h1>创建html内容</h1>
+    <div>
+        <div id="container"></div>
+        </div>
+        <div>
+            <a href="http://www.liwenzhou.com" onclick="return AddElement();">添加内容</a>
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        function AddElement(){
+            /*
+            //方法一
+            //创建标签，添加到container中
+            var nid = document.getElementById("container");
+            var tag = "<input type='text'/>";
+            nid.innerHTML = tag;
+            //beforeBegin\afterBegin\beforeEnd\afterEnd
+            container.innerAdjacentHTML("beforeBegin", tag);
+            */
+
+            //方法二
+            //创建对象
+            var createObj = document.createElement("a");
+            createObj.href = "http://www.liwenzhou.com";
+            createObj.innerText = "李文周的个人主页";
+
+            var nid = document.getElementById("container");
+            nid.appendChild(createObj);
+            return false;
+        }
+    </script>
+</body>
+</html>

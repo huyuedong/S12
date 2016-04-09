@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>menu demo</title>
+    <style>
+    .menu{
+        float: left;width: 30%;height: 500px;background-color: #8AC007;
+    }
+    .content{
+        float: left;width: 70%;height: 500px;background-color: white;
+    }
+    .title{
+        background-color: #8AC007;
+        color: white;
+        font-weight: bold;
+        height: 50px;
+        line-height: 50px;
+        border: 1px solid white;
+    }
+    .hide{
+        display: none;
+    }
+</style>
+</head>
+<body>
+<div>
+        <div class="menu">
+            <div class="item">
+                <div class="title" onclick="Func(this);">菜单一</div>
+                <div class="body">
+                    <div>1.1</div>
+                    <div>1.2</div>
+                    <div>1.3</div>
+                </div>
+            </div>
+
+            <div class="item">
+                 <div class="title" onclick="Func(this);">菜单二</div>
+                <div class="body hide">
+                    <div>2.1</div>
+                    <div>2.2</div>
+                    <div>2.3</div>
+                </div>
+            </div>
+
+            <div class="item">
+                 <div class="title" onclick="Func(this);">菜单三</div>
+                <div class="body hide">
+                    <div>3.1</div>
+                    <div>3.2</div>
+                    <div>3.3</div>
+                </div>
+            </div>
+        </div>
+        <div class="content"></div>
+    </div>
+
+    <script src="jquery-2.2.3.js"></script>
+    <script>
+        function Func(ths){
+            //展开点击菜单的子菜单
+            $(ths).next().removeClass("hide");
+            //关闭其他菜单的子菜单
+            $(ths).parent().siblings().find(".body").addClass("hide");
+        }
+    </script>
+</body>
+</html>

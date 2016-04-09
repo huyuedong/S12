@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dom demo4</title>
+</head>
+<body>
+    <div>
+        <form id="form1" action="https://www.sougou.com/web" method="get">
+            <input name="query" type="text"/>
+            <input type="submit" value="提交"/>
+            <!--利用事件将div改造成提交-->
+            <div onclick="Submit();">提交</div>
+        </form>
+
+    </div>
+
+    <script type="text/javascript">
+        function Submit(){
+            document.getElementById("form1").submit();
+        }
+    </script>
+</body>
+</html>

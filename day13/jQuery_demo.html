@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery demo</title>
+</head>
+<body>
+
+    <div id="n1" class="c1">000</div>
+    <div id="n2" class="c1">000</div>
+    <div id="n3" class="c1">000</div>
+    <div id="n4" class="c1">000
+        <div class="c2">001</div>
+            <div class="c3">002
+                <span class="c4">span</span>
+                <a class="c5">我最辉煌的时刻就是现在！</a>
+            </div>
+    </div>
+
+    <script src="jquery-2.2.3.js"></script>
+    <script>
+        //id选择器
+        $("#n1").text("123");
+        //标签选择器
+        $("div").text("456");
+        //class选择器
+        $(".c3").text("789");
+        //组合选择器
+        $(".c1, a, span").text("abc");
+        //层级选择器
+        $(".c1 div .c3 span").text("efg");
+    </script>
+</body>
+</html>

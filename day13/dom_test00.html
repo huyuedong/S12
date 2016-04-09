@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dom test</title>
+</head>
+<body>
+    <h1>我最辉煌的时刻就是现在！</h1>
+    <h1>是的，我很确定。</h1>
+
+
+    <div>
+        <div id="num">1</div>
+        <input type="button" value="+1" onclick="Add();"/>
+    </div>
+
+    <h3>特殊的：即通过value取值的</h3>
+    <input type="button" onclick="GetValue();" value="获取值"/>
+    <div>
+        <form>
+            <input id="n2"/>
+            <select id="n3">
+                <option value="0">北京</option>
+                <option value="1">上海</option>
+                <option value="2">广州</option>
+            </select><br>
+            <textarea id="n4">
+                abcdef
+            </textarea>
+        </form>
+    </div>
+    <div>
+        <div id="n1">哈哈</div>
+        <a>abcdefgh</a>
+    </div>
+
+    <ul>
+        <li>123</li>
+        <li>123</li>
+        <li>123</li>
+        <li>123</li>
+    </ul>
+    <div>
+        <div class="c1">1</div>
+        <div class="c1">2</div>
+        <div class="c1">3</div>
+    </div>
+
+    <form>
+        <label>用户名：<input name="username" value="alex"/></label><br/>
+        <label>密码：<input name="pwd" value="123"/></label>
+    </form>
+
+
+    <script type="text/javascript">
+
+        function Add(){
+            var nid = document.getElementById("num");
+            var text = nid.innerText;
+            text = parseInt(text);
+            text += 1;
+            nid.innerText = text;
+        }
+
+        function GetValue(){
+//            var val = document.getElementById("n2");
+            var val = document.getElementById("n3");
+//            var val = document.getElementById("n4");
+            alert(val.value);
+            val.value = "2"
+        }
+        /*
+        var nid = document.getElementById("n1");
+        nid.innerText = "alex";
+
+        var lis = document.getElementsByTagName("li");
+        for(var i in lis){
+            if(lis.hasOwnProperty(i)){
+                var item = lis[i];
+                item.innerText = i;
+            }
+
+        }
+
+        var lis2 = document.getElementsByClassName("c1");
+        for(var i2=0;i2<lis2.length;i2+=1){
+            var item2 = lis2[i2];
+            item2.innerText = i;
+        }
+
+        var username = document.getElementsByName("username")[0];
+        var pwd = document.getElementsByName("pwd")[0];
+        console.log(username.value, pwd.value);
+
+        var lisH1 = document.getElementsByTagName("h1");
+        for(var h1 in lisH1){
+            if(lisH1.hasOwnProperty(h1)){
+                console.log(h1.innerText)
+            }
+        }
+        */
+    </script>
+</body>
+</html>
