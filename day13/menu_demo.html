@@ -4,65 +4,106 @@
     <meta charset="UTF-8">
     <title>menu demo</title>
     <style>
-    .menu{
-        float: left;width: 30%;height: 500px;background-color: #8AC007;
-    }
-    .content{
-        float: left;width: 70%;height: 500px;background-color: white;
-    }
-    .title{
-        background-color: #8AC007;
-        color: white;
-        font-weight: bold;
-        height: 50px;
-        line-height: 50px;
-        border: 1px solid white;
-    }
-    .hide{
-        display: none;
-    }
-</style>
+        *{
+            font-family: 微软雅黑;
+        }
+        li{
+            list-style: none;
+            display: list-item;
+        }
+        .menu{
+            float: left;
+            width: 20%;
+            height: 500px;
+            background-color: #4E546B;
+        }
+        .content{
+            float: left;
+            width: 70%;
+            height: 500px;
+            background-color: white;
+            cursor: pointer;
+        }
+        .title{
+            background-color: #4E546B;
+            color: white;
+            font-weight: bold;
+            /*height: 50px;*/
+            line-height: 50px;
+            border: 1px solid white;
+            cursor: pointer;
+        }
+        .subMenu{
+            background-color: #4E546B;
+            color: white;
+            font-size: 18px;
+            border: 1px solid white;
+            cursor: pointer;
+            margin: 0;
+        }
+        .hide{
+            display: none;
+        }
+        .changeColor{
+            color: white;
+            font-weight: bold;
+            background-color: #ff404b;
+        }
+        .moveLittle{
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
 <div>
-        <div class="menu">
-            <div class="item">
-                <div class="title" onclick="Func(this);">菜单一</div>
-                <div class="body">
-                    <div>1.1</div>
-                    <div>1.2</div>
-                    <div>1.3</div>
-                </div>
-            </div>
-
-            <div class="item">
-                 <div class="title" onclick="Func(this);">菜单二</div>
-                <div class="body hide">
-                    <div>2.1</div>
-                    <div>2.2</div>
-                    <div>2.3</div>
-                </div>
-            </div>
-
-            <div class="item">
-                 <div class="title" onclick="Func(this);">菜单三</div>
-                <div class="body hide">
-                    <div>3.1</div>
-                    <div>3.2</div>
-                    <div>3.3</div>
-                </div>
-            </div>
+    <div class="menu">
+        <div class="item">
+            <div class="title changeColor" onmouseover="changeColor(this)" onclick="showMenu(this);">菜单一</div>
+            <ul class="subMenu">
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">1.1</li>
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">1.2</li>
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">1.3</li>
+            </ul>
         </div>
+
+        <div class="item">
+            <div class="title" onmouseover="changeColor(this)" onclick="showMenu(this);">菜单二</div>
+            <ul class="subMenu hide">
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">2.1</li>
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">2.2</li>
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">2.3</li>
+            </ul>
+        </div>
+
+        <div class="item">
+            <div class="title" onmouseover="changeColor(this)" onclick="showMenu(this);">菜单三</div>
+            <ul class="subMenu hide">
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">3.1</li>
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">3.2</li>
+                <li onmouseover="moveOver(this)" onmouseout="moveOut(this)">3.3</li>
+            </ul>
+        </div>
+    </div>
         <div class="content"></div>
     </div>
 
     <script src="jquery-2.2.3.js"></script>
     <script>
-        function Func(ths){
+        function showMenu(ths){
             //展开点击菜单的子菜单
             $(ths).next().removeClass("hide");
             //关闭其他菜单的子菜单
-            $(ths).parent().siblings().find(".body").addClass("hide");
+            $(ths).parent().siblings().find(".subMenu").addClass("hide");
+        }
+        function changeColor(ths){
+            $(ths).addClass("changeColor");
+            $(ths).parent().siblings().find(".title").removeClass("changeColor");
+        }
+        function moveOver(ths){
+            $(ths).addClass("moveLittle");
+        }
+        function moveOut(ths){
+            $(ths).removeClass("moveLittle")
         }
     </script>
 </body>
