@@ -5,9 +5,10 @@
 
 num = 3
 while num < 10:
-	num += 1
 	if num == 5:
+		num += 1
 		continue
-	print(num)
 	if num == 7:
 		break
+	print(num)
+	num += 1
