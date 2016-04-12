@@ -18,6 +18,6 @@ function showPic(which_pic) {
 
 function countBodyChildren() {
     var body_element = document.getElementsByTagName("body")[0];
-    //alert (body_element.childNodes.length);
+    console.log(body_element.childNodes.length);
 }
 window.onload = countBodyChildren();

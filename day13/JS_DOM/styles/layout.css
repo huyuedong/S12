@@ -18,11 +18,17 @@ ul {
     padding: 0;
 }
 li {
-    float: left;
+    /*float: left;*/
     padding: 1em;
     list-style: none;
 }
 img {
     display: block;
     clear: both;
+}
+#imagegallery {
+    list-style: none;
+}
+#imagegallery li {
+    display: inline;
 }
