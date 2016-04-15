@@ -1,0 +1,55 @@
+body {
+    font-family: "微软雅黑", Arial, serif;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+table {
+    margin: auto;
+    border: 1px solid #A7C942;
+}
+.option {
+    margin: 0;
+    border: 1px solid #A7C942;
+    width: auto;
+}
+.hostname {
+    width: auto;
+}
+.ip {
+    width: auto;
+}
+.port {
+    width: auto;
+}
+.state {
+    width: auto;
+}
+
+caption {
+    margin: auto;
+    padding: .2em;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+th {
+    font-weight: normal;
+    font-style: italic;
+    text-align: left;
+    border: 1px dotted #A7C942;
+    background-color: #A7C942;
+    color: #000;
+}
+/*th, td {*/
+    /*width: 10em;*/
+    /*padding: .5em;*/
+/*}*/
+/*tr:nth-child(odd) {*/
+    /*background-color: #FFFFCC;*/
+/*}*/
+/*tr:nth-child(even) {*/
+    /*background-color: #FFFFFF;*/
+/*}*/
+/*.intro {*/
+    /*font-weight: bold;*/
+    /*font-size: 1.2em;*/
+/*}*/
