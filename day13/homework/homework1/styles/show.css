@@ -1,0 +1,78 @@
+* {
+    font-family: "微软雅黑", Arial, serif;
+}
+body {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+/*表格样式*/
+table {
+    margin: 0 auto;
+    border: 1px solid #A7C942;
+}
+/*标题样式*/
+caption {
+    margin: auto;
+    padding: 2px;
+    font-size: 18px;
+    font-weight: bold;
+}
+/*表头*/
+th {
+    font-weight: bold;
+    text-align: center;
+    border: 1px dotted #A7C942;
+    background-color: #A7C942;
+    color: #000;
+}
+/*表体*/
+tr td {
+    margin: 0;
+    border: 1px solid #A7C942;
+    width: 35px;
+    text-align: center;
+}
+.tr_alt {
+    background-color: #EFF9A0;
+}
+/*序号*/
+.no {
+    width: 35px;
+}
+/*主机名*/
+.hostname {
+    width: 200px;
+}
+/*主机IP*/
+.ip {
+    width: 150px;
+}
+/*端口*/
+.port {
+    width: 70px;
+}
+/*状态*/
+.state {
+    width: 70px;
+}
+/*表格下方按钮载体div*/
+.button_set {
+    width: 600px;
+    margin: 0 auto;
+}
+/*表格下方按钮列表*/
+li {
+    display: inline;
+    margin: 0 20px;
+}
+/*按钮*/
+button {
+    cursor: pointer;
+    line-height: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #A7C942;
+    border: none;
+    padding: 5px 15px;
+    text-align: center;
+}
