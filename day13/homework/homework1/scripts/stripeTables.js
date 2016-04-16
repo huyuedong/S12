@@ -47,12 +47,51 @@ function highlightRows() {
         }
     );
 }
+//全选
+function checkAll() {
+    $("#check-all").click(function() {
+        $("form input").each(function() {
+            $(this).prop("checked", true);
+        });
+    });
+}
+//反选
+function invertCheck() {
+    $("#invert-check").click(function() {
+        $("form input").each(function() {
+            if ($(this).prop("checked")) {
+                $(this).prop("checked", false);
+            } else {
+                $(this).prop("checked", true);
+            }
+        })
+    })
+}
+//取消
+
+//进入编辑模式
+function editRecord() {
+    $("#edit").click(function() {
+        //$("input:ckecked").parent().siblings().has("div").each(function() {
+        $("input:checked").each(function() {
+            console.log(1);
+            //$(this).parents().siblings().has("div").children().each(function() {
+            //    var old_value = $(this).text();
+            //    console.log(old_value);
+                //$(this).replaceWith("<input type='text'>")
+            //})
+        })
+    })
+}
 
 //简写方法
 $(function() {
-   stripeTables();
+    stripeTables();
 });
 //推荐方法
 $(document).ready(function() {
-   highlightRows();
+    highlightRows();
+    checkAll();
+    invertCheck();
+    editRecord();
 });

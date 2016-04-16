@@ -6,7 +6,7 @@
     <link rel="stylesheet" media="screen"  href="styles/show.css"/>
 </head>
 <body>
-    <div>
+    <form>
         <table>
             <caption>主机管理系统</caption>
             <thead>
@@ -22,7 +22,7 @@
             <tbody>
             <tr>
                 <td class="option"><input type="checkbox" /></td>
-                <td class="no"><div>1</div></td>
+                <td class="no">1</td>
                 <td class="hostname"><div>hostname1</div></td>
                 <td class="ip"><div>111.111.111.111</div></td>
                 <td class="port"><div>22</div></td>
@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <td class="option"><input type="checkbox" /></td>
-                <td class="no"><div>2</div></td>
+                <td class="no">2</td>
                 <td class="hostname"><div>hostname2</div></td>
                 <td class="ip"><div>8.8.8.8</div></td>
                 <td class="port"><div>22</div></td>
@@ -38,7 +38,7 @@
             </tr>
             <tr>
                 <td class="option"><input type="checkbox" /></td>
-                <td class="no"><div>3</div></td>
+                <td class="no">3</td>
                 <td class="hostname"><div>hostname3</div></td>
                 <td class="ip"><div>225.225.255.254</div></td>
                 <td class="port"><div>22</div></td>
@@ -46,7 +46,7 @@
             </tr>
             <tr>
                 <td class="option"><input type="checkbox" /></td>
-                <td class="no"><div>4</div></td>
+                <td class="no">4</td>
                 <td class="hostname"><div>hostname4</div></td>
                 <td class="ip"><div></div>10.10.0.1</td>
                 <td class="port"><div>22</div></td>
@@ -67,13 +67,13 @@
         <br>
         <div class="button_set">
             <ul>
-                <li><button type="button">全选</button></li>
-                <li><button type="button">反选</button></li>
-                <li><button type="button">取消</button></li>
-                <li><button type="button">进入编辑模式</button></li>
+                <li><button id="check-all" type="button">全选</button></li>
+                <li><button id="invert-check" type="button">反选</button></li>
+                <li><button id="cancel" type="button">取消</button></li>
+                <li><button id="edit" type="button">进入编辑模式</button></li>
             </ul>
         </div>
-    </div>
+    </form>
     <script src="scripts/jquery-2.2.3.js"></script>
     <script rel="script" src="scripts/addLoadEvent.js"></script>
     <script rel="script" src="scripts/stripeTables.js"></script>
