@@ -32,6 +32,10 @@ tr td {
     width: 35px;
     text-align: center;
 }
+td input, td select {
+    font-size: 16px;
+    line-height: 16px;
+}
 .tr_alt {
     background-color: #EFF9A0;
 }
@@ -40,7 +44,7 @@ tr td {
     width: 35px;
 }
 /*主机名*/
-.hostname {
+.hostname, .hostname input {
     width: 200px;
 }
 /*主机IP*/
@@ -48,11 +52,11 @@ tr td {
     width: 150px;
 }
 /*端口*/
-.port {
+.port, .port input {
     width: 70px;
 }
 /*状态*/
-.state {
+.state, .state select {
     width: 70px;
 }
 /*表格下方按钮载体div*/

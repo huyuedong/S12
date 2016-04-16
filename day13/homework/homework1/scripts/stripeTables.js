@@ -72,17 +72,34 @@ function invertCheck() {
 //进入编辑模式
 function editRecord() {
     $("#edit").click(function() {
-        //$("input:ckecked").parent().siblings().has("div").each(function() {
-        $("input:checked").each(function() {
-            console.log(1);
-            //$(this).parents().siblings().has("div").children().each(function() {
-            //    var old_value = $(this).text();
-            //    console.log(old_value);
-                //$(this).replaceWith("<input type='text'>")
-            //})
+        $("input:checked").parent().siblings().has("div").each(function() {
+            $(this).children().each(function() {
+                var old_value = $(this).text();
+                if ($(this).parent().prop("class") != "state") {
+                    console.log(old_value);
+                    $(this).replaceWith("<input type='text' value=" + old_value + ">");
+                } else {
+                    console.log("in select...");
+                    console.log(old_value);
+                    $(this).replaceWith("<select name='state'></select>");
+                    $("<option></option>").val("0").text("在线").appendTo($("select"));
+                    $("<option></option>").val("1").text("下线").appendTo($("select"));
+                    console.log($("select option:contains('"+old_value+"')"));
+                    //$("select option[text='"+old_value+"']").attr("selected", true);
+                    //$("select option:contains('"+old_value+"')").attr("selected", true);
+                    //this.find("option:contains('"+old_value+"')").attr("selected", true);
+                }
+
+            })
         })
     })
 }
+//保存
+function save() {
+    var input_value = $("form input").val();
+    var select_value = $("form select").val();
+}
+
 
 //简写方法
 $(function() {
