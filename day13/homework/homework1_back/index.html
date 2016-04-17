@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" media="screen"  href="styles/show.css"/>
+</head>
+<body>
+    <form>
+        <table>
+            <caption>主机管理系统</caption>
+            <thead>
+            <tr>
+                <th class="option"><div>选择</div></th>
+                <th class="no"><div>序号</div></th>
+                <th class="hostname"><div>主机名</div></th>
+                <th class="ip"><div>IP</div></th>
+                <th class="port"><div>端口</div></th>
+                <th class="state"><div>状态</div></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="0-row">
+                <td class="option"><input type="checkbox" /></td>
+                <td class="no">1</td>
+                <td class="hostname"><div>hostname1</div></td>
+                <td class="ip"><div>111.111.111.111</div></td>
+                <td class="port"><div>22</div></td>
+                <td class="state"><div>在线</div></td>
+            </tr>
+            <tr id="1-row">
+                <td class="option"><input type="checkbox" /></td>
+                <td class="no">2</td>
+                <td class="hostname"><div>hostname2</div></td>
+                <td class="ip"><div>8.8.8.8</div></td>
+                <td class="port"><div>22</div></td>
+                <td class="state"><div>下线</div></td>
+            </tr>
+            <tr id="2-row">
+                <td class="option"><input type="checkbox" /></td>
+                <td class="no">3</td>
+                <td class="hostname"><div>hostname3</div></td>
+                <td class="ip"><div>225.225.255.254</div></td>
+                <td class="port"><div>22</div></td>
+                <td class="state"><div>在线</div></td>
+            </tr>
+            <tr id="3-row">
+                <td class="option"><input type="checkbox" /></td>
+                <td class="no">4</td>
+                <td class="hostname"><div>hostname4</div></td>
+                <td class="ip"><div>10.10.0.1</div></td>
+                <td class="port"><div>22</div></td>
+                <td class="state"><div>下线</div></td>
+            </tr>
+            <!--<tr>-->
+                <!--<td class="option"><input type="checkbox" /></td>-->
+                <!--<td class="hostname"><input type="text" /></td>-->
+                <!--<td class="ip"><input type="text" /></td>-->
+                <!--<td class="port"><input type="text" /></td>-->
+                <!--<td class="state"><select name="state">-->
+                    <!--<option value="online">在线</option>-->
+                    <!--<option value="offline">下线</option>-->
+                <!--</select></td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+        <br>
+        <div class="button-set">
+            <ul id="select-page">
+                <li><button id="check-all" type="button">全选</button></li>
+                <li><button id="invert-check" type="button">反选</button></li>
+                <li><button id="edit" type="button">进入编辑模式</button></li>
+            </ul>
+            <ul id="edit-page">
+                <li><button id='cancel' type='button'>取消</button></li>
+                <li><button id='save' type='button'>保存</button></li>
+            </ul>
+        </div>
+    </form>
+    <script src="scripts/jquery-2.2.3.js"></script>
+    <script rel="script" src="scripts/addLoadEvent.js"></script>
+    <script rel="script" src="scripts/stripeTables.js"></script>
+</body>
+</html>

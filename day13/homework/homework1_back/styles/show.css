@@ -40,8 +40,6 @@ td input, td select {
     line-height: 16px;
     border: none;
     outline: none;
-    background-color: inherit;
-    font-weight: inherit;
 }
 .tr_alt {
     background-color: #EFF9A0;
@@ -63,7 +61,7 @@ td input, td select {
     width: 70px;
 }
 /*状态*/
-.state, .state select, .group, .group select {
+.state, .state select {
     width: 70px;
 }
 /*表格下方按钮载体div*/
@@ -90,7 +88,6 @@ button {
     padding: 5px 15px;
     text-align: center;
 }
-.editing {
-    background-color: #FFFFFF;
-    border: 1px solid #A7C942;
+.hidden {
+    display: none;
 }

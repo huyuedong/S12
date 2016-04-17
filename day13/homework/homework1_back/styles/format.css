@@ -1,0 +1,93 @@
+* {
+    font-family: "微软雅黑", Arial, serif;
+}
+body {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+table {
+    margin: 0 auto;
+    border: 1px solid #A7C942;
+}
+input, select {
+    border: none;
+    line-height: 18px;
+    font-size: 18px;
+    margin: 0 2px;
+}
+.option {
+    margin: 0;
+    border: 1px solid #A7C942;
+    width: auto;
+    text-align: center;
+}
+.hostname {
+    width: auto;
+    border: 1px solid #A7C942;
+}
+.ip {
+    width: 6px;
+    border: 1px solid #A7C942;
+}
+td div {
+    line-height: 18px;
+    font-size: 18px;
+    padding: 2px;
+}
+.port {
+    border: 1px solid #A7C942;
+}
+.port input {
+    width: 50px;
+}
+.state {
+    width: 20px;
+    border: 1px solid #A7C942;
+}
+
+caption {
+    margin: auto;
+    padding: 2px;
+    font-size: 18px;
+    font-weight: bold;
+}
+th {
+    font-weight: normal;
+    text-align: center;
+    border: 1px dotted #A7C942;
+    background-color: #A7C942;
+    color: #000;
+}
+li {
+    display: inline;
+    margin: 0 20px;
+}
+button {
+    cursor: pointer;
+    line-height: 16px;
+    font-size: 16px;
+    background-color: #A7C942;
+    border: none;
+    padding: 5px 15px;
+    text-align: center;
+    /*color: white;*/
+}
+.button_set {
+    /*position: relative;*/
+    width: 600px;
+    margin: 0 auto;
+}
+/*th, td {*/
+    /*width: 10em;*/
+    /*padding: .5em;*/
+/*}*/
+/*tr:nth-child(odd) {*/
+    /*background-color: #FFFFCC;*/
+/*}*/
+/*tr:nth-child(even) {*/
+    /*background-color: #FFFFFF;*/
+/*}*/
+/*.intro {*/
+    /*font-weight: bold;*/
+    /*font-size: 1.2em;*/
+/*}*/

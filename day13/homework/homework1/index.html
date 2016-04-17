@@ -16,57 +16,52 @@
                 <th class="hostname"><div>主机名</div></th>
                 <th class="ip"><div>IP</div></th>
                 <th class="port"><div>端口</div></th>
+                <th class="group"><div>业务组</div></th>
                 <th class="state"><div>状态</div></th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
+            <tbody id="tb-1">
+            <tr id="row-1">
                 <td class="option"><input type="checkbox" /></td>
                 <td class="no">1</td>
-                <td class="hostname"><div>hostname1</div></td>
-                <td class="ip"><div>111.111.111.111</div></td>
-                <td class="port"><div>22</div></td>
-                <td class="state"><div>在线</div></td>
+                <td edit="true" edit-type="input" class="hostname">hostname1</td>
+                <td edit="true" edit-type="input" class="ip">111.111.111.111</td>
+                <td class="port">22</td>
+                <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
+                <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
             </tr>
-            <tr>
+            <tr id="row-2">
                 <td class="option"><input type="checkbox" /></td>
                 <td class="no">2</td>
-                <td class="hostname"><div>hostname2</div></td>
-                <td class="ip"><div>8.8.8.8</div></td>
-                <td class="port"><div>22</div></td>
-                <td class="state"><div>下线</div></td>
+                <td edit="true" edit-type="input" class="hostname">hostname2</td>
+                <td edit="true" edit-type="input" class="ip">8.8.8.8</td>
+                <td class="port">22</td>
+                <td edit="true" edit-type="select" option-key="GROUP" class="group">测试</td>
+                <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
             </tr>
-            <tr>
+            <tr id="row-3">
                 <td class="option"><input type="checkbox" /></td>
                 <td class="no">3</td>
-                <td class="hostname"><div>hostname3</div></td>
-                <td class="ip"><div>225.225.255.254</div></td>
-                <td class="port"><div>22</div></td>
-                <td class="state"><div>在线</div></td>
+                <td edit="true" edit-type="input" class="hostname">hostname3</td>
+                <td edit="true" edit-type="input" class="ip">225.225.255.254</td>
+                <td class="port">22</td>
+                <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
+                <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
             </tr>
-            <tr>
+            <tr id="row-4">
                 <td class="option"><input type="checkbox" /></td>
                 <td class="no">4</td>
-                <td class="hostname"><div>hostname4</div></td>
-                <td class="ip"><div>10.10.0.1</div></td>
-                <td class="port"><div>22</div></td>
-                <td class="state"><div>下线</div></td>
+                <td edit="true" edit-type="input" class="hostname">hostname4</td>
+                <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
+                <td class="port">22</td>
+                <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
+                <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
             </tr>
-            <!--<tr>-->
-                <!--<td class="option"><input type="checkbox" /></td>-->
-                <!--<td class="hostname"><input type="text" /></td>-->
-                <!--<td class="ip"><input type="text" /></td>-->
-                <!--<td class="port"><input type="text" /></td>-->
-                <!--<td class="state"><select name="state">-->
-                    <!--<option value="online">在线</option>-->
-                    <!--<option value="offline">下线</option>-->
-                <!--</select></td>-->
-            <!--</tr>-->
             </tbody>
         </table>
         <br>
-        <div class="button_set">
-            <ul>
+        <div class="button-set">
+            <ul id="select-page">
                 <li><button id="check-all" type="button">全选</button></li>
                 <li><button id="invert-check" type="button">反选</button></li>
                 <li><button id="cancel" type="button">取消</button></li>
