@@ -2,9 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>index</title>
+    <link rel="stylesheet" media="screen"  href="styles/show.css"/>
 </head>
 <body>
-
+    <div id="host-list">
+        <table>
+            <caption>主机管理系统</caption>
+            <thead>
+            <tr>
+                <th class="no">序号</th>
+                <th class="hostname">主机名</th>
+                <th class="ip">IP</th>
+                <th class="port">端口</th>
+                <th class="edit"><a>编辑</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="row-1">
+                <td class="no">1</td>
+                <td class="hostname">hostname1</td>
+                <td class="ip">111.111.111.111</td>
+                <td class="port">22</td>
+                <td class="edit"><a>编辑</a></td>
+            </tr>
+            <tr id="row-2">
+                <td class="no">2</td>
+                <td class="hostname">hostname2</td>
+                <td class="ip">8.8.8.8</td>
+                <td class="port">22</td>
+                <td class="edit"><a>编辑</a></td>
+            </tr>
+            <tr id="row-3">
+                <td class="no">3</td>
+                <td class="hostname">hostname3</td>
+                <td class="ip">225.225.255.254</td>
+                <td class="port">22</td>
+                <td class="edit"><a>编辑</a></td>
+            </tr>
+            <tr id="row-4">
+                <td class="no">4</td>
+                <td class="hostname">hostname4</td>
+                <td class="ip">10.10.0.1</td>
+                <td class="port">22</td>
+                <td class="edit"><a>编辑</a></td>
+            </tr>
+            <!--<tr>-->
+                <!--<td class="option"><input type="checkbox" /></td>-->
+                <!--<td class="hostname"><input type="text" /></td>-->
+                <!--<td class="ip"><input type="text" /></td>-->
+                <!--<td class="port"><input type="text" /></td>-->
+                <!--<td class="state"><select name="state">-->
+                    <!--<option value="online">在线</option>-->
+                    <!--<option value="offline">下线</option>-->
+                <!--</select></td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+        <div id="pop-page" class="hidden modal">
+            <div class="modal-wrapper">
+                <div class="title-set">主机信息编辑页</div>
+                <form id="edit-form" class="edit-set">
+                    <label for="hostname">主机名：
+                        <input id="hostname" type="text" />
+                    </label>
+                    <label for="ip">IP地址：
+                        <input id="ip" type="text" />
+                    </label>
+                    <label for="port">端　口：
+                        <input id="port" type="text" />
+                    </label>
+                </form>
+                <div class="button-set">
+                    <ul>
+                        <li><button id="cancel-button">取消</button></li>
+                        <li><button id="save-button">保存</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/jquery-2.2.3.js"></script>
+    <script rel="script" src="scripts/homework2.js"></script>
 </body>
 </html>
