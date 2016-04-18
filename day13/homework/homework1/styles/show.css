@@ -55,7 +55,7 @@ td input, td select {
     width: 200px;
 }
 /*主机IP*/
-.ip {
+.ip, .ip input {
     width: 150px;
 }
 /*端口*/

@@ -171,15 +171,15 @@ function optionClick() {
     })
 }
 //定义一个判断Ctrl是否按下的flag
-CTRLPRESS = false;
+window.CTRLPRESS = false;
 
+//按下Ctrl则把CTRLPRESS置为true
 window.onkeydown = function(event) {
-    if (event && event.keyCode == 17) {
-        CTRLPRESS = true;
-    }
+    window.CTRLPRESS = !!(event && event.keyCode == 17);
 };
 function batchSelect(ths) {
-    if (CTRLPRESS) {
+    if (window.CTRLPRESS) {
+        window.CTRLPRESS = false;
         //找到td在tr的索引位置
         var cur_index = $(ths).parent().index();
         //找到当前option值
