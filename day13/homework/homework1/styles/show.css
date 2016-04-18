@@ -43,8 +43,14 @@ td input, td select {
     background-color: inherit;
     font-weight: inherit;
 }
+input[type="checkbox"], .state select, .group select {
+    cursor: pointer;
+}
 .tr_alt {
     background-color: #EFF9A0;
+}
+.no, .hostname, .ip, .port, .group, .state {
+    cursor: default;
 }
 /*序号*/
 .no {
