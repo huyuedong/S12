@@ -46,13 +46,15 @@ td input, td select {
 .tr_alt {
     background-color: #EFF9A0;
 }
-.no, .hostname, .ip, .port, .group, .state {
+.no, .hostname, .ip, .port {
     cursor: default;
 }
-.edit {
+tbody .edit {
     cursor: pointer;
     text-align: center;
     text-decoration: none;
+    width: 50px;
+    color: blue;
 }
 /*序号*/
 .no {
@@ -70,11 +72,6 @@ td input, td select {
 .port, .port input {
     width: 70px;
 }
-.editing {
-    background-color: #FFFFFF;
-    border: 1px solid #A7C942;
-}
-
 .modal {
     position: fixed;
     left: 0;
@@ -84,7 +81,7 @@ td input, td select {
     background: rgba(255,255,255,.8);
 }
 .modal-wrapper {
-    width: 500px;
+    width: 525px;
     height: 300px;
     margin: 200px auto;
     border: 1px solid #A7C942;
