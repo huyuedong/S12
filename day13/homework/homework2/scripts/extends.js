@@ -2,6 +2,7 @@
  * Created by qimi on 2016/4/17.
  */
 (function(arg) {
+    //提示指定错误信息
     function errorMessage(container, msg) {
         //确保同时只出现一个错误提示消息
         if (container.parent().attr("hasError") == "false") {
@@ -9,20 +10,25 @@
             container.after(temp);
             container.parent().attr("hasError", "true");
         }
+        //闪烁出现错误的输入框
         shake(container, "red", 2);
+        //该输入框获得焦点之后去掉错误提示
         container.focus(function() {
             container.siblings().remove();
             container.parent().attr("hasError", "false");
         })
     }
-    //确保同时只出现一个错误提示消息
+    //提示不能为空
     function emptyMessage(container, msg) {
+        //确保同时只出现一个错误提示消息
         if (container.parent().attr("hasError") == "false") {
             var temp = "<div id='empty-error'>"+msg+"</div>";
             container.after(temp);
             container.parent().attr("hasError", "true");
         }
+        //闪烁出现错误的输入框
         shake(container, "red", 2);
+        //获得焦点之后去掉错误提示
         container.focus(function() {
             container.siblings().remove();
             container.parent().attr("hasError", "false");
@@ -48,7 +54,9 @@
             $(form).find(":submit").click(function() {
                 var flag = true;
                 $(form).find(":text").each(function() {
-                    var name = $(this).parent().prop("for");
+                    var name = $(this).parent().text();
+                    //去掉冒号和多余的空格
+                    name = name.replace(/[：,　]/g,"").trim();
                     var value = $(this).val();
                     //如果input为空
                     if (!value || value.trim() == "") {

@@ -21,42 +21,32 @@
             <tbody>
             <tr id="row-1">
                 <td class="no">1</td>
-                <td class="hostname">hostname1</td>
-                <td class="ip">111.111.111.111</td>
-                <td class="port">22</td>
+                <td edit="true" class="hostname">hostname1</td>
+                <td edit="true" class="ip">111.111.111.111</td>
+                <td edit="true" class="port">22</td>
                 <td class="edit"><a>编辑</a></td>
             </tr>
             <tr id="row-2">
                 <td class="no">2</td>
-                <td class="hostname">hostname2</td>
-                <td class="ip">8.8.8.8</td>
-                <td class="port">22</td>
+                <td edit="true" class="hostname">hostname2</td>
+                <td edit="true" class="ip">8.8.8.8</td>
+                <td edit="true" class="port">22</td>
                 <td class="edit"><a>编辑</a></td>
             </tr>
             <tr id="row-3">
                 <td class="no">3</td>
-                <td class="hostname">hostname3</td>
-                <td class="ip">225.225.255.254</td>
-                <td class="port">22</td>
+                <td edit="true" class="hostname">hostname3</td>
+                <td edit="true" class="ip">225.225.255.254</td>
+                <td edit="true" class="port">22</td>
                 <td class="edit"><a>编辑</a></td>
             </tr>
             <tr id="row-4">
                 <td class="no">4</td>
-                <td class="hostname">hostname4</td>
-                <td class="ip">10.10.0.1</td>
-                <td class="port">22</td>
+                <td edit="true" class="hostname">hostname4</td>
+                <td edit="true" class="ip">10.10.0.1</td>
+                <td edit="true" class="port">22</td>
                 <td class="edit"><a>编辑</a></td>
             </tr>
-            <!--<tr>-->
-                <!--<td class="option"><input type="checkbox" /></td>-->
-                <!--<td class="hostname"><input type="text" /></td>-->
-                <!--<td class="ip"><input type="text" /></td>-->
-                <!--<td class="port"><input type="text" /></td>-->
-                <!--<td class="state"><select name="state">-->
-                    <!--<option value="online">在线</option>-->
-                    <!--<option value="offline">下线</option>-->
-                <!--</select></td>-->
-            <!--</tr>-->
             </tbody>
         </table>
         <div id="pop-page" class="hidden modal">
@@ -66,10 +56,10 @@
                     <label id="hostname" for="hostname" hasError="false">主机名：
                         <input hostname="true" type="text" />
                     </label>
-                    <label for="ip" hasError=false>IP地址：
+                    <label for="ip" hasError="false">IP地址：
                         <input id="ip" ip="true" type="text" />
                     </label>
-                    <label for="port" hasError=false>端　口：
+                    <label for="port" hasError="false">端　口：
                         <input id="port" port="true" type="text" />
                     </label>
                     <div class="button-set">
