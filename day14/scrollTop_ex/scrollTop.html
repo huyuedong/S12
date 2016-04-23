@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>scrollTop</title>
+    <style>
+        .go-top {
+            position: fixed;
+            right: 5px;
+            bottom: 5px;
+            width: 70px;
+            height: 20px;
+            background-color: #8AC007;
+        }
+        a {
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div style="background-color: red; height: 300px; overflow: scroll">
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <p>111</p>
+        <div style="right: 10px; bottom: 10px">
+            <a onclick="GoTop();">内部返回顶部</a>
+        </div>
+    </div>
+    <div style="background-color: #999999">
+        <div style="height: 2000px"></div>
+        <div class="go-top hide">
+            <a onclick="GoTop();">返回顶部</a>
+        </div>
+    </div>
+    <script src="../jquery-2.2.3.js"></script>
+    <script>
+        function GoTop() {
+            $(window).scrollTop(0);
+        }
+        window.onscroll = function() {
+            if ($(window).scrollTop() > 100) {
+                $(".go-top").removeClass("hide");
+            } else {
+                $(".go-top").addClass("hide");
+            }
+        }
+    </script>
+</body>
+</html>

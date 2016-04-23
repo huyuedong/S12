@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tab exercise</title>
+    <style>
+        .content {
+            margin: 0 auto;
+            padding: 0;
+        }
+        .tab-tittle {
+            background-color: #999999;
+            border: none;
+            line-height: 35px;
+            white-space: nowrap;
+            width: 600px;
+        }
+        .tab-info {
+            border: none;
+        }
+        .hide {
+            display: none;
+        }
+        .current {
+            background-color: #FFFFFF;
+            border-top: 2px solid red;
+        }
+        a {
+            cursor: pointer;
+            text-decoration: none;
+            border-right: 1px solid #999999;
+            padding: 10px;
+            margin: 0;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="tab-tittle">
+            <a class="current" pointTo="info1" onclick="GoTab(this);">菜单一</a>
+            <a pointTo="info2" onclick="GoTab(this);">菜单二</a>
+            <!--<a pointTo="info3" onclick="GoTab(this);">菜单三</a>-->
+        </div>
+        <div class="tab-info">
+            <div id="info1">内容一</div>
+            <div id="info2" class="hide">内容二</div>
+            <div id="info3" class="hide">内容三</div>
+        </div>
+    </div>
+
+    <script src="../jquery-2.2.3.js"></script>
+    <script>
+        function GoTab(ths) {
+            $(ths).addClass("current").siblings().removeClass("current");
+            var tmp = "#" + $(ths).attr("pointTo");
+            $(tmp).removeClass("hide").siblings().addClass("hide");
+        }
+    </script>
+</body>
+</html>

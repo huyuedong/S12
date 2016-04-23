@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Box Exercise</title>
+</head>
+<body>
+    <div>
+        <button value="全选" onclick="CheckAll();">全选</button>
+        <button value="取消" onclick="ClearAll();">取消</button>
+        <button value="取消" onclick="ReverseAll();">反选</button>
+    </div>
+    <div>
+        <table border="1">
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>123</td>
+                <td>456</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>123</td>
+                <td>456</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>123</td>
+                <td>456</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>123</td>
+                <td>456</td>
+            </tr>
+        </table>
+    </div>
+    <script src="../jquery-2.2.3.js"></script>
+    <script>
+        function CheckAll() {
+            $("table :checkbox").prop("checked", true);
+        }
+        function ClearAll() {
+            $("table :checkbox").prop("checked", false);
+        }
+        function ReverseAll() {
+            var checkboxArray = $("table :checkbox");
+//            for (var i= 0;i<checkboxArray.length;i++) {
+//                console.log(checkboxArray[i]);
+//            }
+//            console.log("===============================");
+//            for ( i in checkboxArray) {
+//                console.log(checkboxArray[i]);
+//            }
+            // 反选的两种方法
+            // 方法一
+            $.each (checkboxArray, function(i, item) {
+                console.log(item);
+                var isChecked = $(item).prop("checked");
+                if (isChecked) {
+                    $(item).prop("checked", false);
+                } else {
+                    $(item).prop("checked", true);
+                }
+            });
+            // 方法二
+//            $("table :checkbox").each(function() {
+//                var isChecked = $(this).prop("checked");
+//                if (isChecked) {
+//                    $(this).prop("checked", false);
+//                } else {
+//                    $(this).prop("checked", true);
+//                }
+//            })
+        }
+    </script>
+</body>
+</html>
