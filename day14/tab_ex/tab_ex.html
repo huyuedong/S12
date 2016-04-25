@@ -12,8 +12,14 @@
             background-color: #999999;
             border: none;
             line-height: 35px;
-            white-space: nowrap;
-            width: 600px;
+        }
+        /*利用伪元素实现clear:both*/
+        .tab-tittle:after {
+            content: ".";
+            visibility: hidden;
+            height: 0;
+            display: block;
+            clear: both;
         }
         .tab-info {
             border: none;
@@ -25,22 +31,24 @@
             background-color: #FFFFFF;
             border-top: 2px solid red;
         }
-        a {
-            cursor: pointer;
-            text-decoration: none;
-            border-right: 1px solid #999999;
-            padding: 10px;
+        li {
+            display: inline;
+            list-style: none;
             margin: 0;
-            width: 50%;
+            padding: 0 10px;
+            cursor: pointer;
+            float: left;
         }
     </style>
 </head>
 <body>
     <div class="content">
         <div class="tab-tittle">
-            <a class="current" pointTo="info1" onclick="GoTab(this);">菜单一</a>
-            <a pointTo="info2" onclick="GoTab(this);">菜单二</a>
-            <!--<a pointTo="info3" onclick="GoTab(this);">菜单三</a>-->
+            <ul>
+                <li class="current" pointTo="info1" onclick="GoTab(this);">菜单一</li>
+                <li pointTo="info2" onclick="GoTab(this);">菜单二</li>
+                <li pointTo="info3" onclick="GoTab(this);">菜单三</li>
+            </ul>
         </div>
         <div class="tab-info">
             <div id="info1">内容一</div>
