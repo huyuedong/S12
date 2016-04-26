@@ -1,0 +1,68 @@
+* {
+  font-family: "微软雅黑", Arial, serif;
+}
+body {
+  background-color: #eee;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  border-radius: 0 5px 5px 0;
+}
+.form-signin input[type="password"] {
+  border-radius: 0 5px 5px 0;
+}
+.input-group span {
+  border-right: 0;
+  border-radius: 5px 0 0 5px;
+}
+.input-group {
+  margin: 10px 0;
+}
+.header {
+  background-color: #337ab7;
+  color: #ffffff;
+  margin-top: 0;
+  padding: 10px 10px 20px 20px;
+  text-align: left;
+  line-height: 14px;
+}
+.footer {
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  font-size: 12px;
+  text-align: center;
+  border-top: solid 1px #337ab7;
+  padding: 10px 0 20px;
+  margin: 10px auto;
+}
+.footer-info {
+  width: 70%;
+  padding-top: 10px;
+  text-align: center;
+}
