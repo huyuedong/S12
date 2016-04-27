@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="主页">
+    <meta name="author" content="Q1mi">
+    <link rel="stylesheet" href="../font-awesome-4.6.1/css/font-awesome.min.css" />
+
+    <title>主页</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../styles/bootstrap.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="../styles/common.css" rel="stylesheet" />
+    <link href="../styles/styles.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../scripts/html5shiv.js"></script>
+    <script src="../scripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">宇宙超级无敌管理系统</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user" aria-hidden="true"></span> User <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"><span class="fa fa-user" aria-hidden="true"></span> 简况</a></li>
+							<li><a href="#"><span class="fa fa-cog" aria-hidden="true"></span> 设置</a></li>
+							<li><a href="#"><span class="fa fa-sign-out" aria-hidden="true"></span> 退出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="index.html"><span class="fa fa-tachometer fa-fw"></span> 主机管理</a></li>
+			<li><a href="widgets.html"><span class="fa fa-bars fa-fw"></span> 工具</a></li>
+			<li><a href="charts.html"><span class="fa fa-bar-chart fa-fw"></span> 监控系统</a></li>
+			<li><a href="tables.html"><span class="fa fa-table fa-fw"></span> 表格</a></li>
+			<li><a href="forms.html"><span class="fa fa-pencil fa-fw"></span> 输入</a></li>
+			<li><a href="panels.html"><span class="fa fa-info fa-fw"></span> 通知 &amp; 面板</a></li>
+			<li class="parent ">
+				<a href="#">
+					<span class="fa fa-list fa-fw"></span> 下拉 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus fa-fw"></em></span>
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 1
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 2
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 3
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li role="presentation" class="divider"></li>
+			<li><a href="login.html"><span class="fa fa-user fa-fw"></span> 登录页</a></li>
+		</ul>
+	</div><!--/.sidebar-->
+
+    <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="fa fa-home fa-fw"></span></a></li>
+				<li class="active">主机管理</li>
+			</ol>
+		</div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">主机管理界面</h1>
+            </div>
+        </div><!--/.row-->
+        <div class="row">
+			<div class="">
+                <table class="table table-hover">
+                    <caption>主机管理系统</caption>
+                    <thead>
+                    <tr>
+                        <th class="option"><div>选择</div></th>
+                        <th class="no"><div>序号</div></th>
+                        <th class="hostname"><div>主机名</div></th>
+                        <th class="ip"><div>IP</div></th>
+                        <th class="port"><div>端口</div></th>
+                        <th class="group"><div>业务组</div></th>
+                        <th class="state"><div>状态</div></th>
+                    </tr>
+                    </thead>
+                    <tbody id="tb-1">
+                    <tr id="row-1">
+                        <td class="option"><input type="checkbox" /></td>
+                        <td class="no">1</td>
+                        <td edit="true" edit-type="input" class="hostname">hostname1</td>
+                        <td edit="true" edit-type="input" class="ip">111.111.111.111</td>
+                        <td class="port">22</td>
+                        <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
+                        <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
+                    </tr>
+                    <tr id="row-2">
+                        <td class="option"><input type="checkbox" /></td>
+                        <td class="no">2</td>
+                        <td edit="true" edit-type="input" class="hostname">hostname2</td>
+                        <td edit="true" edit-type="input" class="ip">8.8.8.8</td>
+                        <td class="port">22</td>
+                        <td edit="true" edit-type="select" option-key="GROUP" class="group">测试</td>
+                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
+                    </tr>
+                    <tr id="row-3">
+                        <td class="option"><input type="checkbox" /></td>
+                        <td class="no">3</td>
+                        <td edit="true" edit-type="input" class="hostname">hostname3</td>
+                        <td edit="true" edit-type="input" class="ip">225.225.255.254</td>
+                        <td class="port">22</td>
+                        <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
+                        <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
+                    </tr>
+                    <tr id="row-4">
+                        <td class="option"><input type="checkbox" /></td>
+                        <td class="no">4</td>
+                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
+                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
+                        <td class="port">22</td>
+                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
+                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
+                    </tr>
+                    </tbody>
+                </table>
+			</div>
+        </div>
+    </div>
+
+    <script src="../scripts/jquery-2.2.3.js"></script>
+    <script src="../scripts/bootstrap.min.js"></script>
+</body>
+</html>

@@ -15,6 +15,10 @@
             <li>5</li>
             <li>6</li>
         </ul>
+        <button id="LeftEvent">aaaa</button>
+        <div class="MasterMenu">aaaa</div>
+        <div class="MasterMenu">bbbb</div>
+        <div class="MasterMenu">cccc</div>
     </div>
     <script src="../jquery-2.2.3.js"></script>
     <script>
@@ -24,7 +28,7 @@
            })
         });
 //        $(document).ready(function() {
-//            $("li").css("cursor", "pointer");
+//            $("li").styles("cursor", "pointer");
 //            $("li").click(function() {
 //                console.log($(this).text());
 //                alert($(this).text())
@@ -40,6 +44,26 @@
                alert($(this).text());
            })
         });
+
+        $(function() {
+           $("div").delegate("#LeftEvent", "click", function() {
+              alert($(this).text());
+           });
+        });
+
+//      不要在多层div下找元素委托事件，那样会重复
+        $(function() {
+           $("body").delegate(".MasterMenu", "click", function() {
+              console.log("chenjinpeng");
+           });
+        });
+
+        function Func() {
+            alert($(this).text());
+        }
+        $(function() {
+            $("div").delegate("#LeftEvent", "click", Func);
+        })
     </script>
 </body>
 </html>

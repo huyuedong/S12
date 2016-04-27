@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div class="LeftMenu">
+    <div>
+        <div  class="MasterMenu">资产系统</div>
+        <div class="ChildMenu hide">
+            <div style="cursor: pointer">资产管理</div>
+            <div>1.2</div>
+            <div>1.3</div>
+        </div>
+    </div>
+    <div >
+        <div class="MasterMenu">监控系统</div>
+        <div class="ChildMenu hide">
+            <div>2.1</div>
+            <div>2.2</div>
+            <div>2.3</div>
+        </div>
+    </div>
+
+    <div >
+         <div class="MasterMenu">日志系统</div>
+        <div class="ChildMenu hide">
+            <div>3.1</div>
+            <div>3.2</div>
+            <div>3.3</div>
+        </div>
+    </div>
+
+  </div>
+  <script src="../jquery-2.2.3.js"></script>
+  <script>
+    $(function() {
+       $("div").delegate(".MasterMenu", "click", function() {
+          console.log("chenjinpeng");
+       });
+    });
+  </script>
+</body>
+</html>
