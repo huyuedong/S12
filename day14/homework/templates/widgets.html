@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="主页">
+    <meta name="author" content="Q1mi">
+    <link rel="stylesheet" href="../font-awesome-4.6.1/css/font-awesome.min.css" />
+
+    <title>工具</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../styles/bootstrap.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="../styles/common.css" rel="stylesheet" />
+    <link href="../styles/styles.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../scripts/html5shiv.js"></script>
+    <script src="../scripts/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">宇宙超级无敌管理系统</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user" aria-hidden="true"></span> 用户 <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"><span class="fa fa-user" aria-hidden="true"></span> 个人信息</a></li>
+							<li><a href="#"><span class="fa fa-cog" aria-hidden="true"></span> 设置</a></li>
+							<li><a href="#"><span class="fa fa-sign-out" aria-hidden="true"></span> 退出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="index.html"><span class="fa fa-tachometer fa-fw"></span> 主机管理</a></li>
+			<li><a href="widgets.html"><span class="fa fa-bars fa-fw"></span> 工具</a></li>
+			<li><a href="charts.html"><span class="fa fa-bar-chart fa-fw"></span> 监控系统</a></li>
+			<li><a href="tables.html"><span class="fa fa-table fa-fw"></span> 表格</a></li>
+			<li><a href="forms.html"><span class="fa fa-pencil fa-fw"></span> 输入</a></li>
+			<li><a href="panels.html"><span class="fa fa-info fa-fw"></span> 通知 &amp; 面板</a></li>
+			<li class="parent ">
+				<a href="#">
+					<span class="fa fa-list fa-fw"></span> 下拉 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus fa-fw"></em></span>
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 1
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 2
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 3
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li role="presentation" class="divider"></li>
+			<li><a href="login.html"><span class="fa fa-user fa-fw"></span> 登录页</a></li>
+		</ul>
+	</div><!--/.sidebar-->
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><span class="fa fa-home fa-fw"></span></a></li>
+				<li class="active">Widgets</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Widgets</h1>
+			</div>
+		</div><!--/.row-->
+
+		<div class="row">
+			<div class="col-md-8">
+				<div class="panel panel-default">
+					<div class="panel-heading"><span class="fa fa-envelope fa-fw"></span> Contact Form</div>
+					<div class="panel-body">
+						<form class="form-horizontal" action="" method="post">
+							<fieldset>
+								<!-- Name input-->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="name">Name</label>
+									<div class="col-md-9">
+									<input id="name" name="name" type="text" placeholder="Your name" class="form-control">
+									</div>
+								</div>
+							
+								<!-- Email input-->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="email">Your E-mail</label>
+									<div class="col-md-9">
+										<input id="email" name="email" type="text" placeholder="Your email" class="form-control">
+									</div>
+								</div>
+								
+								<!-- Message body -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="message">Your message</label>
+									<div class="col-md-9">
+										<textarea class="form-control" id="message" name="message" placeholder="Please enter your message here..." rows="5"></textarea>
+									</div>
+								</div>
+								
+								<!-- Form actions -->
+								<div class="form-group">
+									<div class="col-md-12 widget-right">
+										<button type="submit" class="btn btn-default btn-md pull-right">Submit</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+				
+				<div class="panel panel-default chat">
+					<div class="panel-heading" id="accordion"><span class="fa fa-comment fa-fw"></span> Chat</div>
+				
+					<div class="panel-body">
+						<ul>
+							<li class="left clearfix">
+								<span class="chat-img pull-left">
+									<img src="http://placehold.it/80/30a5ff/fff" alt="User Avatar" class="img-circle" />
+								</span>
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="primary-font">John Doe</strong> <small class="text-muted">32 mins ago</small>
+									</div>
+									<p>
+										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ante turpis, rutrum ut ullamcorper sed, dapibus ac nunc. Vivamus luctus convallis mauris, eu gravida tortor aliquam ultricies. 
+									</p>
+								</div>
+							</li>
+							<li class="right clearfix">
+								<span class="chat-img pull-right">
+									<img src="http://placehold.it/80/dde0e6/5f6468" alt="User Avatar" class="img-circle" />
+								</span>
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="pull-left primary-font">Jane Doe</strong> <small class="text-muted">6 mins ago</small>
+									</div>
+									<p>
+										Mauris dignissim porta enim, sed commodo sem blandit non. Ut scelerisque sapien eu mauris faucibus ultrices. Nulla ac odio nisl. Proin est metus, interdum scelerisque quam eu, eleifend pretium nunc. Suspendisse finibus auctor lectus, eu interdum sapien.
+									</p>
+								</div>
+							</li>
+							<li class="left clearfix">
+								<span class="chat-img pull-left">
+									<img src="http://placehold.it/80/30a5ff/fff" alt="User Avatar" class="img-circle" />
+								</span>
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="primary-font">John Doe</strong> <small class="text-muted">32 mins ago</small>
+									</div>
+									<p>
+										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ante turpis, rutrum ut ullamcorper sed, dapibus ac nunc. Vivamus luctus convallis mauris, eu gravida tortor aliquam ultricies. 
+									</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="panel-footer">
+						<div class="input-group">
+							<input id="btn-input" type="text" class="form-control input-md" placeholder="Type your message here..." />
+							<span class="input-group-btn">
+								<button class="btn btn-success btn-md" id="btn-chat">Send</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				
+			</div><!--/.col-->
+			
+			<div class="col-md-4">
+			
+				<div class="panel panel-red">
+					<div class="panel-heading dark-overlay"><span class="fa fa-calendar fa-fw"></span>日历</div>
+					<div class="panel-body">
+						<div id="calendar" data-date="04/27/2016"></div>
+					</div>
+				</div>
+				
+				<div class="panel panel-blue">
+					<div class="panel-heading dark-overlay"><span class="fa fa-check fa-fw"></span>To-do List</div>
+					<div class="panel-body">
+						<ul class="todo-list">
+						<li class="todo-list-item">
+								<div class="checkbox">
+									<input type="checkbox" id="checkbox" />
+									<label for="checkbox">今日计划</label>
+								</div>
+								<div class="pull-right action-buttons">
+									<a href="#"><span class="fa fa-pencil fa-fw"></span></a>
+									<a href="#" class="flag"><span class="fa fa-flag fa-fw"></span></a>
+									<a href="#" class="trash"><span class="fa fa-trash fa-fw"></span></a>
+								</div>
+							</li>
+							<li class="todo-list-item">
+								<div class="checkbox">
+									<input type="checkbox" id="checkbox" />
+									<label for="checkbox">Update Basecamp</label>
+								</div>
+								<div class="pull-right action-buttons">
+									<a href="#"><span class="fa fa-pencil fa-fw"></span></a>
+									<a href="#" class="flag"><span class="fa fa-flag fa-fw"></span></a>
+									<a href="#" class="trash"><span class="fa fa-trash fa-fw"></span></a>
+								</div>
+							</li>
+							<li class="todo-list-item">
+								<div class="checkbox">
+									<input type="checkbox" id="checkbox" />
+									<label for="checkbox">Send email to Jane</label>
+								</div>
+								<div class="pull-right action-buttons">
+									<a href="#"><span class="fa fa-pencil fa-fw"></span></a>
+									<a href="#" class="flag"><span class="fa fa-flag fa-fw"></span></a>
+									<a href="#" class="trash"><span class="fa fa-trash fa-fw"></span></a>
+								</div>
+							</li>
+							<li class="todo-list-item">
+								<div class="checkbox">
+									<input type="checkbox" id="checkbox" />
+									<label for="checkbox">Drink coffee</label>
+								</div>
+								<div class="pull-right action-buttons">
+									<a href="#"><span class="fa fa-pencil fa-fw"></span></a>
+									<a href="#" class="flag"><span class="fa fa-flag fa-fw"></span></a>
+									<a href="#" class="trash"><span class="fa fa-trash fa-fw"></span></a>
+								</div>
+							</li>
+							<li class="todo-list-item">
+								<div class="checkbox">
+									<input type="checkbox" id="checkbox" />
+									<label for="checkbox">Do some work</label>
+								</div>
+								<div class="pull-right action-buttons">
+									<a href="#"><span class="fa fa-pencil fa-fw"></span></a>
+									<a href="#" class="flag"><span class="fa fa-flag fa-fw"></span></a>
+									<a href="#" class="trash"><span class="fa fa-trash fa-fw"></span></a>
+								</div>
+							</li>
+							<li class="todo-list-item">
+								<div class="checkbox">
+									<input type="checkbox" id="checkbox" />
+									<label for="checkbox">Tidy up workspace</label>
+								</div>
+								<div class="pull-right action-buttons">
+									<a href="#"><span class="fa fa-pencil fa-fw"></span></a>
+									<a href="#" class="flag"><span class="fa fa-flag fa-fw"></span></a>
+									<a href="#" class="trash"><span class="fa fa-trash fa-fw"></span></a>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="panel-footer">
+						<div class="input-group">
+							<input id="btn-input" type="text" class="form-control input-md" placeholder="Add new task" />
+							<span class="input-group-btn">
+								<button class="btn btn-primary btn-md" id="btn-todo">Add</button>
+							</span>
+						</div>
+					</div>
+				</div>
+								
+			</div><!--/.col-->
+		</div><!--/.row-->
+	</div>	<!--/.main-->
+		  
+
+	<script src="../scripts/jquery-2.2.3.js"></script>
+	<script src="../scripts/bootstrap.min.js"></script>
+	<!--<script src="js/chart.min.js"></script>-->
+	<!--<script src="js/chart-data.js"></script>-->
+	<!--<script src="js/easypiechart.js"></script>-->
+	<!--<script src="js/easypiechart-data.js"></script>-->
+	<script src="../scripts/bootstrap-datepicker.js"></script>
+	<script>
+		$('#calendar').datepicker();
+//
+//		!function ($) {
+//		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){
+//		        $(this).find('em:first').toggleClass("glyphicon-minus");
+//		    });
+//		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+//		}(window.jQuery);
+//
+//		$(window).on('resize', function () {
+//		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+//		})
+//		$(window).on('resize', function () {
+//		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+//		})
+//		$('#datepicker').datepicker();
+//		$('#datepicker').on("changeDate", function() {
+//			$('#my_hidden_input').val(
+//				$('#datepicker').datepicker('getFormattedDate')
+//			);
+//		});
+	</script>	
+</body>
+
+</html>
