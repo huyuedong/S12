@@ -105,23 +105,23 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">主机列表</div>
                     <div class="panel-body">
-                        <div class="input-group">
-                            <div class="input-group-btn">
-                                <label>刷新</label>
-                                <button class="btn btn-default" type="button" name="refresh" title="Refresh">
-                                    <i class="fa fa-refresh fa-fw"></i>
-                                </button>
+                        <form class="form-inline">
+                            <div class="form-group col-xs-4 col-md-4 col-lg-2">
+                                <label class="sr-only">刷新</label>
+                                <button type="button" class="btn btn-primary" name="refresh" title="刷新">
+                                <i class="fa fa-refresh fa-fw"></i>
+                            </button>
                             </div>
-                            <div class="input-group-btn">
-                                <label>状态</label>
+                            <div class="form-group col-xs-4 col-md-4 col-lg-2">
+                                <label>状态：</label>
                                     <select class="form-control">
                                       <option>全部</option>
                                       <option>在线</option>
                                       <option>下线</option>
                                     </select>
                             </div>
-                            <div class="input-group-btn">
-                                <label>主机组</label>
+                            <div class="form-group col-xs-4 col-md-4 col-lg-2">
+                                <label>主机组：</label>
                                 <select class="form-control">
                                   <option>全部</option>
                                   <option>开发</option>
@@ -129,169 +129,211 @@
                                   <option>运维</option>
                                 </select>
                             </div>
-                            <div class="input-group-btn search">
-                                <label>搜索</label>
-                                <input class="form-control" type="text" placeholder="Search">
+                            <div class="col-xs-8 col-md-6 col-lg-4 search">
+                                <label class="sr-only">搜索：</label>
+                                <input class="form-control" type="text" placeholder="请输入搜索条件">
                             </div>
-                        </div>
-                        <div class="tab-content">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="option" style="width: 36px"><input type="checkbox" /></th>
-                                        <th class="no"><div>序号</div></th>
-                                        <th class="hostname"><div>主机名</div></th>
-                                        <th class="ip"><div>IP</div></th>
-                                        <th class="port"><div>端口</div></th>
-                                        <th class="group"><div>业务组</div></th>
-                                        <th class="state"><div>状态</div></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tb-1">
-                                    <tr id="row-1">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">1</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname1</td>
-                                        <td edit="true" edit-type="input" class="ip">111.111.111.111</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
-                                    </tr>
-                                    <tr id="row-2">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">2</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname2</td>
-                                        <td edit="true" edit-type="input" class="ip">8.8.8.8</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">测试</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                    <tr id="row-3">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">3</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname3</td>
-                                        <td edit="true" edit-type="input" class="ip">225.225.255.254</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
-                                    </tr>
-                                    <tr id="row-4">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">4</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                    <tr id="row-5">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">5</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                    <tr id="row-6">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">6</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                    <tr id="row-7">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">7</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                    <tr id="row-8">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">8</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                    <tr id="row-9">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">9</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                    <tr id="row-10">
-                                        <td class="option"><input type="checkbox" /></td>
-                                        <td class="no">10</td>
-                                        <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                        <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                        <td class="port">22</td>
-                                        <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                        <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="fixed-table-pagination">
-                            <div class="pull-left pagination-detail">
-                                <span>每页显示</span>
-                                <span class="page-list">
-                                    <span class="btn-group dropup">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                            <span class="page-size">10</span>
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li class="active">
-                                                <a href="javascript:void(0)">10</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)">25</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)">50</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)">100</a>
-                                            </li>
-                                        </ul>
-                                    </span>
-                                    条记录
+                            <div class="form-group col-xs-4 col-md-4 col-lg-2">
+                                <label class="sr-only">搜索</label>
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-content">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <!--<th class="option" style="width: 36px"><input type="checkbox" /></th>-->
+                                    <th class="no">序号</th>
+                                    <th class="hostname">主机名</th>
+                                    <th class="position">位置</th>
+                                    <th class="ip">IP地址</th>
+                                    <th class="port">端口</th>
+                                    <th class="service">服务</th>
+                                    <th class="group">业务组</th>
+                                    <th class="state">运行状态</th>
+                                    <th class="operate">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tb-1">
+                                <tr id="row-1">
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <td class="no">1</td>
+                                    <td edit="true" edit-type="input" class="hostname">hostname1</td>
+                                    <td edit="true" edit-type="input" class="position">通用机房</td>
+                                    <td edit="true" edit-type="input" class="ip">111.111.111.111</td>
+                                    <td class="port">22</td>
+                                    <td class="service">tomcat</td>
+                                    <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
+                                    <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
+                                    <td class="">
+                                        <a class="btn btn-danger" href="#" role="button">删除</a>
+                                        <a class="btn btn-success" href="#" role="button">信息</a>
+                                        <a class="btn btn-primary" href="#" role="button">编辑</a>
+                                    </td>
+                                </tr>
+                                <tr id="row-2">
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <td class="no">2</td>
+                                    <td edit="true" edit-type="input" class="hostname">hostname2</td>
+                                    <td edit="true" edit-type="input" class="position">通用机房</td>
+                                    <td edit="true" edit-type="input" class="ip">8.8.8.8</td>
+                                    <td class="port">22</td>
+                                    <td class="service">tomcat</td>
+                                    <td edit="true" edit-type="select" option-key="GROUP" class="group">测试</td>
+                                    <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
+                                   <td class="">
+                                        <a class="btn btn-danger" href="#" role="button">删除</a>
+                                        <a class="btn btn-success" href="#" role="button">信息</a>
+                                        <a class="btn btn-primary" href="#" role="button">编辑</a>
+                                    </td>
+                                </tr>
+                                <tr id="row-3">
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <td class="no">3</td>
+                                    <td edit="true" edit-type="input" class="hostname">hostname3</td>
+                                    <td edit="true" edit-type="input" class="position">通用机房</td>
+                                    <td edit="true" edit-type="input" class="ip">225.225.255.254</td>
+                                    <td class="port">22</td>
+                                    <td class="service">tomcat</td>
+                                    <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
+                                    <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
+                                    <td class="">
+                                        <a class="btn btn-danger" href="#" role="button">删除</a>
+                                        <a class="btn btn-success" href="#" role="button">信息</a>
+                                        <a class="btn btn-primary" href="#" role="button">编辑</a>
+                                    </td>
+                                </tr>
+                                <tr id="row-4">
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <td class="no">4</td>
+                                    <td edit="true" edit-type="input" class="hostname">hostname4</td>
+                                    <td edit="true" edit-type="input" class="position">通用机房</td>
+                                    <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
+                                    <td class="port">22</td>
+                                    <td class="service">tomcat</td>
+                                    <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
+                                    <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
+                                    <td class="">
+                                        <a class="btn btn-danger" href="#" role="button">删除</a>
+                                        <a class="btn btn-success" href="#" role="button">信息</a>
+                                        <a class="btn btn-primary" href="#" role="button">编辑</a>
+                                    </td>
+                                </tr>
+                                <tr id="row-5">
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <td class="no">5</td>
+                                    <td edit="true" edit-type="input" class="hostname">hostname4</td>
+                                    <td edit="true" edit-type="input" class="position">通用机房</td>
+                                    <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
+                                    <td class="port">22</td>
+                                    <td class="service">tomcat</td>
+                                    <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
+                                    <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
+                                    <td class="">
+                                        <a class="btn btn-danger" href="#" role="button">删除</a>
+                                        <a class="btn btn-success" href="#" role="button">信息</a>
+                                        <a class="btn btn-primary" href="#" role="button">编辑</a>
+                                    </td>
+                                </tr>
+                                <!--<tr id="row-6">-->
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <!--<td class="no">6</td>-->
+                                    <!--<td edit="true" edit-type="input" class="hostname">hostname4</td>-->
+                                    <!--<td edit="true" edit-type="input" class="ip">10.10.0.1</td>-->
+                                    <!--<td class="port">22</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>-->
+                                <!--</tr>-->
+                                <!--<tr id="row-7">-->
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <!--<td class="no">7</td>-->
+                                    <!--<td edit="true" edit-type="input" class="hostname">hostname4</td>-->
+                                    <!--<td edit="true" edit-type="input" class="ip">10.10.0.1</td>-->
+                                    <!--<td class="port">22</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>-->
+                                <!--</tr>-->
+                                <!--<tr id="row-8">-->
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <!--<td class="no">8</td>-->
+                                    <!--<td edit="true" edit-type="input" class="hostname">hostname4</td>-->
+                                    <!--<td edit="true" edit-type="input" class="ip">10.10.0.1</td>-->
+                                    <!--<td class="port">22</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>-->
+                                <!--</tr>-->
+                                <!--<tr id="row-9">-->
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <!--<td class="no">9</td>-->
+                                    <!--<td edit="true" edit-type="input" class="hostname">hostname4</td>-->
+                                    <!--<td edit="true" edit-type="input" class="ip">10.10.0.1</td>-->
+                                    <!--<td class="port">22</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>-->
+                                <!--</tr>-->
+                                <!--<tr id="row-10">-->
+                                    <!--<td class="option"><input type="checkbox" /></td>-->
+                                    <!--<td class="no">10</td>-->
+                                    <!--<td edit="true" edit-type="input" class="hostname">hostname4</td>-->
+                                    <!--<td edit="true" edit-type="input" class="ip">10.10.0.1</td>-->
+                                    <!--<td class="port">22</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>-->
+                                    <!--<td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>-->
+                                <!--</tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fixed-table-pagination">
+                        <div class="pull-left pagination-detail">
+                            <span>每页显示</span>
+                            <span class="page-list">
+                                <span class="btn-group dropup">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span class="page-size">10</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="active">
+                                            <a href="javascript:void(0)">10</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">25</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">50</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">100</a>
+                                        </li>
+                                    </ul>
                                 </span>
-                            </div>
-                            <div class="pull-right pagination">
-                                <ul class="pagination">
-                                    <li class="page-first disabled">
-                                        <a href="javascript:void(0)">&lt;&lt;</a>
-                                    </li>
-                                    <li class="page-pre disabled">
-                                        <a href="javascript:void(0)">&lt;</a>
-                                    </li>
-                                    <li class="page-number active disabled">
-                                        <a href="javascript:void(0)">1</a>
-                                    </li>
-                                    <li class="page-number">
-                                        <a href="javascript:void(0)">2</a>
-                                    </li>
-                                    <li class="page-number">
-                                        <a href="javascript:void(0)">3</a></li>
-                                    <li class="page-next">
-                                        <a href="javascript:void(0)">&gt;</a>
-                                    </li>
-                                    <li class="page-last">
-                                        <a href="javascript:void(0)">&gt;&gt;</a>
-                                    </li>
-                                </ul>
-                            </div>
+                                条记录
+                            </span>
+                        </div>
+                        <div class="pull-right pagination">
+                            <ul class="pagination">
+                                <li class="page-first disabled">
+                                    <a href="javascript:void(0)">&lt;&lt;</a>
+                                </li>
+                                <li class="page-pre disabled">
+                                    <a href="javascript:void(0)">&lt;</a>
+                                </li>
+                                <li class="page-number active disabled">
+                                    <a href="javascript:void(0)">1</a>
+                                </li>
+                                <li class="page-number">
+                                    <a href="javascript:void(0)">2</a>
+                                </li>
+                                <li class="page-number">
+                                    <a href="javascript:void(0)">3</a></li>
+                                <li class="page-next">
+                                    <a href="javascript:void(0)">&gt;</a>
+                                </li>
+                                <li class="page-last">
+                                    <a href="javascript:void(0)">&gt;&gt;</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

@@ -50,3 +50,15 @@
 .footer-info {
   padding-top: 10px;
 }
+.form-left {
+  width: 60%;
+  float: left;
+  height: 44px;
+  border-radius: 10px;
+}
+.form-right {
+  width: 32%;
+  float: right;
+  height: 44px;
+  border-radius: 10px;
+}

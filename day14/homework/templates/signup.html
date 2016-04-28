@@ -10,7 +10,7 @@
     <meta name="author" content="Q1mi">
     <link rel="stylesheet" href="../font-awesome-4.6.1/css/font-awesome.min.css" />
 
-    <title>登录</title>
+    <title>注册</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../styles/bootstrap.css" rel="stylesheet" />
@@ -35,27 +35,39 @@
 
 
       <form class="form-signin">
-        <h2 class="form-signin-heading">请登录</h2>
+        <h2 class="form-signin-heading">欢迎注册</h2>
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i></span>
           <label for="inputEmail" class="sr-only">邮箱</label>
-          <input type="email" id="inputEmail" class="form-control" placeholder="邮箱" required autofocus>
+          <input type="email" id="inputEmail" class="form-control" placeholder="请输入邮箱" required autofocus>
         </div>
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-key fa-fw" aria-hidden="true"></i></span>
-          <label for="inputPassword" class="sr-only">密码</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="密码" required>
+          <label for="inputPassword" class="sr-only">设置密码</label>
+          <input type="password" id="inputPassword" class="form-control" placeholder="设置密码" required>
         </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> 记住我
-          </label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-repeat fa-fw" aria-hidden="true"></i></span>
+          <label for="inputPassword" class="sr-only">确认密码</label>
+          <input type="password" id="repeatPassword" class="form-control" placeholder="确认密码" required>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        <div class="input-group">
+            <div class="form-left">
+                <div class="hidden"></div>
+              <label for="authCode" class="sr-only">输入验证码</label>
+              <input type="text" id="authCode" class="form-control" placeholder="请输入右侧结果" required>
+            </div>
+            <div class="form-right">
+                <img class="ccap" src="../images/ccap.png">
+            </div>
+
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
         <div class="checkbox clearfix">
-          <a href="signup.html" class="a pull-left">还没注册？>></a>
+            <a href="login.html" class="a pull-left">已有账号？>></a>
         </div>
       </form>
+
 
     </div> <!-- /container -->
 

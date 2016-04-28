@@ -57,10 +57,10 @@ function preparePlaceHolder() {
     var placeholder = document.createElement("img");
     placeholder.setAttribute("id", "placeholder");
     placeholder.setAttribute("src", "img/default.gif");
-    placeholder.setAttribute("alt", "my image gallery");
+    placeholder.setAttribute("alt", "my images gallery");
     var description = document.createElement("p");
     description.setAttribute("id", "description");
-    var desctext = document.createTextNode("Choose an image.");
+    var desctext = document.createTextNode("Choose an images.");
     description.appendChild(desctext);
     //document.body.appendChild(placeholder);
     //document.body.appendChild(description);
