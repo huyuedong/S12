@@ -1,0 +1,41 @@
+    {% extends 'master/login_signup_master.html' %}
+    {% block title %}
+        注册
+    {% endblock %}
+
+    {% block login_signup_form %}
+        <form class="form-signin">
+            <h2 class="form-signin-heading">欢迎注册</h2>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i></span>
+                <label for="inputEmail" class="sr-only">邮箱</label>
+                <input type="email" id="inputEmail" class="form-control" placeholder="请输入邮箱" required autofocus>
+                <!--{{ obj.email }}-->
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw" aria-hidden="true"></i></span>
+                <label for="inputPassword" class="sr-only">设置密码</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="设置密码" required>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-repeat fa-fw" aria-hidden="true"></i></span>
+                <label for="inputPassword" class="sr-only">确认密码</label>
+                <input type="password" id="repeatPassword" class="form-control" placeholder="确认密码" required>
+            </div>
+            <div class="input-group">
+                <div class="form-left">
+                    <div class="hidden"></div>
+                    <label for="authCode" class="sr-only">输入验证码</label>
+                    <input type="text" id="authCode" class="form-control" placeholder="请输入右侧结果" required>
+                </div>
+                <div class="form-right">
+                    <img class="ccap" src="../static/images/ccap.png">
+                </div>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+            <div class="checkbox clearfix">
+                <a href="../login" class="a pull-left">已有账号？>></a>
+            </div>
+        </form>
+
+      {% endblock %}

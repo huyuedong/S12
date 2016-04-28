@@ -1,0 +1,30 @@
+    {% extends 'master/login_signup_master.html' %}
+    {% block title %}
+        登陆
+    {% endblock %}
+
+    {% block login_signup_form %}
+        <form class="form-signin" action="/login/" method="post">
+            <h2 class="form-signin-heading">请登录</h2>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i></span>
+                <label for="inputEmail" class="sr-only">邮箱</label>
+                <input name="email" type="email" id="inputEmail" class="form-control" placeholder="邮箱" required autofocus>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw" aria-hidden="true"></i></span>
+                <label for="inputPassword" class="sr-only">密码</label>
+                <input name="password" type="password" id="inputPassword" class="form-control" placeholder="密码" required>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="remember-me"> 记住我
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+            <span style="color: red">{{ status }}</span>
+            <div class="checkbox clearfix">
+                <a href="../signup" class="a pull-left">还没注册？>></a>
+            </div>
+        </form>
+    {% endblock %}
