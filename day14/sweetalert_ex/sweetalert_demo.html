@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sweetalert</title>
+    <link rel="stylesheet" type="text/css" href="sweetalert.css">
+</head>
+<body>
+
+    <button onclick="test()">sweet alert test</button><br>
+    <button onclick="test2()">sweet alert test2</button>
+    <script src="sweetalert.min.js"></script>
+    <script>
+        function test() {
+            swal({
+                title: "Error!",
+                text: "Here's my error message!",
+                type: "error",
+                confirmButtonText: "Cool"
+            });
+        }
+        function test2() {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>
