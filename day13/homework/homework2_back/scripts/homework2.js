@@ -18,7 +18,7 @@ function highlightRows() {
     );
 }
 function popEditPage() {
-    $("a").click(function(ths) {
+    $("a").click(function() {
         $("#pop-page").removeClass("hidden");
         $("#cancel-button").click(function() {
             $("#pop-page").addClass("hidden");
