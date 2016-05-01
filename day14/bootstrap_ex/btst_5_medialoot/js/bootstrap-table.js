@@ -240,7 +240,7 @@
 
     BootstrapTable.prototype.initContainer = function () {
         this.$container = $([
-            '<div class="bootstrap-table">',
+            '<div class="bootstrap_ex-table">',
                 '<div class="fixed-table-toolbar"></div>',
                 '<div class="fixed-table-container">',
                     '<div class="fixed-table-header"><table></table></div>',
@@ -1419,7 +1419,7 @@
 
         this.each(function () {
             var $this = $(this),
-                data = $this.data('bootstrap.table'),
+                data = $this.data('bootstrap_ex.table'),
                 options = $.extend({}, BootstrapTable.DEFAULTS, $this.data(),
                     typeof option === 'object' && option);
 
@@ -1435,12 +1435,12 @@
                 value = data[option](_relatedTarget);
 
                 if (option === 'destroy') {
-                    $this.removeData('bootstrap.table');
+                    $this.removeData('bootstrap_ex.table');
                 }
             }
 
             if (!data) {
-                $this.data('bootstrap.table', (data = new BootstrapTable(this, options)));
+                $this.data('bootstrap_ex.table', (data = new BootstrapTable(this, options)));
             }
         });
 

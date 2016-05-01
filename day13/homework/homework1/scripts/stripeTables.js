@@ -174,12 +174,23 @@ function optionClick() {
 window.CTRLPRESS = false;
 
 //按下Ctrl则把CTRLPRESS置为true
+//这样写的话会有一次延迟，即松开Ctrl之后的下一次操作还是批量的，所以还是需要写一个onkeyup函数
+//window.onkeydown = function(event) {
+//    window.CTRLPRESS = !!(event && event.keyCode == 17);
+//};
 window.onkeydown = function(event) {
-    window.CTRLPRESS = !!(event && event.keyCode == 17);
+    if (event && event.keyCode == 17) {
+        window.CTRLPRESS = true;
+    }
+};
+window.onkeyup = function(event) {
+    if (event && event.keyCode == 17) {
+        window.CTRLPRESS = false;
+    }
 };
 function batchSelect(ths) {
     if (window.CTRLPRESS) {
-        window.CTRLPRESS = false;
+        //window.CTRLPRESS = false;
         //找到td在tr的索引位置
         var cur_index = $(ths).parent().index();
         //找到当前option值
