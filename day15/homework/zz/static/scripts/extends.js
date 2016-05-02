@@ -1,0 +1,119 @@
+/**
+ * Created by qimi on 2016/4/17.
+ */
+(function(arg) {
+    //提示指定错误信息
+    function errorMessage(container, msg) {
+        console.log("11");
+        console.log(container);
+        console.log(container.parent().attr("hasError"));
+        //确保同时只出现一个错误提示消息
+        if (!container.parent().attr("hasError") || container.parent().attr("hasError") == "false") {
+            var temp = '<div class="my-alert alert-danger" role="alert">'+msg+'</div>';
+            container.parent().after(temp);
+            container.parent().attr("hasError", "true");
+        }
+        //闪烁出现错误的输入框
+        shake(container, "red", 2);
+        //该输入框获得焦点之后去掉错误提示
+        container.focus(function() {
+            console.log("补货到焦点？");
+            console.log(container.parent().next(".my-alert")[0]);
+            container.parent().next(".my-alert").remove();
+            container.parent().attr("hasError", "false");
+        })
+    }
+    //闪烁提示
+    function shake(ele,cls,times) {
+        var i = 0,t=null,o=ele.prop("class")+ " ",c="",times=times||2;
+        if (t) return;
+        t = setInterval(function() {
+            i++;
+            c = i%2 ? o+cls : o;
+            ele.prop("class", c);
+            if (i==2*times) {
+                clearInterval(t);
+                ele.removeClass(cls);
+            }
+        }, 500);
+    }
+    //检测输入有效性的扩展
+    arg.extend({
+        "checkValidity": function(arg) {
+            var name_map = {
+              id_email: "邮箱",
+              id_password: "密码",
+              id_repeat_password: "确认密码",
+              id_ip: "IP地址",
+              id_port: "端口"
+            };
+            //从参数下面找到submit标签，绑定一个onclick事件
+            $(arg).find(":submit").click(function() {
+                var flag = true;
+                //找到form下的所有class为input-group的input标签
+                $(arg).find(".input-group").children("input").each(function() {
+                    //获取到内容
+                    var name_index = $(this).prop("id");
+                    var name = name_map[name_index];
+                    var value = $(this).val();
+                    //如果input为空
+                    if (!value || value.trim() == "") {
+                        errorMessage($(this),name+"不能为空");
+                        flag = false;
+                        return false;
+                    }
+                    //如果是邮箱，就按照邮箱的规则匹配值
+                    if (name_index == "id_email") {
+                        var re_mail = /^([a-z.0-9]{1,26})@([a-z.0-9]{1,20})(.[a-z0-9]{1,8})$/;
+                        if (!re_mail.test(value)) {
+                            flag = false;
+                            errorMessage($(this), name+"无效");
+                            return false;
+                        }
+                    }
+                    if (name_index == "id_password") {
+                        if (value.length < 6) {
+                            flag = false;
+                            errorMessage($(this), name+"必须大于6位");
+                            return false;
+                        }
+                    }
+                    //判断主机名
+                    if (name_index == "id_hostname") {
+                        if (value.length > 255) {
+                            flag = false;
+                            errorMessage($(this), name+"过长");
+                            return false;
+                        }
+                    }
+                    //判断IP
+                    if (name_index == "id_ip") {
+                        var re_ip = /^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$/;
+                        if (!re_ip.test(value)) {
+                            flag = false;
+                            errorMessage($(this), name+"无效");
+                            return false;
+                        }
+                    }
+                    //判断端口
+                    if (name_index == "id_port") {
+                        var re_port = /^(\d)+$/;
+                        if (re_port.test(value)) {
+                            value = parseInt(value);
+                            if (value > 65535) {
+                                flag = false;
+                                errorMessage($(this), name+"无效");
+                                return false;
+                            }
+                        } else {
+                            flag = false;
+                            errorMessage($(this), name+"必须为数字");
+                            return false;
+                        }
+                    }
+                });
+                return flag;
+            })
+        }
+    })
+})($);

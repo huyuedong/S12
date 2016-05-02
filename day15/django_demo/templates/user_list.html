@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>user_list</title>
+</head>
+<body>
+    <div>
+        <!--<form action="/user_list/" method="post">-->
+            <!--<p><input type="text" name="username" /></p>-->
+            <!--<p><input type="text" name="password" /></p>-->
+            <!--<p><input type="submit" value="submit" /></p>-->
+        <!--</form>-->
+        <hr/>
+        <form action="/app02/user_list/" method="post">
+            <p>用户类型：{{obj.user_type}}</p><span>{{errors.user_type.message}}</span>
+            <p>主机：{{obj.host}}</p><span>{{errors.host.message}}</span>
+            <p>端口：{{obj.port}}</p><span>{{errors.port.message}}</span>
+            <p>邮箱：{{obj.email}}</p><span>{{errors.email.message}}</span>
+            <p>手机：{{obj.mobile}}</p><span>{{errors.mobile.message}}</span>
+            <p>备注：{{obj.memo}}</p><span>{{errors.memo.message}}</span>
+            <p><input type="submit" value="submit" /></p>
+        </form>
+        <hr>
+        <input type="button" onclick="ajaxSubmit()" value="提交" />
+        <input type="button" onclick="ajaxSubmitSet()" value="提交集合" />
+        <table border="1">
+            <thead>
+            <tr>
+                <th>主机名</th>
+                <th>端口</th>
+            </tr>
+            </thead>
+            <tbody id="id_table">
+                <tr>
+                    <td>1.1.1.1</td>
+                    <td>22</td>
+                </tr>
+                <tr>
+                    <td>1.2.2.2</td>
+                    <td>8888</td>
+                </tr>
+                <tr>
+                    <td>11.1.1.1</td>
+                    <td>3306</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="/static/jquery-2.2.3.js"></script>
+    <script>
+        function ajaxSubmit() {
+            var host = "1.1.1.1";
+            var port = "9999";
+            $.ajax({
+                url: "/app02/ajax_demo/",
+                type: "POST",
+                data: {host: host, port: port},
+                success: function (arg) {
+
+                }
+            });
+        }
+        function ajaxSubmitSet() {
+            var array_users = [
+                {"username": "alex", "age": 18},
+                {"username": "eric", "age": 17},
+                {"username": "rain", "age": 16}
+            ];
+            $.ajax({
+                url: "/app02/ajax_demo_set/",
+                type: "POST",
+                tradition:true,
+                data: {data:JSON.stringify(array_users)},
+                success: function(arg) {
+//                  将字符串转换为对象，相当于json.loads
+                    var callback_dic = $.parseJSON(arg);
+                    if (callback_dic.status) {
+                        alert("成功")
+                    } else {
+                        alert(callback_dic.error)
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

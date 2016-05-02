@@ -21,6 +21,9 @@ from app01 import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/', views.home),
+    url(r'^login/', views.login),
+    url(r'^order/', views.order),
+    url(r'^logout/', views.logout),
     url(r'^app01/', include('app01.urls')),
     url(r'^app02/', include('app02.urls')),
 ]
