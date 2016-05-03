@@ -24,6 +24,12 @@ class AddRecordForm(forms.Form):
 		(2, "测试"),
 		(3, "运维"),
 	)
+	SERVICE_TYPE = (
+		(1, "tomcat"),
+		(2, "MySQL"),
+		(3, "Nginx"),
+		(4, "FTP"),
+	)
 	hostname = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
@@ -61,8 +67,9 @@ class AddRecordForm(forms.Form):
 			"required": "端口不能为空",
 		}
 	)
-	service = forms.CharField(
-		widget=forms.TextInput(
+	service = forms.IntegerField(
+		widget=forms.Select(
+			choices=SERVICE_TYPE,
 			attrs={
 				"type": "service",
 				"class": "form-control",

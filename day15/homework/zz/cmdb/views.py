@@ -27,22 +27,25 @@ def md5_encryption(arg):
 def login(request):
 	obj = login_signup_form.LoginForm()
 
-	if request.method == "POST":
-		# 把提交到的所有数据封装到LoginForm()
-		user_input_obj = login_signup_form.LoginForm(request.POST)
-		if user_input_obj.is_valid():
-			login_data = user_input_obj.clean()
-			print(models.UserInfo.objects.filter(email=login_data.get("email")))
-			# TODO 怎么根据email查到密码
-			# if models.UserInfo.objects.filter(email=login_data.get("email")).password == md5_encryption(login_data.get("password", "")):
-			# 	request.session["is_login"] = "true"
-			return redirect("/index/")
-
-		else:
-			error_msg = user_input_obj.errors.as_data()
-			# print(error_msg)
-			return render(request, "login.html", {"obj": user_input_obj, "errors": error_msg})
-	return render(request, "login.html", {"obj": obj})
+	if request.method != "POST":
+		return render(request, "login.html", {"obj": obj})
+	# 把提交到的所有数据封装到LoginForm()
+	user_input_obj = login_signup_form.LoginForm(request.POST)
+	if not user_input_obj.is_valid():
+		error_msg = user_input_obj.errors.as_data()
+		# print(error_msg)
+		return render(request, "login.html", {"obj": user_input_obj, "errors": error_msg})
+	login_data = user_input_obj.clean()
+	try:
+		user = models.UserInfo.objects.get(email=login_data.get("email"))
+		print(user.__dict__)
+	except Exception as e:
+		raise Exception("用户名验证失败{}".format(login_data.get("email")))
+	print(user.password)
+	if user.password != md5_encryption(login_data.get("password", "")):
+		raise Exception("密码验证失败！")
+	# 	request.session["is_login"] = "true"
+	return redirect("/index/")
 
 
 def signup(request):
@@ -54,7 +57,7 @@ def signup(request):
 			if signup_data.get("password") == signup_data.get("repeat_password"):
 				signup_data.pop("repeat_password")
 				signup_data["password"] = md5_encryption(signup_data.get("password"))
-				models.UserInfo.objects.create(**signup_data)
+				statues = models.UserInfo.objects.create(**signup_data)
 
 			else:
 				print("两次密码不一致")

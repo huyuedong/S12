@@ -25,8 +25,15 @@ class HostInfo(models.Model):
 		(2, "测试"),
 		(3, "运维"),
 	)
+	SERVICE_TYPE = (
+		(1, "tomcat"),
+		(2, "MySQL"),
+		(3, "Nginx"),
+		(4, "FTP"),
+	)
 	hostname = models.CharField(max_length=64)
 	ip = models.GenericIPAddressField(unique=True)
 	port = models.IntegerField()
+	service = models.IntegerField(choices=HOST_GROUP_TYPE)
 	group = models.IntegerField(choices=HOST_GROUP_TYPE)
 	state = models.IntegerField(choices=HOST_STATE_TYPE)

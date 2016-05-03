@@ -11,3 +11,10 @@
 # ret = str1.translate(transtab)
 # print(ret)
 
+# for i in range(10001):
+# 	for j in range(1001):
+# 		for k in range(101):
+# 			for l in range(10):
+# 				if i + j + k -l == 2012:
+# 					print(i, j, k, l)
+

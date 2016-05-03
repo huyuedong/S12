@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^signup/$', views.signup),
     url(r'^index/$', views.index),
     url(r'^cmdb/', include("cmdb.urls")),
+    # url(r'.*', views.login),
 ]
