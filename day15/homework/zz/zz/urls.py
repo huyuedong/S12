@@ -22,6 +22,9 @@ urlpatterns = [
     url(r'^login/$', views.login),
     url(r'^signup/$', views.signup),
     url(r'^index/$', views.index),
+    url(r'^ajax_add/$', views.ajax_add),
+    url(r'^ajax_test/$', views.ajax_test),
+    url(r'^test/$', views.test),
     url(r'^cmdb/', include("cmdb.urls")),
     # url(r'.*', views.login),
 ]

@@ -7,6 +7,7 @@ from cmdb import models
 # Create your views here.
 
 import hashlib
+import json
 
 
 # 预设一个加密算法
@@ -77,3 +78,23 @@ def add(request):
 		return render(request, "add_record.html", {"obj": input_record_obj})
 	obj = add_record.AddRecordForm()
 	return render(request, "add_record.html", {"obj": obj})
+
+
+def ajax_add(request):
+	ret = {"status": True, "errors": ""}
+	try:
+		print(request.POST)
+	except Exception as e:
+		ret["status"] = False
+		ret["errors"] = str(e)
+	finally:
+		return HttpResponse(json.dumps(ret))
+
+
+def test(request):
+	return render(request, "ajax_test.html")
+
+
+def ajax_test(request):
+	print(request.POST)
+	return HttpResponse("OK")

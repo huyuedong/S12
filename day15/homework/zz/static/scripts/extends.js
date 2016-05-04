@@ -48,9 +48,8 @@
                 port: "端口"
             };
             //从参数下面找到submit标签，绑定一个onclick事件
-            //$(arg).find(":submit").click(function() {
+            $(arg).find(":submit").click(function() {
                 var flag = true;
-                var data = Object();
                 //找到form下的所有class为input-group的input标签
                 $(arg).find("input").each(function() {
                     //获取到内容
@@ -112,15 +111,9 @@
                             return false;
                         }
                     }
-                    data[name] = value;
                 });
-                if (flag) {
-                    return data;
-                } else {
-                    return flag
-                }
-            //})
-        },
-        min: function() {alert("自动执行？")}
+                return flag;
+            })
+        }
     })
 })($);
