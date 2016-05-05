@@ -51,7 +51,7 @@
                         <tbody id="tb-1">
                             {% for i in obj %}
                             <tr>
-                                <td class="option"><input type="checkbox" /></td>
+                                <td class="option"><input type="checkbox" id-value="{{ i.id }}"/></td>
                                 <td class="no">{{ forloop.counter }}</td>
                                 <td edit="true" edit-type="input" class="hostname">{{ i.hostname }}</td>
                                 <td edit="true" edit-type="input" class="ip">{{ i.ip }}</td>

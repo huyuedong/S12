@@ -107,8 +107,8 @@ function invertCheck() {
 function editRecord() {
     $("#edit").click(function doEdit() {
         if ($(this).hasClass("editing")) {
-            $(this).removeClass("editing");
-            $(this).text("进入编辑模式");
+            $(this).removeClass("btn-primary editing");
+            $(this).html('<span class="fa fa-pencil fa-fw"></span>进入编辑模式');
             //遍历查找checkbox
             $("tbody").find("input:checkbox").each(function() {
                 if ($(this).prop("checked")) {
@@ -118,8 +118,8 @@ function editRecord() {
                 }
             })
         } else {
-            $(this).addClass("editing");
-            $(this).text("退出编辑模式");
+            $(this).addClass("btn-primary editing");
+            $(this).html('<span class="fa fa-pencil fa-fw"></span>退出编辑模式');
             //遍历查找checkbox
             $("tbody").find("input:checkbox").each(function() {
                 if ($(this).prop("checked")) {
@@ -145,8 +145,8 @@ function cancel() {
                 }
             }
         });
-        edit_button.removeClass("editing");
-        edit_button.text("进入编辑模式");
+        edit_button.removeClass("btn-primary editing");
+        edit_button.html('<span class="fa fa-pencil fa-fw"></span>进入编辑模式');
     })
 }
 //编辑模式下单选编辑
@@ -192,6 +192,8 @@ function batchSelect(ths) {
         })
     }
 }
+//保存
+
 
 //推荐方法
 $(document).ready(function() {
