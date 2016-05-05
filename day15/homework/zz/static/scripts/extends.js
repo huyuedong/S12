@@ -37,6 +37,7 @@
         }, 500);
     }
     //检测输入有效性的扩展
+    //debugger;
     arg.extend({
         checkValidity: function(arg) {
             var name_map = {
@@ -47,73 +48,71 @@
                 ip: "IP地址",
                 port: "端口"
             };
-            //从参数下面找到submit标签，绑定一个onclick事件
-            $(arg).find(":submit").click(function() {
-                var flag = true;
-                //找到form下的所有class为input-group的input标签
-                $(arg).find("input").each(function() {
-                    //获取到内容
-                    var name = $(this).prop("name");
-                    var name_str = name_map[name];
-                    var value = $(this).val();
-                    //如果input为空
-                    if (!value || value.trim() == "") {
-                        errorMessage($(this),name_str+"不能为空");
+            var flag = true;
+            //找到form下的所有class为input-group的input标签
+            $(arg).find("input").each(function() {
+                //获取到内容
+                var name = $(this).prop("name");
+                var name_str = name_map[name];
+                var value = $(this).val();
+                //如果input为空
+                if (!value || value.trim() == "") {
+                    errorMessage($(this),name_str+"不能为空");
+                    flag = false;
+                    return false;
+                }
+                //如果是邮箱，就按照邮箱的规则匹配值
+                if (name == "email") {
+                    var re_mail = /^([a-z.0-9]{1,26})@([a-z.0-9]{1,20})(.[a-z0-9]{1,8})$/;
+                    if (!re_mail.test(value)) {
                         flag = false;
+                        errorMessage($(this), name_str+"无效");
                         return false;
                     }
-                    //如果是邮箱，就按照邮箱的规则匹配值
-                    if (name == "email") {
-                        var re_mail = /^([a-z.0-9]{1,26})@([a-z.0-9]{1,20})(.[a-z0-9]{1,8})$/;
-                        if (!re_mail.test(value)) {
+                }
+                if (name == "password") {
+                    if (value.length < 6) {
+                        flag = false;
+                        errorMessage($(this), name_str+"必须大于6位");
+                        return false;
+                    }
+                }
+                //判断主机名
+                if (name == "hostname") {
+                    if (value.length > 255) {
+                        flag = false;
+                        errorMessage($(this), name_str+"过长");
+                        return false;
+                    }
+                }
+                //判断IP
+                if (name == "ip") {
+                    var re_ip = /^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$/;
+                    if (!re_ip.test(value)) {
+                        flag = false;
+                        errorMessage($(this), name_str+"无效");
+                        return false;
+                    }
+                }
+                //判断端口
+                if (name == "port") {
+                    var re_port = /^(\d)+$/;
+                    if (re_port.test(value)) {
+                        value = parseInt(value);
+                        if (value > 65535) {
                             flag = false;
                             errorMessage($(this), name_str+"无效");
                             return false;
                         }
+                    } else {
+                        flag = false;
+                        errorMessage($(this), name_str+"必须为数字");
+                        return false;
                     }
-                    if (name == "password") {
-                        if (value.length < 6) {
-                            flag = false;
-                            errorMessage($(this), name_str+"必须大于6位");
-                            return false;
-                        }
-                    }
-                    //判断主机名
-                    if (name == "hostname") {
-                        if (value.length > 255) {
-                            flag = false;
-                            errorMessage($(this), name_str+"过长");
-                            return false;
-                        }
-                    }
-                    //判断IP
-                    if (name == "ip") {
-                        var re_ip = /^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$/;
-                        if (!re_ip.test(value)) {
-                            flag = false;
-                            errorMessage($(this), name_str+"无效");
-                            return false;
-                        }
-                    }
-                    //判断端口
-                    if (name == "port") {
-                        var re_port = /^(\d)+$/;
-                        if (re_port.test(value)) {
-                            value = parseInt(value);
-                            if (value > 65535) {
-                                flag = false;
-                                errorMessage($(this), name_str+"无效");
-                                return false;
-                            }
-                        } else {
-                            flag = false;
-                            errorMessage($(this), name_str+"必须为数字");
-                            return false;
-                        }
-                    }
-                });
-                return flag;
-            })
+                }
+            });
+            //一个验证通过的标志位，可用于判断是否继续下一步
+            return flag;
         }
     })
 })($);

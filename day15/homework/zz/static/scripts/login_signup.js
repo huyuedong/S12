@@ -4,5 +4,11 @@
 
 
 $(document).ready(function() {
-   $.checkValidity("#input-form");
+   $("#input-form").find(":submit").click(function() {
+       if ($.checkValidity("#input-form")) {
+           return true;
+       } else {
+           return false;
+       }
+   })
 });

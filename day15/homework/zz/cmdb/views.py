@@ -84,6 +84,11 @@ def ajax_add(request):
 	ret = {"status": True, "errors": ""}
 	try:
 		print(request.POST)
+		request_dic = dict(request.POST)
+		add_data_dic = {}
+		for key in request_dic:
+			add_data_dic[key] = request_dic[key][0]
+		models.HostInfo.objects.create(**add_data_dic)
 	except Exception as e:
 		ret["status"] = False
 		ret["errors"] = str(e)
