@@ -49,56 +49,18 @@
                             </tr>
                         </thead>
                         <tbody id="tb-1">
-                            <tr id="row-1">
+                            {% for i in obj %}
+                            <tr>
                                 <td class="option"><input type="checkbox" /></td>
-                                <td class="no">1</td>
-                                <td edit="true" edit-type="input" class="hostname">hostname1</td>
-                                <td edit="true" edit-type="input" class="ip">111.111.111.111</td>
-                                <td class="port">22</td>
-                                <td class="service">tomcat</td>
-                                <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
-                                <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
+                                <td class="no">{{ forloop.counter }}</td>
+                                <td edit="true" edit-type="input" class="hostname">{{ i.hostname }}</td>
+                                <td edit="true" edit-type="input" class="ip">{{ i.ip }}</td>
+                                <td class="port">{{ i.port }}</td>
+                                <td edit="true" edit-type="select" option-key="SERVICE" class="service">{{ i.get_service_display }}</td>
+                                <td edit="true" edit-type="select" option-key="GROUP" class="group">{{ i.get_group_display }}</td>
+                                <td edit="true" edit-type="select" option-key="STATUS" class="state">{{ i.get_state_display }}</td>
                             </tr>
-                            <tr id="row-2">
-                                <td class="option"><input type="checkbox" /></td>
-                                <td class="no">2</td>
-                                <td edit="true" edit-type="input" class="hostname">hostname2</td>
-                                <td edit="true" edit-type="input" class="ip">8.8.8.8</td>
-                                <td class="port">666</td>
-                                <td class="service">tomcat</td>
-                                <td edit="true" edit-type="select" option-key="GROUP" class="group">测试</td>
-                                <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                            </tr>
-                            <tr id="row-3">
-                                <td class="option"><input type="checkbox" /></td>
-                                <td class="no">3</td>
-                                <td edit="true" edit-type="input" class="hostname">hostname3</td>
-                                <td edit="true" edit-type="input" class="ip">225.225.255.254</td>
-                                <td class="port">3309</td>
-                                <td class="service">DB</td>
-                                <td edit="true" edit-type="select" option-key="GROUP" class="group">开发</td>
-                                <td edit="true" edit-type="select" option-key="STATUS" class="state">在线</td>
-                            </tr>
-                            <tr id="row-4">
-                                <td class="option"><input type="checkbox" /></td>
-                                <td class="no">4</td>
-                                <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                <td class="port">8000</td>
-                                <td class="service">tomcat</td>
-                                <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                            </tr>
-                            <tr id="row-5">
-                                <td class="option"><input type="checkbox" /></td>
-                                <td class="no">5</td>
-                                <td edit="true" edit-type="input" class="hostname">hostname4</td>
-                                <td edit="true" edit-type="input" class="ip">10.10.0.1</td>
-                                <td class="port">4444</td>
-                                <td class="service">nginx</td>
-                                <td edit="true" edit-type="select" option-key="GROUP" class="group">运维</td>
-                                <td edit="true" edit-type="select" option-key="STATUS" class="state">下线</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

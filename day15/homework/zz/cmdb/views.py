@@ -69,7 +69,8 @@ def signup(request):
 
 
 def index(request):
-	return render(request, "index.html")
+	host_data = models.HostInfo.objects.all()
+	return render(request, "index.html", {"obj": host_data})
 
 
 def add(request):

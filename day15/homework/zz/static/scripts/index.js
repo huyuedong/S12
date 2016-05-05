@@ -11,6 +11,12 @@ GROUP = [
     {"id": 2, "value": "测试"},
     {"id": 3, "value": "运维"}
 ];
+SERVICE = [
+    {"id": 1, "value": "tomcat"},
+    {"id": 2, "value": "MySQL"},
+    {"id": 3, "value": "Nginx"},
+    {"id": 4, "value": "FTP"}
+];
 
 //退出行的编辑状态
 function outRowEdit(ths) {
@@ -31,8 +37,10 @@ function inRowEdit(ths) {
             if ($(this).attr("edit-type") == "select") {
                 //获得预先定义的option选项
                 var optionArray = window[$(this).attr("option-key")];
+                //console.log(optionArray);
                 //找到当前选中的option项
                 var selected_option = $(this).text();
+                console.log(selected_option);
                 var options = "";
                 //遍历取出option
                 $.each(optionArray, function(index, value) {

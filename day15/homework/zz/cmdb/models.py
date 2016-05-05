@@ -34,6 +34,6 @@ class HostInfo(models.Model):
 	hostname = models.CharField(max_length=64)
 	ip = models.GenericIPAddressField(unique=True)
 	port = models.IntegerField()
-	service = models.IntegerField(choices=HOST_GROUP_TYPE)
+	service = models.IntegerField(choices=SERVICE_TYPE)
 	group = models.IntegerField(choices=HOST_GROUP_TYPE)
 	state = models.IntegerField(choices=HOST_STATE_TYPE)
