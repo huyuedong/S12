@@ -20,6 +20,7 @@ SERVICE = [
 
 //退出行的编辑状态
 function outRowEdit(ths) {
+    ths.removeData("original_data");
     ths.children().each(function() {
         //判断是不是可编辑的元素
         if ($(this).attr("edit") == "true") {
@@ -30,7 +31,11 @@ function outRowEdit(ths) {
 }
 //进入行的编辑状态
 function inRowEdit(ths) {
+    ths.data("original_data", {});
     ths.children().each(function() {
+        if ($(this).attr("name") == "option") {
+            ths.data("original_data")["id"] = $(this).children(":first").attr("id-value");
+        }
         //判断是不是可编辑的元素
         if ($(this).attr("edit") == "true") {
             //处理select标签
@@ -40,6 +45,7 @@ function inRowEdit(ths) {
                 //console.log(optionArray);
                 //找到当前选中的option项
                 var selected_option = $(this).text();
+                ths.data("original_data")[$(this).attr("name")] = selected_option;
                 var options = "";
                 //遍历取出option
                 $.each(optionArray, function(index, value) {
@@ -54,12 +60,14 @@ function inRowEdit(ths) {
                 $(this).html(tmp);
             } else {
                 var text = $(this).text();
+                ths.data("original_data")[$(this).attr("name")] = text;
                 var tmp = "<input type='text' value='" + text + "' />";
                 $(this).html(tmp);
             }
         }
     })
 }
+
 //全选
 function checkAll() {
     $("#check-all").click(function() {
@@ -90,12 +98,13 @@ function invertCheck() {
             if ($(this).prop("checked")) {
                 $(this).prop("checked", false);
                 if (is_edit) {
+                    tr.removeData();
                     outRowEdit(tr);
                 }
             } else {
                 $(this).prop("checked", true);
                 if (is_edit) {
-                    //遍历tr的子元素
+                    //进入编辑模式
                     inRowEdit(tr);
                 }
             }
@@ -195,6 +204,54 @@ function batchSelect(ths) {
     }
 }
 //保存
+function SaveData() {
+    var save_button = $("#save");
+    save_button.data("data", []);
+    save_button.click(function() {
+        $("tbody").find("input:checked").each(function() {
+            var tr = $(this).parent().parent();
+            tr.data("current_data", {});
+            tr.children().each(function() {
+                if ($(this).attr("name") == "option") {
+                   tr.data("current_data")["id"] = $(this).children(":first").attr("id-value");
+                }
+                if ($(this).attr("edit") == "true") {
+                    tr.data("current_data")[$(this).attr("name")] = $(this).children(":first").val();
+                }
+            });
+            console.log("当前数据：");
+            console.log(tr.data("current_data"));
+            console.log("原数据：");
+            console.log(tr.data("original_data"));
+            if (tr.data("original_data") != tr.data("current_data")) {
+                save_button.data("data").push(tr.data("current_data"));
+                tr.removeData("current_data");
+            }
+        });
+        if (save_button.data("data").length > 0) {
+            $.ajax({
+                url: "/cmdb/ajax_req/",
+                type: "post",
+                data: {data_list: JSON.stringify(save_button.data("data"))},
+                success: function(arg) {
+                    var callback_data = $.parseJSON(arg);
+                    if (callback_data.status) {
+                        swal("更新成功", "success");
+                        save_button.removeData("data");
+                        $("input:checked").each(function() {
+                            $(this).prop("checked", false);
+                            var tr = $(this).parent().parent();
+                            outRowEdit(tr);
+                        });
+                        //window.location.href = window.location.href
+                    }
+                }
+            })
+        }
+    });
+}
+//获取数据
+
 
 
 //推荐方法
@@ -204,4 +261,5 @@ $(document).ready(function() {
     editRecord();
     cancel();
     optionClick();
+    SaveData();
 });

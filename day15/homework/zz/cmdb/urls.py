@@ -19,4 +19,5 @@ from cmdb import views
 urlpatterns = [
     url(r'^add/$', views.add),
     url(r'^ajax_add/$', views.ajax_add),
+    url(r'^ajax_req/$', views.ajax_req),
 ]
