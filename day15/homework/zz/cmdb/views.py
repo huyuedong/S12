@@ -100,29 +100,26 @@ def ajax_add(request):
 def ajax_req(request):
 	ret = {"status": True, "errors": ""}
 	try:
-		print(request.POST)
+		# print(request.POST)
 		# request_dic = json.loads(request.POST.data_list)
 		request_dic = dict(request.POST)
-		print(request_dic)
+		# print(request_dic)
 		request_list = request_dic["data_list"]
-		print(request_list[0])
+		# print(request_list[0])
 		modify_data = json.loads(request_list[0])
-		print(modify_data)
+		# print(modify_data)
 		operate_list = []
 		for i in modify_data:
 			id = i["id"]
 			i.pop("id")
+			# 此处转换得到一个< 数据的id:数据内容 >的格式
 			temp_dic = {id: i}
 			operate_list.append(temp_dic)
 		print(operate_list)
-		# 遍历要操作的记录列表
+		# 遍历要操作的记录列表,j是每一条需要操作的数据
 		for j in operate_list:
-			print(j)
 			# key是每条要更新的数据的id值
 			for key in j:
-				print(key)
-				print(j[key])
-				print(models.HostInfo.objects.filter(id=key))
 				# 根据id找到记录，然后更新
 				models.HostInfo.objects.filter(id=key).update(**j[key])
 	except Exception as e:

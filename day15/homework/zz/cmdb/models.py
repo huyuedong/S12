@@ -37,3 +37,12 @@ class HostInfo(models.Model):
 	service = models.IntegerField(choices=SERVICE_TYPE)
 	group = models.IntegerField(choices=HOST_GROUP_TYPE)
 	state = models.IntegerField(choices=HOST_STATE_TYPE)
+
+	def __str__(self):
+		return "主机名：{}，ip地址：{}，服务：{}，组：{}，状态：{}".format(
+			self.hostname,
+			self.ip,
+			self.service,
+			self.group,
+			self.state,
+		)

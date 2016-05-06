@@ -45,12 +45,15 @@ function inRowEdit(ths) {
                 //console.log(optionArray);
                 //找到当前选中的option项
                 var selected_option = $(this).text();
-                ths.data("original_data")[$(this).attr("name")] = selected_option;
+
                 var options = "";
+                var key = $(this).attr("name");
+                console.log(key);
                 //遍历取出option
                 $.each(optionArray, function(index, value) {
                     //将转换后的select中选中之前的option项
                     if (selected_option == value.value) {
+                        ths.data("original_data")[key] = value.id;
                         options += "<option selected='selected'>" + value.value + "</option>";
                     } else {
                         options += "<option>" + value.value + "</option>";
@@ -213,10 +216,23 @@ function SaveData() {
             tr.data("current_data", {});
             tr.children().each(function() {
                 if ($(this).attr("name") == "option") {
-                   tr.data("current_data")["id"] = $(this).children(":first").attr("id-value");
+
+                    tr.data("current_data")["id"] = $(this).children(":first").attr("id-value");
                 }
                 if ($(this).attr("edit") == "true") {
-                    tr.data("current_data")[$(this).attr("name")] = $(this).children(":first").val();
+                    if ($(this).attr("edit-type") == "select") {
+                        var optionArray = window[$(this).attr("option-key")];
+                        var selected_option = $(this).children(":first").val();
+                        var key = $(this).attr("name");
+                        console.log(key);
+                        $.each(optionArray, function(index, value) {
+                            if (selected_option == value.value) {
+                                tr.data("current_data")[key] = value.id;
+                            }
+                        })
+                    } else {
+                        tr.data("current_data")[$(this).attr("name")] = $(this).children(":first").val();
+                    }
                 }
             });
             console.log("当前数据：");
