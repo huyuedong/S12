@@ -1,0 +1,12 @@
+{% extends "master/index_master.html" %}
+
+{% block title %}
+    page1
+{% endblock %}
+
+{% block container %}
+    <h4>这是page1</h4>
+    {% block father-container %}
+        {% include "master/register_form.html" %}
+    {% endblock %}
+{% endblock %}
