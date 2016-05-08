@@ -32,3 +32,4 @@ urlpatterns = [
     url(r'^payment/', include(payment_urls)),
 
 ]
+

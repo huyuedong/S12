@@ -18,12 +18,13 @@
         <h2>等于有两种写法，1.5之后支持 == ，以前都用ifequal</h2>
     <ul>
         {% for user_obj in user_objs %}
-            {% ifequal forloop.counter 2 %}
-{#            {% if forloop.counter == 2 %}#}
+{#            {% ifequal forloop.counter 2 %}#}
+            {% if forloop.counter == 2 %}
                 <li style="background-color: red">username: {{ user_obj.name }}, age:{{ user_obj.age }}</li>
             {% else %}
                 <li style="">username: {{ user_obj.name }}, age:{{ user_obj.age }}</li>
-            {% endifequal %}
+{#            {% endifequal %}#}
+            {% endif %}
         {% endfor %}
     </ul>
     <h2>偶数行背景为红色，注意|两边不能有空格</h2>

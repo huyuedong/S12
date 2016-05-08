@@ -90,7 +90,7 @@ DATABASES = {
         'PORT': '',
         'USER': 'root',
         # TODO: clear the password before push!!!
-        'PASSWORD': 'rootroot',
+        'PASSWORD': '1234',
     }
 }
 
