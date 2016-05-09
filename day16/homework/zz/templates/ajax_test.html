@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax test</title>
+</head>
+<body>
+    <div class="container">
+        <form id="add-test">
+            <p><input type="text" name="hostname"/></p>
+            <p><input type="text" name="ip"/></p>
+            <p><button type="submit" onclick="return ajaxPost();">submit</button></p>
+        </form>
+    </div>
+    <script src="/static/scripts/jquery-2.2.3.js"></script>
+    <script src="/static/scripts/extends.js"></script>
+    <script>
+        function ajaxPost() {
+            $.ajax({
+                url: "/ajax_test/",
+                type: "post",
+                data: {username: "alex", password: " 123", age: "18"},
+                success: function(arg) {
+                    if (arg == "OK") {
+                        alert("成功！");
+                    }
+                }
+            });
+            return false;
+        }
+    </script>
+</body>
+</html>

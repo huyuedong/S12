@@ -1,0 +1,75 @@
+{% extends "master/main_master.html" %}
+{% block title %}
+    添加主机
+{% endblock %}
+
+{% block index_css %}
+    <link href="/static/styles/main_common.css" rel="stylesheet" />
+    <link href="/static/styles/add_record.css" rel="stylesheet" />
+    <link href="/static/styles/sweetalert.css" rel="stylesheet" />
+{% endblock %}
+
+{% block page_name %}
+    <li class="active"><a href="/index/">主机管理</a></li>
+    <li class="active">添加主机</li>
+{% endblock %}
+
+{% block page_info %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="add-container">
+                <form id="add-form" method="post" class="form-horizontal">
+                    <div class="" style="width: 200px">
+                        <label for="add-form-hostname">主机名</label>
+                        <div class="input-group">
+                            {{ obj.hostname }}
+                        </div>
+                    </div>
+                    <div class="" style="width: 200px">
+                        <label for="add-form-ip">IP地址</label>
+                        <div class="input-group">
+                            {{ obj.ip }}
+                        </div>
+                    </div>
+                    <div class="" style="width: 100px">
+                        <label for="add-form-port">端口号</label>
+                        <div class="input-group">
+                            {{ obj.port }}
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="" style="margin-right: 20px; width: 100px;">
+                            <label for="add-form-service" class="control-label">服务</label>
+                            <div class="">
+                                {{ obj.service }}
+                            </div>
+                        </div>
+                        <div class="" style="margin-right: 20px; width: 100px;">
+                            <label for="add-form-group" class="control-label">主机组</label>
+                            <div class="">
+                                {{ obj.group }}
+                            </div>
+                        </div>
+                        <div class="" style="margin-right: 20px; width: 100px;">
+                            <label for="add-form-state" class="control-label">状态</label>
+                            <div class="">
+                                {{ obj.state }}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="" style="text-align: center">
+                        <button id="submit-add" class="btn btn-primary" type="submit">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block index_js %}
+    <script src="/static/scripts/extends.js"></script>
+    <script src="/static/scripts/index.js"></script>
+    <script src="/static/scripts/sweetalert.min.js"></script>
+    <script src="/static/scripts/ajax_submit.js"></script>
+{% endblock %}
