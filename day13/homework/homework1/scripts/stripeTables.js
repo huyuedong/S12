@@ -121,6 +121,8 @@ function editRecord() {
             //遍历查找checkbox
             $("form :checkbox").each(function() {
                 if ($(this).prop("checked")) {
+                    console.log(1);
+                    $(this).prop("checked", false);
                     var tr = $(this).parent().parent();
                     //遍历tr的子元素
                     outRowEdit(tr);

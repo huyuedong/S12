@@ -70,7 +70,7 @@ function inRowEdit(ths) {
         }
     })
 }
-
+__debugger__ = true;
 //全选
 function checkAll() {
     $("#check-all").click(function() {
@@ -123,7 +123,10 @@ function editRecord() {
             $(this).html('<span class="fa fa-pencil fa-fw"></span>进入编辑模式');
             //遍历查找checkbox
             $("tbody").find("input:checkbox").each(function() {
+
                 if ($(this).prop("checked")) {
+                    // 去掉勾选
+                    $(this).prop("checked", false);
                     var tr = $(this).parent().parent();
                     //遍历tr的子元素
                     outRowEdit(tr);

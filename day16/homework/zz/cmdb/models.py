@@ -52,7 +52,7 @@ class HostInfo(models.Model):
 	)
 
 	hostname = models.CharField(max_length=64)
-	ip = models.ForeignKey(IPInfo)
+	ip = models.OneToOneField(IPInfo)
 	port = models.IntegerField()
 	service = models.CharField(max_length=128)
 
