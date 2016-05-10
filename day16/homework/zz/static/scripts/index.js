@@ -20,6 +20,7 @@ SERVICE = [
 
 //退出行的编辑状态
 function outRowEdit(ths) {
+    ths.removeData("original_data");
     ths.children().each(function() {
         //判断是不是可编辑的元素
         if ($(this).attr("edit") == "true") {
@@ -30,7 +31,11 @@ function outRowEdit(ths) {
 }
 //进入行的编辑状态
 function inRowEdit(ths) {
+    ths.data("original_data", {});
     ths.children().each(function() {
+        if ($(this).attr("name") == "option") {
+            ths.data("original_data")["id"] = $(this).children(":first").attr("id-value");
+        }
         //判断是不是可编辑的元素
         if ($(this).attr("edit") == "true") {
             //处理select标签
@@ -40,11 +45,15 @@ function inRowEdit(ths) {
                 //console.log(optionArray);
                 //找到当前选中的option项
                 var selected_option = $(this).text();
+
                 var options = "";
+                var key = $(this).attr("name");
+                console.log(key);
                 //遍历取出option
                 $.each(optionArray, function(index, value) {
                     //将转换后的select中选中之前的option项
                     if (selected_option == value.value) {
+                        ths.data("original_data")[key] = value.id;
                         options += "<option selected='selected'>" + value.value + "</option>";
                     } else {
                         options += "<option>" + value.value + "</option>";
@@ -54,12 +63,14 @@ function inRowEdit(ths) {
                 $(this).html(tmp);
             } else {
                 var text = $(this).text();
+                ths.data("original_data")[$(this).attr("name")] = text;
                 var tmp = "<input type='text' value='" + text + "' />";
                 $(this).html(tmp);
             }
         }
     })
 }
+__debugger__ = true;
 //全选
 function checkAll() {
     $("#check-all").click(function() {
@@ -90,12 +101,13 @@ function invertCheck() {
             if ($(this).prop("checked")) {
                 $(this).prop("checked", false);
                 if (is_edit) {
+                    tr.removeData();
                     outRowEdit(tr);
                 }
             } else {
                 $(this).prop("checked", true);
                 if (is_edit) {
-                    //遍历tr的子元素
+                    //进入编辑模式
                     inRowEdit(tr);
                 }
             }
@@ -111,7 +123,10 @@ function editRecord() {
             $(this).html('<span class="fa fa-pencil fa-fw"></span>进入编辑模式');
             //遍历查找checkbox
             $("tbody").find("input:checkbox").each(function() {
+
                 if ($(this).prop("checked")) {
+                    // 去掉勾选
+                    $(this).prop("checked", false);
                     var tr = $(this).parent().parent();
                     //遍历tr的子元素
                     outRowEdit(tr);
@@ -195,6 +210,67 @@ function batchSelect(ths) {
     }
 }
 //保存
+function SaveData() {
+    var save_button = $("#save");
+    save_button.data("data", []);
+    save_button.click(function() {
+        $("tbody").find("input:checked").each(function() {
+            var tr = $(this).parent().parent();
+            tr.data("current_data", {});
+            tr.children().each(function() {
+                if ($(this).attr("name") == "option") {
+
+                    tr.data("current_data")["id"] = $(this).children(":first").attr("id-value");
+                }
+                if ($(this).attr("edit") == "true") {
+                    if ($(this).attr("edit-type") == "select") {
+                        var optionArray = window[$(this).attr("option-key")];
+                        var selected_option = $(this).children(":first").val();
+                        var key = $(this).attr("name");
+                        console.log(key);
+                        $.each(optionArray, function(index, value) {
+                            if (selected_option == value.value) {
+                                tr.data("current_data")[key] = value.id;
+                            }
+                        })
+                    } else {
+                        tr.data("current_data")[$(this).attr("name")] = $(this).children(":first").val();
+                    }
+                }
+            });
+            console.log("当前数据：");
+            console.log(tr.data("current_data"));
+            console.log("原数据：");
+            console.log(tr.data("original_data"));
+            if (tr.data("original_data") != tr.data("current_data")) {
+                save_button.data("data").push(tr.data("current_data"));
+                tr.removeData("current_data");
+            }
+        });
+        if (save_button.data("data").length > 0) {
+            $.ajax({
+                url: "/cmdb/ajax_req/",
+                type: "post",
+                data: {data_list: JSON.stringify(save_button.data("data"))},
+                success: function(arg) {
+                    var callback_data = $.parseJSON(arg);
+                    if (callback_data.status) {
+                        swal("更新成功", "success");
+                        save_button.removeData("data");
+                        $("input:checked").each(function() {
+                            $(this).prop("checked", false);
+                            var tr = $(this).parent().parent();
+                            outRowEdit(tr);
+                        });
+                        //window.location.href = window.location.href
+                    }
+                }
+            })
+        }
+    });
+}
+//获取数据
+
 
 
 //推荐方法
@@ -204,4 +280,5 @@ $(document).ready(function() {
     editRecord();
     cancel();
     optionClick();
+    SaveData();
 });

@@ -6,7 +6,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 import re
-from django.db import models
+from cmdb import models
 
 
 def port_validate(value):
@@ -108,7 +108,7 @@ class AddRecordForm(forms.Form):
 		}
 	)
 
-	# def __init__(self, *args, **kwargs):
-	# 	super(AddRecordForm, self).__init__(*args, **kwargs)
-	# 	self.fields['group'].widget.choices = models.IDC.objects.all().order_by('id').values_list('id','display')
-	# 	self.fields['state'].widget.choices = models.BusinessUnit.objects.all().order_by('id').values_list('id','name')
+	def __init__(self, *args, **kwargs):
+		super(AddRecordForm, self).__init__(*args, **kwargs)
+		self.fields['group'].widget.choices = models.HostGroup.objects.all().order_by('id').values_list('id', 'group_name')
+		# self.fields['state'].widget.choices = models.HostInfo.objects.all().order_by('id').values_list('id', 'name')
