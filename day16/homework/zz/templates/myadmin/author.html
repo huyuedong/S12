@@ -1,0 +1,12 @@
+{% extends "master/myadmin/tableinfo_master.html" %}
+
+{%  block table_info %}
+    {% for i in obj %}
+    <tr>
+        <td style="width: 20px"><input type="checkbox" id={{ i.id }}></td>
+        <td><a href="{{ i.id }}/change/">{{ i.first_name }} {{ i.last_name }}</a></td>
+    </tr>
+    {% empty %}
+        <tr><td>0条数据。</td></tr>
+    {% endfor %}
+{% endblock %}

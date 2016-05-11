@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from cmdb import views
+from cmdb import urls as cmdb_urls
+from myadmin import urls as myadmin_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,7 +25,7 @@ urlpatterns = [
     url(r'^signup/$', views.signup),
     url(r'^index/$', views.index),
     url(r'^ajax_add/$', views.ajax_add),
-    url(r'^cmdb/', include("cmdb.urls")),
-    url(r'^myadmin/', include("myadmin.urls")),
+    url(r'^cmdb/', include(cmdb_urls)),
+    url(r'^myadmin/', include(myadmin_urls)),
     # url(r'.*', views.login),
 ]

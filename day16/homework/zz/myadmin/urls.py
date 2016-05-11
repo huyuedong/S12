@@ -18,4 +18,7 @@ from myadmin import views
 
 urlpatterns = [
     url(r'^$', views.index),
+    url(r'book/$', views.book),
+    url(r'publisher/$', views.publisher),
+    url(r'author/$', views.author),
 ]

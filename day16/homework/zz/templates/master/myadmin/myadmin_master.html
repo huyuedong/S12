@@ -11,6 +11,7 @@
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
         <link href="/static/styles/common.css" rel="stylesheet">
+        <link rel="stylesheet" href="/static/plugins/font-awesome-4.6.1/css/font-awesome.min.css" />
         <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
         <!--[if lt IE 9]>
         <script src="../../assets/js/ie8-responsive-file-warning.js"></script>
@@ -25,7 +26,7 @@
     <body>
         <nav class="navbar navbar-fixed-top bg-primary">
             <div class="navbar-header bg-blue">
-                <a class="navbar-brand bg-blue" href="#">Django MyAdmin</a>
+                <a class="navbar-brand bg-blue" href="/myadmin/">Django MyAdmin</a>
             </div>
             <!--/.nav-collapse -->
         </nav>
@@ -36,9 +37,11 @@
             </ol>
             </div>
         <div class="container">
-            <div class="container-header">
-                {% block page-header %}
-                {% endblock %}
+            <div class="row">
+                <div class="col-md-8">
+                    {% block page_header %}
+                    {% endblock %}
+                </div>
             </div>
             {% block page_info %}
             {% endblock %}

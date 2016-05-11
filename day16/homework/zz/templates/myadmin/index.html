@@ -1,26 +1,32 @@
 {% extends "master/myadmin/myadmin_master.html" %}
 
-{% block page-header %}
-    <h4>MyAdmin 管理界面</h4>
+{% block page_header %}
+    <h4 class="pull-left">MyAdmin 管理界面</h4>
 {% endblock %}
 
 {% block page_info %}
-    {% for db in obj %}
     <div class="row">
         <div class="col-md-8">
-            <table class="table table-hover">
-                <caption class="bg-primary"><a class="caption-a-info" href="#">{{ db.name }}</a></caption>
+            <table class="table table-hover table-bordered">
+                <caption class="bg-primary"><a class="caption-a-info" href="/myadmin/">MyAdmin</a></caption>
                 <tbody>
-                {% for table in db %}
                     <tr>
-                        <td><a href="/{{ table.name }}/">{{ table.name }}</a></td>
-                        <td><a href="/{{ db.name }}/{{ table.name }}/add/">添加</a></td>
-                        <td><a href="/{{ db.name }}/{{ table.name }}/edit/">修改</a></td>
+                        <td class="col-xs-9 col-sm-9 col-md-9"><a href="book/">书名</a></td>
+                        <td><a href="book/add/"><span class="fa fa-plus fa-fw"></span>添加</a></td>
+                        <td><a href="book/"><span class="fa fa-pencil fa-fw"></span>修改</a></td>
                     </tr>
-                {% endfor %}
+                    <tr>
+                        <td class="col-xs-9 col-sm-9 col-md-9"><a href="publisher/">出版商</a></td>
+                        <td><a href="publisher/add/"><span class="fa fa-plus fa-fw"></span>添加</a></td>
+                        <td><a href="publisher/"><span class="fa fa-pencil fa-fw"></span>修改</a></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-9 col-sm-9 col-md-9"><a href="author/">作者</a></td>
+                        <td><a href="author/add/"><span class="fa fa-plus fa-fw"></span>添加</a></td>
+                        <td><a href="author/"><span class="fa fa-pencil fa-fw"></span>修改</a></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    {% endfor %}
 {% endblock %}
