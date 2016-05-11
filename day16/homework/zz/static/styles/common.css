@@ -4,6 +4,12 @@
 body {
     background-color: #eee;
 }
+.bg-blue {
+    color: #eeeeee
+}
+.bg-blue:hover {
+    color: #ffffff;
+}
 .footer {
     position: absolute;
     bottom: 0;
@@ -13,4 +19,11 @@ body {
     height: 50px;
     border-top: solid 1px #337ab7;
     padding: 10px 0 10px;
+}
+.caption-a-info {
+    color: #eeeeee; !important;
+    padding-left: 10px; !important;
+}
+.caption-a-info:hover {
+    color: #ffffff; !important;
 }

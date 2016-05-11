@@ -79,19 +79,19 @@ WSGI_APPLICATION = 's12day16.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # },
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 's12day16',
-        'HOST': '',
-        'PORT': '',
-        'USER': 'root',
-        # TODO: clear the password before push!!!
-        'PASSWORD': '1234',
-    }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 's12day16',
+    #     'HOST': '',
+    #     'PORT': '',
+    #     'USER': 'root',
+    #     # TODO: clear the password before push!!!
+    #     'PASSWORD': '1234',
+    # }
 }
 
 

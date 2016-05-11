@@ -21,6 +21,7 @@ from app01 import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^admin/', views.myadmin),
     url(r'^articles/2003/$', views.special_case_2003),
     url(r'^articles/(?P<year>[0-9]{4})$', views.year_archive),
     url(r'^articles/([0-9]{4})$', views.year_archive),

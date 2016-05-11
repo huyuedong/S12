@@ -14,10 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from cmdb import views
+from myadmin import views
 
 urlpatterns = [
-    url(r'^index/$', views.add),
-    url(r'^ajax_add/$', views.ajax_add),
-    url(r'^ajax_req/$', views.ajax_req),
+    url(r'^$', views.index),
 ]

@@ -25,17 +25,18 @@ def md5_encryption(arg):
 		return None
 
 
+# 登录页
 def login(request):
 	obj = login_signup_form.LoginForm()
 
 	if request.method != "POST":
-		return render(request, "login.html", {"obj": obj})
+		return render(request, "cmdb/login.html", {"obj": obj})
 	# 把提交到的所有数据封装到LoginForm()
 	user_input_obj = login_signup_form.LoginForm(request.POST)
 	if not user_input_obj.is_valid():
 		error_msg = user_input_obj.errors.as_data()
 		# print(error_msg)
-		return render(request, "login.html", {"obj": user_input_obj, "errors": error_msg})
+		return render(request, "cmdb/login.html", {"obj": user_input_obj, "errors": error_msg})
 	login_data = user_input_obj.clean()
 	try:
 		user = models.UserInfo.objects.get(email=login_data.get("email"))
@@ -49,6 +50,7 @@ def login(request):
 	return redirect("/index/")
 
 
+# 注册页
 def signup(request):
 	obj = login_signup_form.SignupForm()
 	if request.method == "POST":
@@ -64,27 +66,30 @@ def signup(request):
 				print("两次密码不一致")
 		else:
 			error_msg = signup_obj.errors.as_data()
-			return render(request, "signup.html", {"obj": signup_obj, "errors": error_msg})
-	return render(request, "signup.html", {"obj": obj})
+			return render(request, "cmdb/signup.html", {"obj": signup_obj, "errors": error_msg})
+	return render(request, "cmdb/signup.html", {"obj": obj})
 
 
+# 主页
 def index(request):
 	host_data = models.HostInfo.objects.all()
 	# 多对多前台显示需要对数据进行处理
 	for i in host_data:
 		# 把每个主机的groups都查出来，然后在前端遍历显示出来
 		i.groups = i.groups.all()
-	return render(request, "index.html", {"obj": host_data})
+	return render(request, "cmdb/index.html", {"obj": host_data})
 
 
+# 添加页
 def add(request):
 	if request.method == "POST":
 		input_record_obj = add_record.AddRecordForm(request.POST)
-		return render(request, "add_record.html", {"obj": input_record_obj})
+		return render(request, "cmdb/add_record.html", {"obj": input_record_obj})
 	obj = add_record.AddRecordForm()
-	return render(request, "add_record.html", {"obj": obj})
+	return render(request, "cmdb/add_record.html", {"obj": obj})
 
 
+# 添加主机记录
 def ajax_add(request):
 	ret = {"status": True, "errors": ""}
 	try:
@@ -101,17 +106,13 @@ def ajax_add(request):
 		return HttpResponse(json.dumps(ret))
 
 
+# 保存修改
 def ajax_req(request):
 	ret = {"status": True, "errors": ""}
 	try:
-		# print(request.POST)
-		# request_dic = json.loads(request.POST.data_list)
 		request_dic = dict(request.POST)
-		# print(request_dic)
 		request_list = request_dic["data_list"]
-		# print(request_list[0])
 		modify_data = json.loads(request_list[0])
-		# print(modify_data)
 		operate_list = []
 		for i in modify_data:
 			id = i["id"]
@@ -132,11 +133,3 @@ def ajax_req(request):
 	finally:
 		return HttpResponse(json.dumps(ret))
 
-
-def test(request):
-	return render(request, "ajax_test.html")
-
-
-def ajax_test(request):
-	print(request.POST)
-	return HttpResponse("OK")

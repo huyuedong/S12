@@ -1,0 +1,26 @@
+{% extends "master/myadmin/myadmin_master.html" %}
+
+{% block page-header %}
+    <h4>MyAdmin 管理界面</h4>
+{% endblock %}
+
+{% block page_info %}
+    {% for db in obj %}
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <caption class="bg-primary"><a class="caption-a-info" href="#">{{ db.name }}</a></caption>
+                <tbody>
+                {% for table in db %}
+                    <tr>
+                        <td><a href="/{{ table.name }}/">{{ table.name }}</a></td>
+                        <td><a href="/{{ db.name }}/{{ table.name }}/add/">添加</a></td>
+                        <td><a href="/{{ db.name }}/{{ table.name }}/edit/">修改</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}
