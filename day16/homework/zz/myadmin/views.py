@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from myadmin import models
 import inspect
+from myadmin.forms import change_book
 
 # Create your views here.
 
@@ -32,3 +33,24 @@ def publisher(request):
 def author(request):
 	authors_data = models.Author.objects.all()
 	return render(request, "myadmin/author.html", {"table_name": "author", "obj": authors_data})
+
+
+def book_change(request, book_id):
+	book_data = models.Book.objects.get(id=book_id)
+	the_authors = book_data.authors.select_related()
+	the_publisher = book_data.publisher
+	all_authors = models.Author.objects.all()
+	all_publishers = models.Publisher.objects.all()
+	print(the_authors, the_publisher)
+	# r = models.Author.objects.all().order_by("id").values_list("id", "first_name", "last_name")
+	# print(r)
+	return render(request, "myadmin/book_change.html", {"i": book_data, "authors": all_authors, "publishers": all_publishers})
+	# return HttpResponse("ok")
+
+
+def publisher_change(request, publisher_id):
+	return HttpResponse("OK")
+
+
+def author_change(request, author_id):
+	return HttpResponse("ok")
