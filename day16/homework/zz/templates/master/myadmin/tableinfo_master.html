@@ -11,23 +11,19 @@
 {% endblock %}
 
 {% block page_info %}
-    <div class="row">
-        <div class="col-md-8">
-            <table class="table table-hover table-bordered">
-                <caption class="bg-primary"><a class="caption-a-info" href="#">{{ table_name }}管理界面</a></caption>
-                <tbody>
-                {%  block table_info %}
-                    {% for i in obj %}
-                    <tr>
-                        <td style="width: 20px"><input type="checkbox" id={{ i.id }}></td>
-                        <td><a href="{{ i.id }}/change/">《{{ i.title }}》</a></td>
-                    </tr>
-                    {% empty %}
-                        <tr><td>0条数据。</td></tr>
-                    {% endfor %}
-                {% endblock %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <table class="table table-hover table-bordered">
+        <caption class="bg-primary"><a class="caption-a-info" href="#">{{ table_name }}管理界面</a></caption>
+        <tbody>
+        {%  block table_info %}
+            {% for i in obj %}
+            <tr>
+                <td style="width: 20px"><input type="checkbox" id={{ i.id }}></td>
+                <td><a href="{{ i.id }}/change/">《{{ i.title }}》</a></td>
+            </tr>
+            {% empty %}
+                <tr><td>0条数据。</td></tr>
+            {% endfor %}
+        {% endblock %}
+        </tbody>
+    </table>
 {% endblock %}

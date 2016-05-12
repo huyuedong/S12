@@ -12,6 +12,7 @@
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
         <link href="/static/styles/common.css" rel="stylesheet">
         <link rel="stylesheet" href="/static/plugins/font-awesome-4.6.1/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" />
         <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
         <!--[if lt IE 9]>
         <script src="../../assets/js/ie8-responsive-file-warning.js"></script>
@@ -43,15 +44,22 @@
                     {% endblock %}
                 </div>
             </div>
-            {% block page_info %}
-            {% endblock %}
+            <div class="row">
+                <div class="col-md-8">
+                    {% block page_info %}
+                    {% endblock %}
+                </div>
+            </div>
         </div>
         <!-- /.container -->
         <!-- Bootstrap core JavaScript
     ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+        <script src="/static/scripts/jquery-2.2.3.js"></script>
         <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
+        <script src="/static/plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+        {% block dateplugin %}
+        
+        {% endblock %}
     </body>
 </html>

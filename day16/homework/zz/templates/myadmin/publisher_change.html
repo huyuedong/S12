@@ -1,0 +1,60 @@
+{% extends "master/myadmin/tableinfo_master.html" %}
+
+{% block breadcrumb %}
+    <li><a href="/myadmin/">Home</a></li>
+    <li><a href="/myadmin/publisher/">出版社</a></li>
+    <li class="active">{{ i }}</li>
+{% endblock %}
+
+{% block page_header %}
+    <h4 class="pull-left">修改出版社相关信息</h4>
+{% endblock %}
+
+{% block page_info %}
+{% if flag == "add" %}
+<form action="/myadmin/publisher/add/" method="post">
+{% else %}
+<form action="/myadmin/publisher/{{ i.id }}/change/" method="post">
+{% endif %}
+    <div class="row" style="margin: 10px 0">
+        <div class="col-md-2 text-left">出版社名：</div>
+        <div class="col-md-offset-2">
+            <input name="name" type="text" />
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0">
+        <div class="col-md-2 text-left">地址：</div>
+        <div class="col-md-offset-2">
+            <input name="address" type="text" />
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0">
+        <div class="col-md-2 text-left">城市：</div>
+        <div class="col-md-offset-2">
+            <input name="city" type="text" />
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0">
+        <div class="col-md-2 text-left">省：</div>
+        <div class="col-md-offset-2">
+            <input name="state_province" type="text" />
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0">
+        <div class="col-md-2 text-left">国家：</div>
+        <div class="col-md-offset-2">
+            <input name="country" type="text" />
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0">
+        <div class="col-md-2 text-left">网址：</div>
+        <div class="col-md-offset-2">
+            <input name="website" type="text" />
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0">
+        <input class="btn btn-danger pull-left" type="submit" value="删除">
+        <input class="btn btn-success pull-right" type="submit" value="保存">
+    </div>
+</form>
+{% endblock %}

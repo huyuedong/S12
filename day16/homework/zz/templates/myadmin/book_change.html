@@ -2,8 +2,8 @@
 
 {% block breadcrumb %}
     <li><a href="/myadmin/">Home</a></li>
-    <li><a href="/myadmin/book/">书名</a></li>
-    <li class="active">《{{ i }}》</li>
+    <li><a href="/myadmin/book/">书</a></li>
+    <li class="active">{{ i }}</li>
 {% endblock %}
 
 {% block page_header %}
@@ -11,52 +11,68 @@
 {% endblock %}
 
 {% block page_info %}
-<form>
+    {% if flag == "add" %}
+<form action="/myadmin/book/add/" method="post">
+    {% else %}
+<form action="/myadmin/book/{{ i.id }}/change/" method="post">
+{% endif %}
     <div class="row" style="margin: 10px 0">
-        <div class="container">
-            <div class="col-md-2 text-left">书名：</div>
-            <div class="col-md-offset-2">
-                <input type="text" />
-            </div>
+        <div class="col-md-2 text-left">书名：</div>
+        <div class="col-md-offset-2">
+            <input name="title" type="text" value="{{ i.title }}" />
         </div>
     </div>
     <div class="row" style="margin: 10px 0">
-        <div class="container">
-            <div class="col-md-2 text-left">作者：</div>
-            <div class="col-md-offset-2">
-                <select class="col-md-2" multiple>
-                {% for author in authors %}
-                    <option value="{{ author.id }}">{{ author.first_name }} {{ author.last_name }}</option>
+        <div class="col-md-2 text-left">作者：</div>
+        <div class="col-md-offset-2">
+            <select name="authors" multiple>
+            {% for author in authors %}
+                <option value="{{ author.id }}">{{ author.first_name }} {{ author.last_name }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0">
+        <div class="col-md-2 text-left">出版社：</div>
+        <div class="col-md-offset-2">
+            <select name="publisher">
+                {% for publisher in publishers %}
+                    {% if publisher.name == publisher_value.name %}
+                        <option value="{{ publisher.id }}" selected>{{ publisher.name }}</option>
+                    {% endif %}
+                <option value="{{ publisher.id }}">{{ publisher.name }}</option>
                 {% endfor %}
-                </select>
-            </div>
+            </select>
         </div>
     </div>
     <div class="row" style="margin: 10px 0">
-        <div class="container">
-            <div class="col-md-2 text-left">出版社：</div>
-            <div class="col-md-offset-2">
-                <select class="col-md-2">
-                    {% for publisher in publishers %}
-                    <option value="{{ publisher.id }}">{{ publisher.name }}</option>
-                    {% endfor %}
-                </select>
+        <div class="col-md-2 text-left">出版日期：</div>
+            <div class="input-append date" id="datetimepicker" data-date-format="yyyy-mm-dd">
+                <input name="publication_date" class="span2" size="16" type="text" value="{{ i.publication_date }}">
+                <span class="add-on"><i class="fa fa-times fa-fw"></i></span>
+                <span class="add-on"><i class="fa fa-calendar fa-fw"></i></span>
             </div>
-        </div>
     </div>
     <div class="row" style="margin: 10px 0">
-        <div class="container">
-            <div class="col-md-2 text-left">
-                出版日期：
-            </div>
-        </div>
-    </div>
-    <div class="row" style="margin: 10px 0">
-        <div class="container">
-            <input class="btn btn-danger pull-left" type="submit" value="删除">
-            <input class="btn btn-success pull-right" type="submit" value="保存">
-        </div>
+        <input class="btn btn-danger pull-left" type="submit" value="删除">
+        <input class="btn btn-success pull-right" type="submit" value="保存">
     </div>
 
 </form>
+{% endblock %}
+
+{% block dateplugin %}
+    <script src="/static/plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script>
+    $('#datetimepicker').datetimepicker({
+        format:"yyyy-mm-dd",
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+    </script>
 {% endblock %}

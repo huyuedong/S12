@@ -19,9 +19,12 @@ from myadmin import views
 urlpatterns = [
     url(r'^$', views.index),
     url(r'book/$', views.book),
+    url(r'book/add/$', views.book_add),
     url(r'book/(?P<book_id>\d+)/change/$', views.book_change),
     url(r'publisher/$', views.publisher),
+    url(r'publisher/add/$', views.publisher_add),
     url(r'publisher/(?P<publisher_id>\d+)/change/$', views.publisher_change),
     url(r'author/$', views.author),
+    url(r'author/add/$', views.author_add),
     url(r'author/(?P<author_id>\d+)/change/$', views.author_change),
 ]
