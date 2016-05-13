@@ -1,0 +1,29 @@
+{% extends "master/myadmin/myadmin_master.html" %}
+
+{% block breadcrumb %}
+    <li><a href="/myadmin/">Home</a></li>
+    <li><a href="/myadmin/{{ table_name }}/">{{ table_name }}</a></li>
+    <li class="active">{{ obj }}</li>
+{% endblock %}
+
+{% block page_header %}
+    <h4 class="pull-left">删除 {{ obj }}</h4>
+{% endblock %}
+
+{% block page_info %}
+    <div>
+        <p>与{{ obj }}关联的记录如下：</p>
+        {% for i in related_data %}
+        <ul>
+            <li>i</li>
+        </ul>
+        {% empty %}
+            <p>共有0条记录。</p>
+        {% endfor %}
+    </div>
+<form action="/myadmin/{{ table }}/{{ id }}/delete/" method="post">
+    <p>确定要删除么？</p>
+    <a href="/myadmin/{{ table_name }}/" class="btn btn-primary pull-left">取消</a>
+    <input class="btn btn-danger pull-right" type="submit" value="删除">
+</form>
+{% endblock %}

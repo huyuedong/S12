@@ -2,12 +2,16 @@
 
 {% block breadcrumb %}
     <li><a href="/myadmin/">Home</a></li>
-    <li><a href="/myadmin/book/">作者</a></li>
+    <li><a href="/myadmin/author/">作者</a></li>
     <li class="active">{{ i }}</li>
 {% endblock %}
 
 {% block page_header %}
-    <h4 class="pull-left">修改作者相关信息</h4>
+    {% if flag == "add" %}
+        <h4 class="pull-left">添加作者</h4>
+    {% else %}
+        <h4 class="pull-left">修改作者相关信息</h4>
+    {% endif %}
 {% endblock %}
 
 {% block page_info %}
@@ -19,23 +23,25 @@
     <div class="row" style="margin: 10px 0">
         <div class="col-md-2 text-left">名：</div>
         <div class="col-md-offset-2">
-            <input type="text" />
+            <input type="text" value="{{ i.first_name }}" />
         </div>
     </div>
     <div class="row" style="margin: 10px 0">
         <div class="col-md-2 text-left">姓：</div>
         <div class="col-md-offset-2">
-            <input type="text" />
+            <input type="text" value="{{ i.last_name }}" />
         </div>
     </div>
     <div class="row" style="margin: 10px 0">
         <div class="col-md-2 text-left">邮箱：</div>
         <div class="col-md-offset-2">
-            <input type="text" />
+            <input type="text" value="{{ i.email }}" />
         </div>
     </div>
     <div class="row" style="margin: 10px 0">
-        <input class="btn btn-danger pull-left" type="submit" value="删除">
+    {% if not flag == "add" %}
+        <a href="/myadmin/author/{{ i.id }}/delete/" class="btn btn-danger pull-left">删除</a>
+    {% endif %}
         <input class="btn btn-success pull-right" type="submit" value="保存">
     </div>
 

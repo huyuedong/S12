@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'author/$', views.author),
     url(r'author/add/$', views.author_add),
     url(r'author/(?P<author_id>\d+)/change/$', views.author_change),
+    url(r'(?P<the_table_name>\w+)/(?P<the_id>\d+)/delete/$', views.delete),
 ]

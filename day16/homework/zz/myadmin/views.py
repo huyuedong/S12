@@ -6,6 +6,7 @@ from myadmin.forms import change_book
 # Create your views here.
 
 
+# 找出模块里所有的类名
 def get_classes(arg):
 	classes = []
 	clsmembers = inspect.getmembers(arg, inspect.isclass)
@@ -57,15 +58,18 @@ def book_change(request, book_id):
 		the_publisher = book_data.publisher
 		# 找出数据库中所有的作者
 		all_authors = models.Author.objects.all()
-		print(all_authors)
 		# 找出数据库中所有的出版商
 		all_publishers = models.Publisher.objects.all()
-		print(the_authors, the_publisher)
-		print(book_data.publication_date)
 		return render(
 				request,
 				"myadmin/book_change.html",
-				{"i": book_data, "authors": all_authors, "publishers": all_publishers, "publisher_value": the_publisher}
+				{
+					"i": book_data,
+					"authors": all_authors,
+					"publishers": all_publishers,
+					"publisher_value": the_publisher,
+					"authors_value": the_authors,
+				}
 		)
 
 
@@ -102,6 +106,7 @@ def author_change(request, author_id):
 		return render(request, "myadmin/author_change.html", {"i": author_data})
 
 
+# 添加书籍
 def book_add(request):
 	if request.method == "POST":
 		try:
@@ -117,6 +122,7 @@ def book_add(request):
 		return render(request, "myadmin/book_change.html", {"authors": all_authors, "publishers": all_publishers, "flag": "add"})
 
 
+# 添加出版社
 def publisher_add(request):
 	if request.method == "POST":
 		try:
@@ -128,6 +134,7 @@ def publisher_add(request):
 		return render(request, "myadmin/publisher_change.html", {"flag": "add"})
 
 
+# 添加作者
 def author_add(request):
 	if request.method == "POST":
 		try:
@@ -137,3 +144,21 @@ def author_add(request):
 		return redirect("/myadmin/author/")
 	else:
 		return render(request, "myadmin/author_change.html", {"flag": "add"})
+
+
+# 删除
+def delete(request, the_table_name, the_id):
+	classes = get_classes(models)
+	the_class_name = the_table_name.capitalize()
+	if the_class_name in classes:
+		# 反射获取到具体的models对象
+		obj = getattr(models, the_class_name).objects.all().get(id=the_id)
+		print(obj)
+		for class_name in classes:
+			if class_name != the_class_name:
+				pass
+
+		return render(request, "myadmin/delete.html", {"table_name": the_table_name, "obj": obj})
+	else:
+		print("err")
+		return redirect(request, "/myadmin/{}/".format(the_table_name))
