@@ -19,12 +19,12 @@ def get_list(arg):
 	"""
 	list_tmp = []
 	for i in range(arg):
-		list_tmp.append(random.randrange(10))
+		list_tmp.append(random.randrange(1000000))
 	return list_tmp
 
 
 def quick_sort(original_list, start, end):
-	print(start, end)
+	# print(start, end)
 	"""
 
 	:param original_list: 待排序的列表
@@ -58,10 +58,10 @@ def quick_sort(original_list, start, end):
 
 
 if __name__ == "__main__":
-	l1 = get_list(6)
-	print(l1)
+	l1 = get_list(500000)
+	# print(l1)
 	start_time = time.time()
 	quick_sort(l1, 0, len(l1)-1)
 	end_time = time.time()
 	print("此次耗时：{} 秒。".format(end_time-start_time))
-	print(l1)
+	# print(l1)
