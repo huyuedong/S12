@@ -3,12 +3,12 @@
 # __author__ = "Q1mi"
 # Email: master@liwenzhou.com
 
-import random
-import time
-
 """
 快速排序
 """
+
+import random
+import time
 
 
 def get_list(arg):
@@ -24,12 +24,11 @@ def get_list(arg):
 
 
 def quick_sort(original_list, start, end):
-	# print(start, end)
 	"""
 
 	:param original_list: 待排序的列表
-	:param left: 第一个元素的索引
-	:param right: 最后一个元素的索引
+	:param start: 第一个元素的索引
+	:param end: 最后一个元素的索引
 	:return:
 	"""
 	# 参数输错直接退出
@@ -59,9 +58,7 @@ def quick_sort(original_list, start, end):
 
 if __name__ == "__main__":
 	l1 = get_list(500000)
-	# print(l1)
 	start_time = time.time()
 	quick_sort(l1, 0, len(l1)-1)
 	end_time = time.time()
 	print("此次耗时：{} 秒。".format(end_time-start_time))
-	# print(l1)

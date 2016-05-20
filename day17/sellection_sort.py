@@ -3,12 +3,12 @@
 # __author__ = "Q1mi"
 # Email: master@liwenzhou.com
 
-import random
-import time
-
 """
 选择排序
 """
+
+import random
+import time
 
 
 def get_list(arg):
@@ -40,9 +40,7 @@ def selection_sort(arg):
 
 if __name__ == "__main__":
 	l1 = get_list(50000)
-	print(l1)
 	start_time = time.time()
 	l2 = selection_sort(l1)
 	end_time = time.time()
 	print("此次耗时：{} 秒。".format(end_time-start_time))
-	print(l2)

@@ -32,11 +32,9 @@ def sift_down(lst, start, end):
 	:return: 调整为最大堆结构
 	"""
 	root = start
-	# print("root:{}".format(start))
 	while True:
 		child = 2 * root + 1  # 默认设置左子节点为最大子节点
-		# print("child:{}".format(child))
-		# 右子节点越界就跳出
+		# 子节点越界就跳出
 		if child > end:
 			break
 		# 如果右子节点没越界，并且右子节点的值比左子节点大
@@ -52,7 +50,6 @@ def sift_down(lst, start, end):
 		# 无需调整就退出
 		else:
 			break
-	# print(lst)
 
 
 def heap_sort(lst):
@@ -65,12 +62,8 @@ def heap_sort(lst):
 
 
 if __name__ == "__main__":
-	# list_demo = [16, 9, 21, 13, 4, 11, 3, 15, 8]
 	list_demo = get_list(500000)
 	start_time = time.time()
 	heap_sort(list_demo)
 	end_time = time.time()
 	print("此次耗时：{} 秒。".format(end_time-start_time))
-	# for k in range(len(list_demo)//2, -1, -1):
-	# 	sift_down(list_demo, k, len(list_demo)-1)
-	# print(list_demo)
