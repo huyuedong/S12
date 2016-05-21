@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>book_model_form</title>
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+</head>
+<body>
+    <div class="container">
+        <form action="" method="post">{% csrf_token %}
+            <div class="form-group">
+                {{ book_form }}
+                <input class="btn btn-default" type="submit" value="创建图书" />
+            </div>
+        </form>
+    </div>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</body>
+</html>
