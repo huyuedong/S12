@@ -14,4 +14,4 @@ def datetime_2_str(arg):
 	if arg:
 		return arg.strftime("%Y-%m-%d")
 	else:
-		return ""
+		return "ERROR"

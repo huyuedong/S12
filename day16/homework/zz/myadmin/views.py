@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, render_to_response
 from myadmin import models
 import inspect
 from myadmin.forms import change_book
@@ -51,26 +51,19 @@ def book_change(request, book_id):
 		return redirect("/myadmin/book/")
 	else:
 		# 根据url传过来的id找到那条数据
-		book_data = models.Book.objects.get(id=book_id)
+		book_obj = models.Book.objects.get(id=book_id)
 		# 找到书的作者们
-		the_authors = book_data.authors.select_related()
+		the_authors = book_obj.authors.all()
 		# 找到书的出版商
-		the_publisher = book_data.publisher
-		# 找出数据库中所有的作者
-		all_authors = models.Author.objects.all()
-		# 找出数据库中所有的出版商
-		all_publishers = models.Publisher.objects.all()
-		return render(
-				request,
-				"myadmin/book_change.html",
-				{
-					"i": book_data,
-					"authors": all_authors,
-					"publishers": all_publishers,
-					"publisher_value": the_publisher,
-					"authors_value": the_authors,
-				}
-		)
+		the_publisher = book_obj.publisher
+		author_selected = [author.id for author in the_authors]
+		f = change_book.BookFrom({
+			"title": book_obj.title,
+			"authors": author_selected,
+			"publisher": str(the_publisher.id),
+			"publication_date": book_obj.publication_date
+		},)
+		return render(request, "myadmin/book_change2.html", {"f": f})
 
 
 def publisher_change(request, publisher_id):

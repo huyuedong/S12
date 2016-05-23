@@ -30,15 +30,16 @@ class BookFrom(forms.Form):
 	)
 	publisher = forms.IntegerField(
 		widget=forms.Select(
-
 		),
 		error_messages={
 			"required": "出版社不能为空",
 		}
 	)
-	publication = forms.DateField(
-		widget=forms.SelectDateWidget(
-
+	publication_date = forms.DateField(
+		widget=forms.DateInput(
+			attrs={
+				"name": "publication_date",
+			}
 		),
 		error_messages={
 			"required": "出版日期不能为空",
@@ -47,6 +48,6 @@ class BookFrom(forms.Form):
 
 	def __init__(self, *args, **kwargs):
 		super(BookFrom, self).__init__(*args, **kwargs)
-		self.fields["authors"].widget.choices = models.Author.objects.all().order_by("id").values_list("id")
-		self.fields["publisher"].widget.choices = models.Author.objects.all().order_by("id").values_list("id")
-
+		self.fields["authors"].widget.choices = models.Author.objects.all().order_by("id").values_list("id", "first_name")
+		self.fields["publisher"].widget.choices = models.Publisher.objects.all().order_by("id").values_list("id", "name")
+		# self.fields["publisher"].widget._empty_value = [1]
