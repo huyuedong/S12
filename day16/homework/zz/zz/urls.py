@@ -18,6 +18,7 @@ from django.contrib import admin
 from cmdb import views
 from cmdb import urls as cmdb_urls
 from myadmin import urls as myadmin_urls
+from testapp import urls as test_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,5 +28,6 @@ urlpatterns = [
     url(r'^ajax_add/$', views.ajax_add),
     url(r'^cmdb/', include(cmdb_urls)),
     url(r'^myadmin/', include(myadmin_urls)),
+    url(r'^test/', include(test_urls))
     # url(r'.*', views.login),
 ]

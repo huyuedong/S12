@@ -2,51 +2,44 @@ from django.shortcuts import render, redirect, HttpResponse
 from cmdb.forms import login_signup_form
 from cmdb.forms import add_record
 from cmdb import models
-
+import logging
+from cmdb.auth import auth
 
 # Create your views here.
 
-import hashlib
 import json
 
-
-# 预设一个加密算法
-def md5_encryption(arg):
-	try:
-		# 将传入的参数按utf-8编码
-		m = arg.encode("utf-8")
-		# 创建添加自定义key的md5对象
-		h = hashlib.md5("alex".encode("utf-8"))
-		# 生成加密串
-		h.update(m)
-		# 返回十六进制的加密串
-		return h.hexdigest()
-	except TypeError:
-		return None
+logger = logging.getLogger(__name__)
 
 
-def login(request):
+# 登录
+def acc_login(request):
 	obj = login_signup_form.LoginForm()
 
 	if request.method != "POST":
-		return render(request, "login.html", {"obj": obj})
+		return render(request, "cmdb/login.html", {"obj": obj})
 	# 把提交到的所有数据封装到LoginForm()
 	user_input_obj = login_signup_form.LoginForm(request.POST)
 	if not user_input_obj.is_valid():
 		error_msg = user_input_obj.errors.as_data()
-		# print(error_msg)
-		return render(request, "login.html", {"obj": user_input_obj, "errors": error_msg})
+		return render(request, "cmdb/login.html", {"obj": user_input_obj, "errors": error_msg})
 	login_data = user_input_obj.clean()
-	try:
-		user = models.UserInfo.objects.get(email=login_data.get("email"))
-		print(user.__dict__)
-	except Exception as e:
-		raise Exception("用户名验证失败{}".format(login_data.get("email")))
-	print(user.password)
-	if user.password != md5_encryption(login_data.get("password", "")):
-		raise Exception("密码验证失败！")
-	# 	request.session["is_login"] = "true"
-	return redirect("/index/")
+	user = login_data.get("email", "")
+	pwd = login_data.get("password", "")
+	user_obj = auth.verify(user, pwd)
+	if user_obj:
+		request.session["IS_LOGIN"] = 1
+		request.session["NAME"] = user
+		request.session.set_expiry(600)
+		return redirect("/index")
+	else:
+		return render(request, "cmdb/login.html", {"errors": "用户名或密码错误"})
+
+
+# 注销
+def acc_logout(request):
+	del request.session["IS_LOGIN"]
+	return redirect("/login/")
 
 
 def signup(request):
@@ -64,23 +57,26 @@ def signup(request):
 				print("两次密码不一致")
 		else:
 			error_msg = signup_obj.errors.as_data()
-			return render(request, "signup.html", {"obj": signup_obj, "errors": error_msg})
-	return render(request, "signup.html", {"obj": obj})
+			return render(request, "cmdb/signup.html", {"obj": signup_obj, "errors": error_msg})
+	return render(request, "cmdb/signup.html", {"obj": obj})
 
 
+@auth.acc_auth
 def index(request):
 	host_data = models.HostInfo.objects.all()
-	return render(request, "index.html", {"obj": host_data})
+	return render(request, "cmdb/index.html", {"obj": host_data})
 
 
+@auth.acc_auth
 def add(request):
 	if request.method == "POST":
 		input_record_obj = add_record.AddRecordForm(request.POST)
-		return render(request, "add_record.html", {"obj": input_record_obj})
+		return render(request, "cmdb/add_record.html", {"obj": input_record_obj})
 	obj = add_record.AddRecordForm()
-	return render(request, "add_record.html", {"obj": obj})
+	return render(request, "cmdb/add_record.html", {"obj": obj})
 
 
+@auth.acc_auth
 def ajax_add(request):
 	ret = {"status": True, "errors": ""}
 	try:
@@ -97,6 +93,7 @@ def ajax_add(request):
 		return HttpResponse(json.dumps(ret))
 
 
+@auth.acc_auth
 def ajax_req(request):
 	ret = {"status": True, "errors": ""}
 	try:
@@ -130,7 +127,7 @@ def ajax_req(request):
 
 
 def test(request):
-	return render(request, "ajax_test.html")
+	return render(request, "cmdb/ajax_test.html")
 
 
 def ajax_test(request):

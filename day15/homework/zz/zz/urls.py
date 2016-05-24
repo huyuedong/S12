@@ -19,12 +19,13 @@ from cmdb import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^login/$', views.login),
+    url(r'^login/$', views.acc_login),
+    url(r'^logout/$', views.acc_logout),
     url(r'^signup/$', views.signup),
     url(r'^index/$', views.index),
     url(r'^ajax_add/$', views.ajax_add),
     url(r'^ajax_test/$', views.ajax_test),
     url(r'^test/$', views.test),
     url(r'^cmdb/', include("cmdb.urls")),
-    # url(r'.*', views.login),
+    url(r'.*', views.login),
 ]
