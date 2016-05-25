@@ -17,6 +17,10 @@ class UserProfile(models.Model):
 	def __str__(self):
 		return self.name
 
+	class Meta:
+		verbose_name = u"用户"
+		verbose_name_plural = u"用户"
+
 
 class School(models.Model):
 	name = models.CharField(u"校区名称", max_length=64, unique=True)
@@ -25,6 +29,10 @@ class School(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	class Meta:
+		verbose_name = u"校区"
+		verbose_name_plural = u"校区"
 
 
 class Course(models.Model):
@@ -35,6 +43,10 @@ class Course(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	class Meta:
+		verbose_name = u"课程"
+		verbose_name_plural = u"课程"
 
 
 class ClassList(models.Model):
@@ -56,7 +68,7 @@ class ClassList(models.Model):
 
 class Customer(models.Model):
 	qq = models.CharField(u"QQ号", max_length=64, unique=True)
-	name = models.CharField(u"姓名",max_length=32, blank=True, null=True)
+	name = models.CharField(u"姓名", max_length=32, blank=True, null=True)
 	phone = models.BigIntegerField(u'手机号', blank=True, null=True)
 	stu_id = models.CharField(u"学号", blank=True, null=True, max_length=64)
 	# id = models.CharField(u"身份证号",blank=True,null=True,max_length=128)
@@ -93,6 +105,10 @@ class Customer(models.Model):
 
 	def __str__(self):
 		return "{},{}".format(self.qq, self.name)
+
+	class Meta:
+		verbose_name = u"客户"
+		verbose_name_plural = u"客户"
 
 
 class ConsultRecord(models.Model):

@@ -17,9 +17,6 @@ from django.conf.urls import url
 from crm import views
 
 urlpatterns = [
-    # url(r'^add/$', views.add),
-    # url(r'^ajax_add/$', views.ajax_add),
-    # url(r'^ajax_req/$', views.ajax_req),
     url(r'^$', views.index),
-
+    url(r'(?i)(?P<model_name>\w+)/$', views.show),
 ]

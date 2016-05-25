@@ -30,7 +30,7 @@ def acc_login(request):
 	if user_obj:
 		request.session["IS_LOGIN"] = 1
 		request.session["NAME"] = user
-		request.session.set_expiry(600)
+		request.session.set_expiry(0)
 		return redirect("/index/")
 	else:
 		return render(request, "cmdb/login.html", {"obj": user_input_obj, "status": "用户名或密码错误"})
