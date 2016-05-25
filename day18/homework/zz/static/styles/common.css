@@ -17,3 +17,13 @@ body {
 .error_msg {
     color: red; !important;
 }
+caption {
+    margin-top: 10px;
+    background-color: #30a5ff;
+}
+.caption-a {
+    color: #FFFFFF;
+}
+.caption-a:hover {
+    color: #FFFFFF;
+}

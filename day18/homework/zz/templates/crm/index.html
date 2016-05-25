@@ -55,15 +55,19 @@
                 <div class="panel-heading">CRM管理系统</div>
                 <div class="table-responsive tab-content">
                     <table class="table table-bordered table-striped">
-
-                        {% for model in models %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><a href="/crm/{% get_model_name model %}/">{% get_verbose_name model %}</a></td>
-                            <td><a href="/crm/{% get_model_name model %}/add/"><span class="fa fa-plus fa-fw"></span>添加</a></td>
-                            <td><a href="/crm/{% get_model_name model %}/edit/"><span class="fa fa-pencil fa-fw"></span>编辑</a></td>
-                        </tr>
-                        {% endfor %}
+                        <caption>
+                            <a class="clearfix caption-a">CRM</a>
+                        </caption>
+                        <tbody>
+                            {% for model in models %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a href="/crm/{% get_model_name model %}/">{% get_verbose_name model %}</a></td>
+                                <td><a href="/crm/{% get_model_name model %}/add/"><span class="fa fa-plus fa-fw"></span>添加</a></td>
+                                <td><a href="/crm/{% get_model_name model %}/edit/"><span class="fa fa-pencil fa-fw"></span>编辑</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </div>
