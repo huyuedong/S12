@@ -2,6 +2,20 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.html import format_html
+
+course_choices = (
+	('LinuxL1',u'Linux中高级'),
+	('LinuxL2',u'Linux架构师'),
+	('Linux51',u'Linux中高级(51网络)'),
+	('LinuxL251',u'Linux中高级+架构合成班(51网络)'),
+	('PythonDevOps',u'Python自动化开发'),
+	('PythonFullStack',u'Python高级全栈开发'),
+	('PythonDevOps51',u'Python自动化开发(51网络)'),
+	('PythonFullStack51',u'Python全栈开发(51网络)'),
+	('BigDataDev',u"大数据开发课程"),
+	('Cloud',u"云计算课程"),
+)
 
 class_type_choices = (
 	('online', u'网络班'),
@@ -65,6 +79,10 @@ class ClassList(models.Model):
 		verbose_name_plural = u"班级列表"
 		unique_together = ("course", "course_type", "semester")
 
+	def get_student_num(self):
+		return "{}".format(self.customer_set.select_related().count())
+	get_student_num.short_description = u'学员数量'
+
 
 class Customer(models.Model):
 	qq = models.CharField(u"QQ号", max_length=64, unique=True)
@@ -102,6 +120,20 @@ class Customer(models.Model):
 	consultant = models.ForeignKey(UserProfile, verbose_name=u"课程顾问")
 	date = models.DateField(u"咨询日期", auto_now_add=True)
 	class_list = models.ManyToManyField('ClassList', verbose_name=u"已报班级", blank=True)
+
+	def colored_status(self):
+		global format_td
+		if self.status == "signed":
+			format_td =format_html('<span style="padding:2px;background-color:yellowgreen;color:white">已报名</span>')
+		elif self.status == "unregistered":
+			format_td =format_html('<span style="padding:2px;background-color:gray;color:white">未报名</span>')
+		elif self.status == "paid_in_full":
+			format_td =format_html('<span style="padding:2px;background-color:orange;color:white">学费已交齐</span>')
+
+		return format_td
+
+	def get_enrolled_course(self):
+		return " | ".join(["%s(%s)" %(i.get_course_display(),i.semester) for i in self.class_list.select_related()])
 
 	def __str__(self):
 		return "{},{}".format(self.qq, self.name)
@@ -149,6 +181,31 @@ class CourseRecord(models.Model):
 		verbose_name_plural = u"上课纪录"
 		unique_together = ('course', 'day_num')
 
+	def get_total_show_num(self):
+		total_shows = self.studyrecord_set.select_related().filter(record="checked").count()
+		return "<a href='../studyrecord/?course_record__id__exact=%s&record__exact=checked' >%s</a>" % (self.id,total_shows)
+
+	def get_total_late_num(self):
+		total_shows = self.studyrecord_set.select_related().filter(record="late").count()
+		return "<a href='../studyrecord/?course_record__id__exact=%s&record__exact=late' >%s</a>" % (self.id,total_shows)
+
+	def get_total_noshow_num(self):
+		total_shows = self.studyrecord_set.select_related().filter(record="noshow").count()
+		return "<a href='../studyrecord/?course_record__id__exact=%s&record__exact=noshow' >%s</a>" % (self.id,total_shows)
+
+	def get_total_leave_early_num(self):
+		total_shows = self.studyrecord_set.select_related().filter(record="leave_early").count()
+		return "<a href='../studyrecord/?course_record__id__exact=%s&record__exact=leave_early' >%s</a>" % (self.id,total_shows)
+
+	get_total_leave_early_num.allow_tags = True
+	get_total_noshow_num.allow_tags = True
+	get_total_late_num.allow_tags = True
+	get_total_show_num.allow_tags = True
+	get_total_show_num.short_description = u"出勤人数"
+	get_total_noshow_num.short_description = u"缺勤人数"
+	get_total_late_num.short_description = u"迟到人数"
+	get_total_leave_early_num.short_description = u"早退人数"
+
 
 class StudyRecord(models.Model):
 	course_record = models.ForeignKey(CourseRecord, verbose_name=u"第几天课程")
@@ -178,6 +235,21 @@ class StudyRecord(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	note = models.CharField("备注", max_length=255, blank=True, null=True)
 
+	color_dic = {
+		100: "#5DFC70",
+		90: "yellowgreen",
+		85:  "deepskyblue",
+		80: "#49E3F5",
+		70: "#1CD4C8",
+		60: "#FFBF00",
+		50: "#FF8000",
+		40: "#FE642E",
+		0: "red",
+		-1: "#E9E9E9",
+		-100: "#585858",
+		-1000: "darkred"
+	}
+
 	def __str__(self):
 		return "{},学员:{},纪录:{}, 成绩:{}".format(self.course_record, self.student.name, self.record, self.get_score_display())
 
@@ -185,3 +257,49 @@ class StudyRecord(models.Model):
 		verbose_name = '学员学习纪录'
 		verbose_name_plural = "学员学习纪录"
 		unique_together = ('course_record', 'student')
+
+	def colored_record(self):
+		color_dic = {
+			'checked': "#5DFC70",
+			'late': "#FFBF00",
+			'noshow': "#B40404",
+			'leave_early': "#FFFF00",
+		}
+		html_td = '<span style="padding:5px;background-color:%s;">%s</span>' %(
+			color_dic[self.record],self.get_record_display()
+		)
+		return html_td
+
+	def colored_score(self):
+		html_td = '<span style="padding:5px;background-color:%s;">%s</span>' %(
+			self.color_dic[self.score],self.score
+	)
+		return html_td
+
+	colored_score.allow_tags = True
+	colored_record.allow_tags = True
+	colored_score.short_description = u'成绩'
+	colored_record.short_description = u'签到情况'
+
+
+class PaymentRecord(models.Model):
+	customer = models.ForeignKey(Customer, verbose_name=u"客户")
+	course = models.CharField(u"课程名", choices=course_choices, max_length=64)
+	class_type = models.CharField(u"班级类型", choices=class_type_choices, max_length=64)
+	pay_type_choices = (
+		('deposit', u"订金/报名费"),
+		('tution', u"学费"),
+		('refund', u"退款"),
+	)
+	pay_type = models.CharField(u"费用类型", choices=pay_type_choices, max_length=64, default="deposit")
+	paid_fee = models.IntegerField(u"费用数额", default=0)
+	note = models.TextField(u"备注", blank=True, null=True)
+	date = models.DateTimeField(u"交款日期", auto_now_add=True)
+	consultant = models.ForeignKey(UserProfile, verbose_name=u"负责老师", help_text=u"谁签的单就选谁")
+
+	def __str__(self):
+		return u"{}, 类型:{},数额:{}".format(self.customer, self.pay_type, self.paid_fee)
+
+	class Meta:
+		verbose_name = u'交款纪录'
+		verbose_name_plural = u"交款纪录"

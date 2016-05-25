@@ -18,5 +18,6 @@ from crm import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'(?i)(?P<model_name>\w+)/$', views.show),
+    url(r'(?P<model_name>\w+)/$', views.show),
+
 ]

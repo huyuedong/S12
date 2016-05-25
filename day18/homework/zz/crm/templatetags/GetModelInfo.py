@@ -23,4 +23,4 @@ def get_verbose_name(object, field_name=None):
 
 @register.simple_tag
 def get_model_name(object):
-		return object.__class__.__name__.lower()
+		return object.__class__.__name__

@@ -28,6 +28,6 @@ urlpatterns = [
     url(r'^(?i)ajax_test/$', views.ajax_test),
     url(r'^(?i)test/$', views.test),
     url(r'^(?i)cmdb/', include("cmdb.urls")),
-    url(r'^(?i)crm/', include(crm_urls)),
+    url(r'^crm/', include(crm_urls)),
     url(r'.*', views.acc_login),
 ]
