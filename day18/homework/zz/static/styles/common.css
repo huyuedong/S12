@@ -27,3 +27,12 @@ caption {
 .caption-a:hover {
     color: #FFFFFF;
 }
+
+.my-option {
+    width: 20px;!important;
+}
+
+.my-toolbar {
+    margin-bottom: 10px;!important;
+}
+
