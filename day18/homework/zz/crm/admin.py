@@ -21,7 +21,8 @@ class CustomerAdmin(admin.ModelAdmin):
     filter_horizontal = ('class_list',)
     list_filter = ('source','course','class_type','status','date','consultant')
     inlines = [ConsultRecordInline,PaymentRecordInline]
-    list_display = ('id','qq','name','course','class_type','colored_status','get_enrolled_course','customer_note','consultant','date')
+    # list_display = ('id','qq','name','course','class_type','colored_status','get_enrolled_course','customer_note','consultant','date')
+    list_display = ('id','qq','name','course','class_type','colored_status','customer_note','consultant','date')
     # list_editable = ('status',)
     # def has_delete_permission(self, request, obj=None):
     #    return False
@@ -66,14 +67,12 @@ class PaymentRecordAdmin(admin.ModelAdmin):
 
 class CustomerInline(admin.TabularInline):
     model = models.Customer.class_list.through
-    # fields = ('class_type',)
-    # fields = ('class_type',)
 
 
 class ClassListAdmin(admin.ModelAdmin):
     list_display = ("course",'semester',"start_date","graduate_date","get_student_num")
     inlines = (CustomerInline,)
-    actions= ['view_grade',]
+    actions = ['view_grade',]
 
     def view_grade(modeladmin, request, queryset):
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
@@ -99,7 +98,6 @@ class CourseRecordAdmin(admin.ModelAdmin):
                     "get_total_leave_early_num",
                     )
     list_filter = ('course','day_num','teacher')
-
     actions = ['initialize_student_list']
 
     def initialize_student_list(modeladmin, request, queryset):
@@ -177,30 +175,6 @@ class StudyRecordAdmin(admin.ModelAdmin):
     get_stu_name.short_description = u'姓名'  # Renames column head
 
 
-class SurveryAdmin(admin.ModelAdmin):
-    filter_horizontal = ('questions',)
-    actions = ['check_survery_report',]
-
-    def check_survery_report(modeladmin, request, queryset):
-        selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
-        # ct = ContentType.objects.get_for_model(queryset.model)
-        if len(selected) > 1:
-            return HttpResponse(u"只能同时查看一个问卷的统计报告,请确保只选一个问卷再试!")
-        # return HttpResponseRedirect("/asset/new_assets/approval/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
-        return HttpResponseRedirect("/crm/survery/report/%s/" %(selected[0]))
-    check_survery_report.short_description = u"查看问卷报告"
-
-
-class SurveryRecordAdmin(admin.ModelAdmin):
-    # filter_horizontal = ('questions',)
-    list_display = ['survery','survery_item','score','suggestion','date']
-    list_filter = ['survery_item','survery']
-
-
-class CompliantAdmin(admin.ModelAdmin):
-    list_display = ('compliant_type','title','content','name','date','dealing_time','status','comment')
-    list_filter = ('compliant_type','status','date')
-
 admin.site.register(models.UserProfile)
 admin.site.register(models.Customer,CustomerAdmin)
 admin.site.register(models.ConsultRecord,ConsultRecordAdmin)
@@ -209,3 +183,13 @@ admin.site.register(models.ClassList,ClassListAdmin)
 admin.site.register(models.CourseRecord,CourseRecordAdmin)
 admin.site.register(models.StudyRecord,StudyRecordAdmin)
 
+
+from django.apps import apps
+from django.contrib.admin.sites import AlreadyRegistered
+
+models_list = apps.get_app_config("crm").get_models()
+for model in models_list:
+    try:
+        admin.register(model)
+    except AlreadyRegistered:
+        pass

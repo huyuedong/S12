@@ -1,4 +1,5 @@
 {% extends "master/main_master.html" %}
+{% load i18n %}
 {% load GetModelInfo %}
 {% block title %}
     CRM
@@ -11,7 +12,7 @@
 
 {% block page_name %}
     <li><a href="/crm/">CRM</a></li>
-    <li>{% get_verbose_name obj %}</li>
+    <li>{% get_verbose_name model %}</li>
 {% endblock %}
 
 {% block nav-menu %}
@@ -54,32 +55,35 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <p>选择 {% get_verbose_name obj %} 进行修改</p>
+                    <p>选择 {% get_verbose_name model %} 进行修改</p>
                 </div>
                 <div class="panel-body">
                     <div class="my-toolbar">
                         <div class="btn" role="button">action</div>
-                        <a class="btn btn-success pull-right" href="/crm/{% get_model_name obj %}/add/" role="button">添加 {% get_verbose_name obj %}</a>
+                        <a class="btn btn-success pull-right" href="/crm/{% get_model_name model %}/add/" role="button">添加{% get_verbose_name model %}</a>
                     </div>
                     <table class="table table-bordered table-striped">
                         <thead class="">
                             <tr>
                                 <th class="my-option bg-info"><input type="checkbox" id="check-all" /></th>
-                                <th class="text-center bg-info">{% get_verbose_name obj %}</th>
+                                <th class="text-center bg-info">{% get_verbose_name model %}</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for i in query_set %}
                             <tr>
                                 <td class="my-option"><input type="checkbox" id="i.id"/></td>
-                                <td><a href="/crm/{{ i.id }}/change/">{{ i.name }}</a></td>
+                                <td><a href="/crm/{% get_model_name model %}/{{ i.id }}/change/">
+                                    {% for area in i.area.all %} {{ area }}
+                                </a></td>
+                                    {% endbfor %}
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
                 <div class="panel-footer">
-                    {{ query_set|length }} {% get_verbose_name obj %}
+                    {{ query_set|length }} {% get_verbose_name model %}
                 </div>
             </div>
         </div>
