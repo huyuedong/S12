@@ -66,19 +66,18 @@
                         <thead class="">
                             <tr>
                                 <th class="my-option bg-info"><input type="checkbox" id="check-all" /></th>
-                                <th class="text-center bg-info">{% get_verbose_name model %}</th>
+                                {% for field in model_fields %}
+                                <th class="text-center bg-info">{{ field.verbose_name }}</th>
+                                {% endfor %}
                             </tr>
                         </thead>
                         <tbody>
-                        {% for i in query_set %}
-                            <tr>
-                                <td class="my-option"><input type="checkbox" id="i.id"/></td>
-                                <td><a href="/crm/{% get_model_name model %}/{{ i.id }}/change/">
-                                    {% for area in i.area.all %} {{ area }}
-                                </a></td>
-                                    {% endbfor %}
+                            {% for i in query_set %}
+                                <tr>
+                                    <td class="my-option"><input type="checkbox" id="i.id"/></td>
+                                    {% get_fields i %}
+                            {% endfor %}
                             </tr>
-                        {% endfor %}
                         </tbody>
                     </table>
                 </div>

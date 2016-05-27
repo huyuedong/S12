@@ -34,9 +34,10 @@ def index(request):
 def show(request, model_name_str):
 	username = request.session["NAME"]
 	model_name = get_obj(models, model_name_str)
+	model_fields = model_name._meta.fields
 	if model_name:
 		query_set = model_name.objects.all()
-		return render(request, "crm/show.html", {"query_set": query_set, "model": model_name, "username": username})
+		return render(request, "crm/show.html", {"query_set": query_set, "model": model_name, "model_fields": model_fields, "username": username})
 	else:
 		return HttpResponse("views.show ERROR")
 
