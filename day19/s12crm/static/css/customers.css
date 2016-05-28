@@ -1,0 +1,16 @@
+
+.signed {
+    background-color: dodgerblue;
+}
+
+.unregistered {
+    background-color: orangered;
+}
+
+.graduated {
+    background-color: green;
+}
+
+.drop-out {
+    background-color: whitesmoke;
+}

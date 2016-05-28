@@ -1,0 +1,89 @@
+{% extends "crm/dashboard.html" %}
+{% load get_show_pages %}
+{% load show_page %}
+
+{% block my-css %}
+<link href="/static/css/customers.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block page-header %}
+    客户信息列表
+{% endblock %}
+
+{% block page-content %}
+    <table class="table table-hover">
+        <thead>
+            <th>#</th>
+            <th>ID</th>
+            <th>QQ</th>
+            <th>姓名</th>
+            <th>渠道</th>
+            <th>咨询课程</th>
+            <th>课程类型</th>
+            <th>客户备注</th>
+            <th>状态</th>
+            <th>课程顾问</th>
+            <th>日期</th>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.qq }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.source }}</td>
+                <td>{{ customer.course }}</td>
+                <td>{{ customer.get_course_type_display }}</td>
+                <td>{{ customer.consult_memo|truncatechars:50 }}</td>
+                <td class="{{ customer.status }}">{{ customer.get_status_display }}</td>
+                <td>{{ customer.consultant }}</td>
+                <td>{{ customer.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+{#        <nav>#}
+{#          <ul class="pagination">#}
+{#              {% if customers.has_previous %}#}
+{#                <li class=""><a href="?page={{ customers.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>#}
+{#              {% else %}#}
+{#                <li class="disabled"><a href="" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>#}
+{#              {% endif %}#}
+{#          {% for page in customers.paginator.page_range %}#}
+{#              {% if page == customers.number %}#}
+{#                <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>#}
+{#              {% else %}#}
+{#                <li class=""><a href="?page={{ page }}">{{ page }}</a></li>#}
+{#              {% endif %}#}
+{#              {% get_show_pages customers.number page %}#}
+{#          {% endfor %}#}
+{##}
+{#          {% if customers.has_next %}#}
+{#              <li class=""><a href="?page={{ customers.next_page_number }}" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>#}
+{#          {% else %}#}
+{#            <li class="disabled"><a href="" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>#}
+{#          {% endif %}#}
+{##}
+{#          </ul>#}
+{#        </nav>#}
+        <nav>
+          <ul class="pagination">
+              {% show_pages customers 3 %}
+          </ul>
+        </nav>
+
+        <span>
+            {% if  customers.has_previous %}
+                <a href="?page={{ customers.previous_page_number }}">上一页</a>
+            {% endif %}
+        <span>
+            {{ customers.number }}/{{ customers.paginator.num_pages }}
+        </span>
+        {% if customers.has_next %}
+            <a href="?page={{ customers.next_page_number }}">下一页</a>
+        {% endif %}
+        </span>
+    </div>
+{% endblock %}

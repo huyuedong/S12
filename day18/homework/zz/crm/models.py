@@ -72,7 +72,7 @@ class ClassList(models.Model):
 	teachers = models.ManyToManyField(UserProfile, verbose_name=u"讲师")
 
 	def __str__(self):
-		return "{}({})".format(self.course.name, self.course_type)
+		return "{}({})".format(self.course.name, self.get_course_type_display())
 
 	class Meta:
 		verbose_name = u'班级列表'
@@ -132,8 +132,8 @@ class Customer(models.Model):
 
 		return format_td
 
-	# def get_enrolled_course(self):
-	# 	return " | ".join(["%s(%s)" %(i.get_course_display(),i.semester) for i in self.class_list.select_related()])
+	def get_enrolled_course(self):
+		return " | ".join(["%s(%s)" %(i.get_course_display(),i.semester) for i in self.class_list.select_related()])
 
 	def __str__(self):
 		return "{},{}".format(self.qq, self.name)
