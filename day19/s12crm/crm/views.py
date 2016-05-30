@@ -11,8 +11,9 @@ def index(request):
 
 def customers(request):
 	customers_set = models.Customer.objects.all()
-	# 生成分页实例
+	# 生成分页实例，第一个参数为query_set对象，第二个参数为每页显示多少条数据
 	paginator = Paginator(customers_set, 1)
+	# 从请求中获取页码
 	page = request.GET.get("page")
 	try:
 		customers_iter = paginator.page(page)
@@ -24,3 +25,4 @@ def customers(request):
 		customers_iter = paginator.page(paginator.num_pages)
 
 	return render(request, "crm/customers.html", {"customers": customers_iter})
+

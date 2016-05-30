@@ -44,30 +44,62 @@
         </tbody>
     </table>
     <div>
-{#        <nav>#}
-{#          <ul class="pagination">#}
-{#              {% if customers.has_previous %}#}
-{#                <li class=""><a href="?page={{ customers.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>#}
-{#              {% else %}#}
-{#                <li class="disabled"><a href="" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>#}
-{#              {% endif %}#}
-{#          {% for page in customers.paginator.page_range %}#}
-{#              {% if page == customers.number %}#}
-{#                <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>#}
-{#              {% else %}#}
-{#                <li class=""><a href="?page={{ page }}">{{ page }}</a></li>#}
-{#              {% endif %}#}
-{#              {% get_show_pages customers.number page %}#}
-{#          {% endfor %}#}
-{##}
-{#          {% if customers.has_next %}#}
-{#              <li class=""><a href="?page={{ customers.next_page_number }}" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>#}
-{#          {% else %}#}
-{#            <li class="disabled"><a href="" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>#}
-{#          {% endif %}#}
-{##}
-{#          </ul>#}
-{#        </nav>#}
+        <nav>
+            <ul class="pagination">
+            {% if customers.has_previous %}
+                <li class="">
+                    <a href="?page={{ customers.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for page in customers.paginator.page_range %}
+                {% if page == customers.number %}
+                    <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>
+                {% else %}
+                    <li class=""><a href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if customers.has_next %}
+                <li class="">
+                    <a href="?page={{ customers.next_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="" aria-label="Previous">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            </ul>
+        </nav>
+
+        <nav>
+            <ul class="pagination">
+            {% if customers.has_previous %}
+            <li class=""><a href="?page={{ customers.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+            {% else %}
+            <li class="disabled"><a href="" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+            {% endif %}
+            {% for page in customers.paginator.page_range %}
+                {% get_show_pages customers.number page %}
+            {% endfor %}
+            {% if customers.has_next %}
+              <li class=""><a href="?page={{ customers.next_page_number }}" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>
+            {% else %}
+            <li class="disabled"><a href="" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>
+            {% endif %}
+            </ul>
+        </nav>
+
         <nav>
           <ul class="pagination">
               {% show_pages customers 3 %}
