@@ -4,6 +4,7 @@ from cmdb.forms import add_record
 from cmdb import models
 import logging
 from cmdb.auth import auth
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here.
 
@@ -76,8 +77,16 @@ def signup(request):
 @auth.acc_auth
 def index(request):
 	host_data = models.HostInfo.objects.all()
+	paginator = Paginator(host_data, 5)
+	page = request.GET.get("page")
+	try:
+		query_data = paginator.page(page)
+	except PageNotAnInteger:
+		query_data = paginator.page(1)
+	except EmptyPage:
+		query_data = paginator.page(paginator.num_pages)
 	user = request.session["NAME"]
-	return render(request, "cmdb/index.html", {"username": user, "obj": host_data})
+	return render(request, "cmdb/index.html", {"username": user, "obj": query_data})
 
 
 @auth.acc_auth

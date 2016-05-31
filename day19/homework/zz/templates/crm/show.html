@@ -1,6 +1,7 @@
 {% extends "master/main_master.html" %}
 {% load i18n %}
 {% load GetModelInfo %}
+{% load show_page %}
 {% block title %}
     CRM
 {% endblock %}
@@ -80,6 +81,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    <nav>
+                        <ul class="pagination">
+                            {% show_pages query_set 3 %}
+                        </ul>
+                    </nav>
                 </div>
                 <div class="panel-footer">
                     {{ query_set|length }} {% get_verbose_name model %}

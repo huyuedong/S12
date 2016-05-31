@@ -1,4 +1,5 @@
 {% extends "master/main_master.html" %}
+{% load show_page %}
 {% block title %}
     主机
 {% endblock %}
@@ -64,6 +65,11 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    <nav>
+                        <ul class="pagination">
+                            {% show_pages obj 3 %}
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
