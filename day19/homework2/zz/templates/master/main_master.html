@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="主页">
+    <meta name="author" content="Q1mi">
+    <link rel="stylesheet" href="/static/plugins/font-awesome-4.6.1/css/font-awesome.min.css" />
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/styles/bootstrap.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="/static/styles/common.css" rel="stylesheet" />
+    {% block index_css %}{% endblock %}
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/static/scripts/html5shiv.js"></script>
+    <script src="/static/scripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">宇宙超级无敌管理系统</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user fa-fw" aria-hidden="true"></span>{{ username }}<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"><span class="fa fa-user" aria-hidden="true"></span> 个人信息</a></li>
+							<li><a href="#"><span class="fa fa-cog" aria-hidden="true"></span> 设置</a></li>
+							<li><a href="/logout/"><span class="fa fa-sign-out" aria-hidden="true"></span> 退出</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+        {% block nav-menu %}
+		<ul class="nav menu">
+			<li class="active"><a href="/index/"><span class="fa fa-tachometer fa-fw"></span> 主机</a></li>
+			<li><a href="/crm/"><span class="fa fa-bars fa-fw"></span> CRM </a></li>
+			<li><a href="#"><span class="fa fa-eye fa-fw"></span> 监控</a></li>
+			<li><a href="#"><span class="fa fa-cloud fa-fw"></span> 私有云</a></li>
+			<li><a href="#"><span class="fa fa-pencil fa-fw"></span> 输入</a></li>
+			<li><a href="#"><span class="fa fa-info fa-fw"></span> 通知</a></li>
+			<li class="parent ">
+				<a href="#">
+					<span class="fa fa-list fa-fw"></span> 下拉 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus fa-fw"></em></span>
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 1
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 2
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<span class="fa fa-share fa-fw"></span> 子项 3
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li role="presentation" class="divider"></li>
+			<li><a href="/login/"><span class="fa fa-user fa-fw"></span> 登录页</a></li>
+		</ul>
+        {% endblock %}
+	</div><!--/.sidebar-->
+
+    <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="/index/"><span class="fa fa-home fa-fw"></span></a></li>
+                {% block page_name %}{% endblock %}
+            </ol>
+        </div>
+        {% block page_info %}{% endblock %}
+    </div>
+
+    <script src="/static/scripts/jquery-2.2.3.js"></script>
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    {% block index_js %}{% endblock %}
+</body>
+</html>
