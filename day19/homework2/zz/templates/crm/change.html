@@ -1,0 +1,97 @@
+{% extends "master/main_master.html" %}
+{% load GetModelInfo %}
+{% block title %}
+    CRM
+{% endblock %}
+
+{% block index_css %}
+    <link href="/static/styles/main_common.css" rel="stylesheet" />
+    <link href="/static/styles/sweetalert.css" rel="stylesheet" />
+    <link href="/static/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block page_name %}
+    <li><a href="/crm/">CRM</a></li>
+    <li><a href="/crm/{% get_model_name model %}/">{% get_verbose_name model %}</a></li>
+    <li>{{ instance_name }}</li>
+{% endblock %}
+
+{% block nav-menu %}
+<ul class="nav menu">
+    <li><a href="/index/"><span class="fa fa-tachometer fa-fw"></span> 主机</a></li>
+    <li class="active" ><a href="/crm/"><span class="fa fa-bars fa-fw"></span> CRM </a></li>
+    <li><a href="#"><span class="fa fa-eye fa-fw"></span> 监控</a></li>
+    <li><a href="#"><span class="fa fa-cloud fa-fw"></span> 私有云</a></li>
+    <li><a href="#"><span class="fa fa-pencil fa-fw"></span> 输入</a></li>
+    <li><a href="#"><span class="fa fa-info fa-fw"></span> 通知</a></li>
+    <li class="parent ">
+        <a href="#">
+            <span class="fa fa-list fa-fw"></span> 下拉 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus fa-fw"></em></span>
+        </a>
+        <ul class="children collapse" id="sub-item-1">
+            <li>
+                <a class="" href="#">
+                    <span class="fa fa-share fa-fw"></span> 子项 1
+                </a>
+            </li>
+            <li>
+                <a class="" href="#">
+                    <span class="fa fa-share fa-fw"></span> 子项 2
+                </a>
+            </li>
+            <li>
+                <a class="" href="#">
+                    <span class="fa fa-share fa-fw"></span> 子项 3
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li role="presentation" class="divider"></li>
+    <li><a href="/login/"><span class="fa fa-user fa-fw"></span> 登录页</a></li>
+</ul>
+{% endblock %}
+
+{% block page_info %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>修改{% get_verbose_name model %}</p>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" action="" method="post">
+                        {% csrf_token %}
+                        {% for field in form_obj %}
+                            <div class="form-group">
+                            {% if field.field.required %}
+                                <label class="col-sm-2 control-label text-left">*{{ field.label }}</label>
+                            {% else %}
+                                <label class="col-sm-2 control-label text-left">{{ field.label }}</label>
+                            {% endif %}
+                                <div class="col-sm-9">
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <ul>
+                                        {% for error in field.errors %}
+                                            <li style="color: red">{{ error }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="col-sm-11">
+                            <input class="btn btn-primary" type="submit" value="保存" />
+                            <a href="/crm/{% get_model_name model %}/" class="btn btn-primary">取消</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block index_js %}
+    <script src="/static/plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/static/plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="/static/scripts/use_datetimepicker.js"></script>
+{% endblock %}

@@ -57,7 +57,8 @@ def get_fields(obj):
 
 
 @register.simple_tag
-def show_fields_value(obj, fields_list):
+def show_fields_value(obj, fields_list, model, record_id):
+	model_name = get_model_name(model)
 	global field_data
 	html_td = ""
 	for field in fields_list:
@@ -76,9 +77,16 @@ def show_fields_value(obj, fields_list):
 		else:  # 其他就直接显示
 			field_value = getattr(obj, field.name)
 			field_data = str(field_value)
-		if fields_list.index(field) == 1:
-			html_td += "<td name='{}'><a href='/a/'>{}</a></td>".format(field.name, field_data)
+
+		if fields_list.index(field) == 0:  # 默认将第一个字段加上a标签
+			html_td += "<td name='{}'><a href='/crm/{}/{}/change/'>{}</a></td>".format(field.name, model_name, record_id, field_data)
 		else:
 			html_td += "<td name='{}'>{}</td>".format(field.name, field_data)
 
 	return format_html(html_td)
+
+
+@register.simple_tag
+def show_fields_value2(obj, field):
+	if hasattr(obj, field.name):
+		return getattr(obj, field.name)

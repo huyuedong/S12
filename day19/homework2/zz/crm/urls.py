@@ -18,8 +18,8 @@ from crm import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^(?P<model_name_str>\w+)/$', views.show),
-    url(r'^(?P<model_name_str>\w+)/add/$', views.add),
-    url(r'^(?P<model_name_str>\w+)/(?P<obj_id>\d+)/change/$', views.change),
+    url(r'^(?P<model_name_str>\w+)/$', views.show, name="model_detail"),
+    url(r'^(?P<model_name_str>\w+)/add/$', views.add, name="add_model_detail"),
+    url(r'^(?P<model_name_str>\w+)/(?P<obj_id>\d+)/change/$', views.change, name="change_model_detail"),
 
 ]

@@ -14,6 +14,7 @@ def get_obj(object_arg, str_arg):
 	return obj
 
 
+# 根据model名获取对应的modelform
 def get_modelform(model_str, *args, **kwargs):
 	class MyForm(ModelForm):
 		class Meta:

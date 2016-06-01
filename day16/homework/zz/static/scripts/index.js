@@ -70,7 +70,7 @@ function inRowEdit(ths) {
         }
     })
 }
-__debugger__ = true;
+//__debugger__ = true;
 //全选
 function checkAll() {
     $("#check-all").click(function() {

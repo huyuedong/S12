@@ -76,7 +76,8 @@
                                 <tr>
                                     <td class="my-option"><input type="checkbox" id="i.id"/></td>
                                     {% for field in model_fields %}
-                                        {{ obj.field }}
+                                        <td>{% show_fields_value2 obj field %}</td>
+{#                                        {{ obj.field }}#}
                                     {% endfor %}
                                 </tr>
                             {% endfor %}

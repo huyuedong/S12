@@ -7,6 +7,7 @@
 {% block index_css %}
     <link href="/static/styles/main_common.css" rel="stylesheet" />
     <link href="/static/styles/sweetalert.css" rel="stylesheet" />
+    <link href="/static/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 {% endblock %}
 
 {% block page_name %}
@@ -57,18 +58,39 @@
                     <p>添加{% get_verbose_name model %}</p>
                 </div>
                 <div class="panel-body">
-                    <form action="" method="post">
-                        <div class="form-control">
+                    <form  class="form-horizontal" action="" method="post">
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="btn-group" role="group">
-                            <input class="btn btn-primary" type="submit" role="button" value="保存" />
-                            <a href="/crm/{% get_model_name model %}/" class="btn btn-primary" role="button">取消</a>
-                        </div>
+                        {% for field in form_obj %}
+                            <div class="form-group">
+                            {% if field.field.required %}
+                                <label class="col-sm-2 control-label text-left">*{{ field.label }}</label>
+                            {% else %}
+                                <label class="col-sm-2 control-label text-left">{{ field.label }}</label>
+                            {% endif %}
+                            <div class="col-sm-9">
+                                {{ field }}
+                                {% if field.errors %}
+                                    <ul>
+                                    {% for error in field.errors %}
+                                        <li style="color: red">{{ error }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            </div>
+                        {% endfor %}
+                        <div class="col-sm-11">
+                            <input class="btn btn-primary" type="submit" value="保存" />
+                            <a href="/crm/{% get_model_name model %}/" class="btn btn-primary">取消</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+{% block index_js %}
+    <script src="/static/plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/static/plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="/static/scripts/use_datetimepicker.js"></script>
 {% endblock %}

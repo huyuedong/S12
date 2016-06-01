@@ -1,6 +1,7 @@
 {% extends "master/main_master.html" %}
 {% load i18n %}
 {% load GetModelInfo %}
+{% load show_page %}
 {% block title %}
     CRM
 {% endblock %}
@@ -59,8 +60,17 @@
                 </div>
                 <div class="panel-body">
                     <div class="my-toolbar">
-                        <div class="btn" role="button">action</div>
-                        <a class="btn btn-success pull-right" href="/crm/{% get_model_name model %}/add/" role="button">添加{% get_verbose_name model %}</a>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="">要执行的动作:</label>
+                                <select class="form-control">
+                                    <option value="" selected="selected">------</option>
+                                    <option value="delete">删除选择的{% get_verbose_name model %}</option>
+                                </select>
+                                <input class="btn btn-default" type="submit" value="Go"/>
+                            </div>
+                            <a class="btn btn-success pull-right" href="/crm/{% get_model_name model %}/add/" role="button">添加{% get_verbose_name model %}</a>
+                        </form>
                     </div>
                     <table class="table table-bordered table-striped">
                         <thead class="">
@@ -74,12 +84,17 @@
                         <tbody>
                             {% for i in query_set %}
                                 <tr>
-                                    <td class="my-option"><input type="checkbox" id="i.id"/></td>
-                                    {% show_fields_value i model_fields %}
+                                    <td class="my-option"><input type="checkbox" id="{{ i.id }}"/></td>
+                                    {% show_fields_value i model_fields model i.id %}
                             {% endfor %}
                             </tr>
                         </tbody>
                     </table>
+                    <nav>
+                        <ul class="pagination">
+                            {% show_pages query_set 3 %}
+                        </ul>
+                    </nav>
                 </div>
                 <div class="panel-footer">
                     {{ query_set|length }} {% get_verbose_name model %}
