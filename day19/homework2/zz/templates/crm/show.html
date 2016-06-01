@@ -1,0 +1,90 @@
+{% extends "master/main_master.html" %}
+{% load i18n %}
+{% load GetModelInfo %}
+{% block title %}
+    CRM
+{% endblock %}
+
+{% block index_css %}
+    <link href="/static/styles/main_common.css" rel="stylesheet" />
+    <link href="/static/styles/sweetalert.css" rel="stylesheet" />
+{% endblock %}
+
+{% block page_name %}
+    <li><a href="/crm/">CRM</a></li>
+    <li>{% get_verbose_name model %}</li>
+{% endblock %}
+
+{% block nav-menu %}
+<ul class="nav menu">
+    <li><a href="/index/"><span class="fa fa-tachometer fa-fw"></span> 主机</a></li>
+    <li class="active" ><a href="/crm/"><span class="fa fa-bars fa-fw"></span> CRM </a></li>
+    <li><a href="#"><span class="fa fa-eye fa-fw"></span> 监控</a></li>
+    <li><a href="#"><span class="fa fa-cloud fa-fw"></span> 私有云</a></li>
+    <li><a href="#"><span class="fa fa-pencil fa-fw"></span> 输入</a></li>
+    <li><a href="#"><span class="fa fa-info fa-fw"></span> 通知</a></li>
+    <li class="parent ">
+        <a href="#">
+            <span class="fa fa-list fa-fw"></span> 下拉 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus fa-fw"></em></span>
+        </a>
+        <ul class="children collapse" id="sub-item-1">
+            <li>
+                <a class="" href="#">
+                    <span class="fa fa-share fa-fw"></span> 子项 1
+                </a>
+            </li>
+            <li>
+                <a class="" href="#">
+                    <span class="fa fa-share fa-fw"></span> 子项 2
+                </a>
+            </li>
+            <li>
+                <a class="" href="#">
+                    <span class="fa fa-share fa-fw"></span> 子项 3
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li role="presentation" class="divider"></li>
+    <li><a href="/login/"><span class="fa fa-user fa-fw"></span> 登录页</a></li>
+</ul>
+{% endblock %}
+
+{% block page_info %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>选择 {% get_verbose_name model %} 进行修改</p>
+                </div>
+                <div class="panel-body">
+                    <div class="my-toolbar">
+                        <div class="btn" role="button">action</div>
+                        <a class="btn btn-success pull-right" href="/crm/{% get_model_name model %}/add/" role="button">添加{% get_verbose_name model %}</a>
+                    </div>
+                    <table class="table table-bordered table-striped">
+                        <thead class="">
+                            <tr>
+                                <th class="my-option bg-info"><input type="checkbox" id="check-all" /></th>
+                                {% for field in model_fields %}
+                                <th class="text-center bg-info">{{ field.verbose_name }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in query_set %}
+                                <tr>
+                                    <td class="my-option"><input type="checkbox" id="i.id"/></td>
+                                    {% show_fields_value i model_fields %}
+                            {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    {{ query_set|length }} {% get_verbose_name model %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
