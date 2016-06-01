@@ -120,3 +120,6 @@ def change(request, model_name_str, obj_id):
 			{"form_obj": modelform_obj, "model": model_name, "instance_name": str(instance_obj), "username": username},
 	)
 
+
+def url_name_test(request, word1, word2):
+	return render(request, "crm/url_name_test.html")

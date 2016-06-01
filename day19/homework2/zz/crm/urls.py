@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^(?P<model_name_str>\w+)/$', views.show, name="model_detail"),
     url(r'^(?P<model_name_str>\w+)/add/$', views.add, name="add_model_detail"),
     url(r'^(?P<model_name_str>\w+)/(?P<obj_id>\d+)/change/$', views.change, name="change_model_detail"),
+    url(r'^(?P<word1>\w+)/(?P<word2>\w+)/from/Q1mi/$', views.url_name_test, name="url_name_test"),
 
 ]

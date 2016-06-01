@@ -19,5 +19,5 @@ from crm import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^customers/$', views.customers),
+    url(r'^customers/$', views.customers, name="customer_list"),
 ]

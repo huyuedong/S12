@@ -25,5 +25,6 @@ def get_modelform(model_str, *args, **kwargs):
 			super(MyForm, self).__init__(*args, **kwargs)
 			for field_name in self.base_fields:
 				field = self.base_fields[field_name]
+				# field.widget.attrs["class"] = "form-control"
 				field.widget.attrs.update({"class": "form-control"})
 	return MyForm(*args, **kwargs)
