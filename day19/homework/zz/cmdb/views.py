@@ -35,14 +35,17 @@ def acc_login(request):
 			request.session["IS_LOGIN"] = 1
 			request.session["NAME"] = user.username
 			request.session.set_expiry(0)
-			return redirect("/index/")
+			return redirect("/crm/")
 	else:
 		return render(request, "cmdb/login.html", {"obj": user_input_obj, "status": "用户名或密码错误"})
 
 
 # 注销
 def acc_logout(request):
-	del request.session["IS_LOGIN"]
+	try:
+		del request.session["IS_LOGIN"]
+	except KeyError as e:
+		print(e)
 	logout(request)
 	return redirect("/login/")
 

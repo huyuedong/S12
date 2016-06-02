@@ -35,7 +35,11 @@ class UserProfile(models.Model):
 		verbose_name = u"用户"
 		verbose_name_plural = u"用户"
 		permissions = (
-			("view_", "可以查看"),
+			("view_index", "可以查看crm首页"),
+			("view_record_details", "可以查看详情"),
+			("change_record_details", "可以修改详情"),
+			("add_record", "可以添加"),
+			("delete_record", "可以删除"),
 		)
 
 
@@ -122,7 +126,7 @@ class Customer(models.Model):
 	status = models.CharField(u"状态", choices=status_choices, max_length=64, default=u"unregistered", help_text=u"选择客户此时的状态")
 	consultant = models.ForeignKey(UserProfile, verbose_name=u"课程顾问")
 	date = models.DateField(u"咨询日期", auto_now_add=True)
-	class_list = models.ManyToManyField('ClassList', verbose_name=u"已报班级", blank=True)
+	class_list = models.ManyToManyField('ClassList', verbose_name=u"已报班级", null=True, blank=True)
 
 	def colored_status(self):
 		global format_td
@@ -134,16 +138,18 @@ class Customer(models.Model):
 			format_td = format_html('<span style="padding:2px;background-color:orange;color:white">学费已交齐</span>')
 
 		return format_td
+	colored_status.short_description = "报名状态"
 
 	def get_enrolled_course(self):
 		enrolled_course_list = [
-			"{}[{}]-{}".format(
-				i.get_course_display(),
+			"{}({}):{}".format(
+				i.course,
 				i.get_course_type_display(),
 				i.semester
 			) for i in self.class_list.select_related()
 		]
 		return " | ".join(enrolled_course_list)
+	get_enrolled_course.short_description = "已报班级"
 
 	def __str__(self):
 		return "{},{}".format(self.qq, self.name)

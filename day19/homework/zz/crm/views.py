@@ -4,7 +4,7 @@ from crm import models
 from crm.forms import get_modelform
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
-
+from crm import permissions
 
 # Create your views here.
 
@@ -27,16 +27,18 @@ def get_fields_list(obj):
 	return ret
 
 
+# @permissions.check_permission
 @login_required
 def index(request):
-	user = request.session["NAME"]
+	user = request.user
 	models_list = apps.get_app_config("crm").get_models()
 	return render(request, "crm/index.html", {"models": models_list, "username": user})
 
 
+@permissions.check_permission
 @login_required
 def show(request, model_name_str):
-	username = request.session["NAME"]
+	username = request.user
 	model_name = get_obj(models, model_name_str)
 	model_fields = get_fields_list(model_name)
 	if model_name:
@@ -59,10 +61,11 @@ def show(request, model_name_str):
 
 
 # 添加记录
+@permissions.check_permission
 @login_required
 def add(request, model_name_str):
 	global form_obj
-	username = request.session["NAME"]  # 从session中获得登录的账号
+	username = request.user
 	form_obj = get_modelform.get_modelform(model_name_str)
 	model_name = get_obj(models, model_name_str)
 	if request.method == "POST":
@@ -86,9 +89,10 @@ def add(request, model_name_str):
 
 
 # 修改记录
+@permissions.check_permission
 @login_required
 def change(request, model_name_str, obj_id):
-	username = request.session["NAME"]
+	username = request.user
 	id_value = int(obj_id)  # 获得点击的记录ID
 	model_name = get_obj(models, model_name_str)  # 得到该记录对应的model对象
 	instance_obj = model_name.objects.get(id=id_value)  # 从数据中取到该记录的model实例

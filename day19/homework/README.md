@@ -9,6 +9,7 @@
 #### 功能介绍：
 * 类似Django Admin的界面
 * 实现展示、搜索、过滤等功能
+* 自定义权限管理
 
 
 #### 使用方法：
@@ -33,10 +34,13 @@
            ├── admin.py #
            ├── apps.py #
            ├── models.py #数据库模型文件
+           ├── permissions.py #权限验证文件
            ├── tests.py #
            ├── urls.py #url路由文件
            └── views.py #视图文件
 
 #### 备注：
-* 就写了个展示
-* 其他的没来得及写
+* 测试账号：
+    * teachers group: alex alex1234
+    * salesman group: zhangsan alex1234
+    * students group: liwenzhou alex1234
