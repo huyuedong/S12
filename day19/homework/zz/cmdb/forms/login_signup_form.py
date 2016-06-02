@@ -8,16 +8,17 @@ from django.core.exceptions import ValidationError
 
 
 class LoginForm(forms.Form):
-	email = forms.EmailField(
+	username = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				"type": "email",
+				"type": "username",
 				"class": "form-control",
-				"placeholder": "邮箱",
+				"placeholder": "用户名",
+				"autofocus": "",
 			}
 		),
 		error_messages={
-			"required": "邮箱不能为空",
+			"required": "用户名不能为空",
 		}
 	)
 	password = forms.CharField(
@@ -46,16 +47,16 @@ def repeat_validate():
 
 
 class SignupForm(forms.Form):
-	email = forms.EmailField(
+	username = forms.CharField(
 		widget=forms.TextInput(
 			attrs={
-				"type": "email",
+				"type": "username",
 				"class": "form-control",
-				"placeholder": "请输入邮箱",
+				"placeholder": "请输入用户名",
 			}
 		),
 		error_messages={
-			"required": "邮箱不能为空",
+			"required": "用户名不能为空",
 		}
 	)
 	password = forms.CharField(

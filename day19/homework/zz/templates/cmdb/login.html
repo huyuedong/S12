@@ -8,9 +8,9 @@
     <form id="input-form" class="form-signin" action="/login/" method="post">
         <h2 class="form-signin-heading">请登录</h2>
         <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i></span>
-            <label for="inputEmail" class="sr-only">邮箱</label>
-              {{ obj.email }}
+            <span class="input-group-addon"><i class="fa fa-user fa-fw" aria-hidden="true"></i></span>
+            <label for="inputEmail" class="sr-only">用户名</label>
+              {{ obj.username }}
         </div>
         {% show_error_msg errors.email %}
         <div class="input-group">

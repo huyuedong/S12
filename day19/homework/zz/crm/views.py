@@ -1,8 +1,7 @@
 from django.shortcuts import render, HttpResponse, Http404, redirect
-from cmdb.auth import auth
 from django.apps import apps
 from crm import models
-from crm.forms import model_forms, get_modelform
+from crm.forms import get_modelform
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
 
@@ -28,23 +27,21 @@ def get_fields_list(obj):
 	return ret
 
 
-@auth.acc_auth
+@login_required
 def index(request):
 	user = request.session["NAME"]
 	models_list = apps.get_app_config("crm").get_models()
-	print(models_list)
 	return render(request, "crm/index.html", {"models": models_list, "username": user})
 
 
-@auth.acc_auth
+@login_required
 def show(request, model_name_str):
-	print("=========>{}".format(request.user))
 	username = request.session["NAME"]
 	model_name = get_obj(models, model_name_str)
 	model_fields = get_fields_list(model_name)
 	if model_name:
 		query_set = model_name.objects.all()
-		paginator = Paginator(query_set, 2)  # 分页显示记录，每页2条记录
+		paginator = Paginator(query_set, 5)  # 分页显示记录，每页5条记录
 		page = request.GET.get("page")
 		try:
 			ret = paginator.page(page)
@@ -62,18 +59,16 @@ def show(request, model_name_str):
 
 
 # 添加记录
-@auth.acc_auth
+@login_required
 def add(request, model_name_str):
 	global form_obj
 	username = request.session["NAME"]  # 从session中获得登录的账号
 	form_obj = get_modelform.get_modelform(model_name_str)
 	model_name = get_obj(models, model_name_str)
-	print(form_obj)
 	if request.method == "POST":
 		request_form = get_modelform.get_modelform(model_name_str, request.POST)  # 获取提交的form数据
 		if request_form.is_valid():
 			request_form.save()
-			# request_data = request_form.clean()
 			base_url = "/".join(request.path.split("/")[:-2])  # 截取保存成功后要跳转的url
 			redirect_url = "{}/".format(base_url)
 			return redirect(redirect_url)
@@ -91,7 +86,7 @@ def add(request, model_name_str):
 
 
 # 修改记录
-@auth.acc_auth
+@login_required
 def change(request, model_name_str, obj_id):
 	username = request.session["NAME"]
 	id_value = int(obj_id)  # 获得点击的记录ID
@@ -105,8 +100,6 @@ def change(request, model_name_str, obj_id):
 		if request_form.is_valid():
 			print("验证成功！")
 			request_form.save()
-			# request_data = request_form.clean()
-			# print(request_data)
 			base_url = "/".join(request.path.split("/")[:-3])  # 截取保存成功后要跳转的url
 			redirect_url = "{}/".format(base_url)
 			return redirect(redirect_url)

@@ -70,7 +70,7 @@ class CustomerInline(admin.TabularInline):
 
 
 class ClassListAdmin(admin.ModelAdmin):
-    list_display = ("course",'semester',"start_date","graduate_date","get_student_num")
+    list_display = ("course", "course_type", 'semester',"start_date","graduate_date","get_student_num")
     inlines = (CustomerInline,)
     actions = ['view_grade',]
 

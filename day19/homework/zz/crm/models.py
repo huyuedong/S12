@@ -35,7 +35,7 @@ class UserProfile(models.Model):
 		verbose_name = u"用户"
 		verbose_name_plural = u"用户"
 		permissions = (
-			("can_view_"),
+			("view_", "可以查看"),
 		)
 
 
@@ -100,7 +100,7 @@ class Customer(models.Model):
 		('agent', u"招生代理"),
 		('others', u"其它"),
 	)
-	source = models.CharField(u'客户来源',max_length=64, choices=source_type,default='qq')
+	source = models.CharField(u'客户来源', max_length=64, choices=source_type, default='qq')
 	referral_from = models.ForeignKey(
 		'self',
 		verbose_name=u"转介绍自学员",
@@ -127,16 +127,23 @@ class Customer(models.Model):
 	def colored_status(self):
 		global format_td
 		if self.status == "signed":
-			format_td =format_html('<span style="padding:2px;background-color:yellowgreen;color:white">已报名</span>')
+			format_td = format_html('<span style="padding:2px;background-color:yellowgreen;color:white">已报名</span>')
 		elif self.status == "unregistered":
-			format_td =format_html('<span style="padding:2px;background-color:gray;color:white">未报名</span>')
+			format_td = format_html('<span style="padding:2px;background-color:gray;color:white">未报名</span>')
 		elif self.status == "paid_in_full":
-			format_td =format_html('<span style="padding:2px;background-color:orange;color:white">学费已交齐</span>')
+			format_td = format_html('<span style="padding:2px;background-color:orange;color:white">学费已交齐</span>')
 
 		return format_td
 
 	def get_enrolled_course(self):
-		return " | ".join(["%s(%s)" %(i.get_course_type_display(),i.semester) for i in self.class_list.select_related()])
+		enrolled_course_list = [
+			"{}[{}]-{}".format(
+				i.get_course_display(),
+				i.get_course_type_display(),
+				i.semester
+			) for i in self.class_list.select_related()
+		]
+		return " | ".join(enrolled_course_list)
 
 	def __str__(self):
 		return "{},{}".format(self.qq, self.name)
@@ -235,7 +242,7 @@ class StudyRecord(models.Model):
 		(-1000, 'FAIL'),
 	)
 	score = models.IntegerField("本节成绩", choices=score_choices, default=-1)
-	date = models.DateTimeField(auto_now_add=True)
+	date = models.DateTimeField("日期", auto_now_add=True)
 	note = models.CharField("备注", max_length=255, blank=True, null=True)
 
 	color_dic = {
@@ -269,13 +276,13 @@ class StudyRecord(models.Model):
 			'leave_early': "#FFFF00",
 		}
 		html_td = '<span style="padding:5px;background-color:%s;">%s</span>' %(
-			color_dic[self.record],self.get_record_display()
+			color_dic[self.record], self.get_record_display()
 		)
 		return html_td
 
 	def colored_score(self):
 		html_td = '<span style="padding:5px;background-color:%s;">%s</span>' %(
-			self.color_dic[self.score],self.score
+			self.color_dic[self.score], self.score
 	)
 		return html_td
 

@@ -5,6 +5,7 @@ from cmdb import models
 import logging
 from cmdb.auth import auth
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -25,14 +26,16 @@ def acc_login(request):
 		error_msg = user_input_obj.errors.as_data()
 		return render(request, "cmdb/login.html", {"obj": user_input_obj, "errors": error_msg})
 	login_data = user_input_obj.clean()
-	user = login_data.get("email", "")
-	pwd = login_data.get("password", "")
-	user_obj = auth.verify(user, pwd)
-	if user_obj:
-		request.session["IS_LOGIN"] = 1
-		request.session["NAME"] = user
-		request.session.set_expiry(0)
-		return redirect("/index/")
+	username = login_data.get("username", "")
+	password = login_data.get("password", "")
+	user = authenticate(username=username, password=password)
+	if user is not None:
+		if user.is_active:
+			login(request, user)
+			request.session["IS_LOGIN"] = 1
+			request.session["NAME"] = user.username
+			request.session.set_expiry(0)
+			return redirect("/index/")
 	else:
 		return render(request, "cmdb/login.html", {"obj": user_input_obj, "status": "用户名或密码错误"})
 
@@ -40,6 +43,7 @@ def acc_login(request):
 # 注销
 def acc_logout(request):
 	del request.session["IS_LOGIN"]
+	logout(request)
 	return redirect("/login/")
 
 
@@ -52,13 +56,12 @@ def signup(request):
 			signup_data = signup_obj.clean()
 			if signup_data.get("password") == signup_data.get("repeat_password"):
 				signup_data.pop("repeat_password")
-				signup_data["password"] = auth.md5_encryption(signup_data.get("password"))
 				# 如何判断注册成功与失败？？？
 				try:
-					sign_status = models.UserInfo.objects.create(**signup_data)
+					user = User.objects.create_user(**signup_data)
 					# 如果没有错误信息就表明注册成功，跳转到登陆页面。
-					if sign_status:
-						print("用户：{} 注册成功。".format(signup_data.get("email")))
+					if user:
+						print("用户：{} 注册成功。".format(signup_data.get("username")))
 						return redirect("/login/")
 				except Exception as e:
 					print(e)
