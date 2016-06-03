@@ -53,9 +53,9 @@ def sift_down(lst, start, end):
 
 
 def heap_sort(lst):
-	for i in range(len(lst)//2, -1, -1):
+	for i in range(len(lst)//2, -1, -1):  # 从最后一个有子节点的元素开始调整最大堆
 		sift_down(lst, i, len(lst)-1)
-	for j in range(len(lst)-1, 0, -1):
+	for j in range(len(lst)-1, 0, -1):  # 将最大的值放到最后，堆-1，继续排序
 		lst[0], lst[j] = lst[j], lst[0]
 		sift_down(lst, 0, j-1)
 	return lst
