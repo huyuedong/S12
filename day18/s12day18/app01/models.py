@@ -44,6 +44,13 @@ class Book(models.Model):
 	status = models.CharField(choices=status_choice, max_length=32, default="producing")
 
 	def colored_status(self):
+		"""
+		在前端给状态字段根据不同状态添加不同的背景色
+		Django 1.7之后需要format_html将字符串渲染一下
+		用该函数名（colored_status）替换在model Admin中list_display中的status即可。
+		:return:
+		"""
+		global format_td
 		if self.status == "published":
 			format_td = format_html('<span style="padding:2px;background-color:yellowgreen;color:white">已出版</span>')
 		elif self.status == "producing":
@@ -52,7 +59,7 @@ class Book(models.Model):
 			format_td = format_html('<span style="padding:2px;background-color:orange;color:white">禁书</span>')
 		return format_td
 
-	colored_status.short_description = "status"
+	colored_status.short_description = "状态"
 
 	def __str__(self):
 		return "《{}》".format(self.title)
