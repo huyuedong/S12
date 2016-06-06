@@ -11,12 +11,11 @@
             {{ article_obj.title }}
         </h1>
         <div class="article-author">
-            <span>作者:{{ article_obj.author.name }}</span>
+            <span>作者:{{ article_obj.author.name }}|</span>
             <span>{{ article_obj.pub_date }}</span>
             <span>
                 <span class="fa fa-comment-o" aria-hidden="true"></span>
-                {% filter_comment article_obj as comments %}
-                {{ comments.comment_count }}
+                {{ article_obj.get_comments_num }}
             </span>
         </div>
         <div class="article-content">
@@ -26,21 +25,36 @@
             </div>
         </div>
         <div class="article-menu">
-            <a class="btn btn-info btn-lg" type="button">打赏</a>
-            <a class="btn btn-success btn-lg pull-right" type="button">
-                <span class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></span>
-                <span class="badge">4</span>
-            </a>
+            <div class="row">
+                <a class="btn btn-exceptional" type="button">打赏</a>
+                <a class="btn btn-thumb pull-right" type="button">
+                    <span class="fa fa-thumbs-o-up fa-lg" aria-hidden="true"></span>
+                    <span class="">4</span>
+                </a>
+            </div>
         </div>
-        <div class="comment-box">
-            {% if request.user.is_authenticated %}
-                 <textarea class="form-control" rows="3"></textarea>
-                 <button type="button" style="margin-top: 10px" class="btn btn-success pull-right">提交</button>
-            {% else %}
-                <div class="jumbotron">
-                  <h4 class="text-center"><a class="btn-link" href="{% url 'login' %}?next={{ request.path }}">登陆</a>后评论</h4>
+        <div class="tag-box"></div>
+        <div class="comment-wrapper">
+            <div class="comment-form-box-wrapper">
+                <span class="">发表评论</span>
+                <div class="comment-form-box">
+                    {% if request.user.is_authenticated %}
+                        <textarea class="form-control" rows="3"></textarea>
+                        <button class="btn btn-article" style="margin: 20px 0">发表</button>
+                    {% else %}
+                        <div class="jumbotron">
+                          <h4 class="text-center"><a class="btn-link" href="{% url 'login' %}?next={{ request.path }}">登陆</a>后评论</h4>
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
+
+            </div>
+            <div class="comment-box-wrapper">
+                <span class="">默认评论|最新评论</span>
+                <div class="comment-box">
+                    。。。
+                </div>
+            </div>
         </div>
     </div>
 

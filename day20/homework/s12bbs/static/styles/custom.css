@@ -49,6 +49,9 @@ body{
     margin-bottom: 20px;
 }
 .article-author {
+    position: relative;
+    color: #bbb;
+    font-size: 16px;
     margin: 20px 0 27px;
 }
 .article-content{
@@ -56,4 +59,74 @@ body{
 }
 .article-menu {
     margin: 20px;
+    padding: 20px 0;
+}
+
+.comment-wrapper {
+    margin-top: 50px;
+}
+
+.comment-form-box-wrapper, .comment-box-wrapper {
+    border-top: 1px solid #f0f0f0;
+    margin-top: 50px;
+}
+.comment-form-box-wrapper span, .comment-box-wrapper span {
+    border-bottom: 4px solid #f63756;
+    color: #333;
+    font-size: 18px;
+    position: absolute;
+    z-index: 1;
+    height: 28px;
+    line-height: 20px;
+    margin: -28px 0 0;
+}
+.comment-form-box, .comment-box {
+    margin-top: 10px;
+}
+
+.btn-article {
+    width: 148px;
+    height: 48px;
+    line-height: 38px;
+    color: #fff;
+    background-color: #3ca5f6;
+    font-size: 18px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+.btn-exceptional:hover {
+    background-color: #ec2b4b;
+    color: #fff;
+}
+
+.btn-thumb {
+    width: 148px;
+    height: 48px;
+    line-height: 38px;
+    border: 1px solid #eeeeee;
+    font-size: 18px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+.btn-thumb:hover {
+    color: #fff;
+    background-color: #5cb85c;
+    border: none;
+}
+
+.btn-exceptional {
+    width: 148px;
+    height: 48px;
+    line-height: 36px;
+    background-color: #f63756;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.btn-article:hover {
+    color: #fff;
+    background-color: #2f99ea;
 }

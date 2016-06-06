@@ -30,11 +30,10 @@
                     {{ article.author.name }}
                 </span>
                 <span>{{ article.pub_date }}</span>
-                <span>{%  filter_comment article as comments %} </span>
                 <span class="fa fa-thumbs-o-up" aria-hidden="true"></span>
-                {{ comments.comment_count }}
+                {{ article.get_thumbs_up_num}}
                 <span class="fa fa-comment-o" aria-hidden="true"></span>
-                {{ comments.thumb_count }}
+                {{ article.get_comments_num }}
             </div>
             <div class="article-brief-text">
                 <p>{{ article.brief }}</p>

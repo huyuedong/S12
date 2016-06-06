@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 import datetime
+from django.db.models import aggregates
 # Create your models here.
 
 
@@ -23,7 +24,7 @@ class Article(models.Model):
 		('published', u"已发布"),
 		('hidden', u"隐藏"),
 	)
-	status = models.CharField(choices=status_choices,default='published', max_length=32)
+	status = models.CharField(choices=status_choices, default='published', max_length=32)
 
 	def __str__(self):
 		return self.title
@@ -39,6 +40,14 @@ class Article(models.Model):
 		# Set the pub_date for published items if it hasn't been set already.
 		if self.status == 'published' and self.pub_date is None:
 			self.pub_date = datetime.date.today()
+
+	def get_comments_num(self):  # 获取评论中的回复数
+		return self.comment_set.filter(comment_type=1).count()
+
+	def get_thumbs_up_num(self):  # 获取评论中的点赞数
+		return self.comment_set.filter(comment_type=2).count()
+
+
 
 
 class Comment(models.Model):
@@ -58,7 +67,10 @@ class Comment(models.Model):
 			raise ValidationError(u'评论内容不能为空，sb')
 
 	def __str__(self):
-		return "{},P:{},{}".format(self.article, self.parent_comment.id, self.comment)
+		if self.parent_comment:
+			return "{}-->P:{}-->{}".format(self.article, self.parent_comment.id, self.comment)
+		else:
+			return "{}-->{}".format(self.article, self.comment)
 
 	class Meta:
 		verbose_name = "评论/点赞"
