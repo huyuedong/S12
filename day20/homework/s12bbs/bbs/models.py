@@ -48,8 +48,6 @@ class Article(models.Model):
 		return self.comment_set.filter(comment_type=2).count()
 
 
-
-
 class Comment(models.Model):
 	article = models.ForeignKey(Article, verbose_name="所属文章")
 	parent_comment = models.ForeignKey('self', related_name='my_children', blank=True, null=True)
