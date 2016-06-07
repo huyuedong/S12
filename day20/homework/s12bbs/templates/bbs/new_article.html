@@ -1,0 +1,24 @@
+{% extends "bbs/master/base.html" %}
+{% load custom %}
+
+{% block head-js %}
+    <script src="/static/plugins/ckeditor/ckeditor.js"></script>
+{% endblock %}
+
+{% block page-container %}
+    {% if new_article_obj %}
+        <h1>文章：{{ new_article_obj.title }}发布成功，<a href="{% url "bbs:article_detail" new_article_obj.id %}">点击查看</a></h1>
+    {% else %}
+    <form enctype="multipart/form-data">
+        <textarea id="ckeditor" name="content" class="form-control" rows="3">
+
+        </textarea>
+    </form>
+    {% endif %}
+{% endblock %}
+
+{% block extend-js %}
+    <script>
+        CKEDITOR.replace("ckeditor");
+    </script>
+{% endblock %}

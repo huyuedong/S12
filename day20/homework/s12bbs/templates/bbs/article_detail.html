@@ -21,7 +21,7 @@
         <div class="article-content">
             <img class="img-responsive center-block" src="/static/{{ article_obj.head_img|truncate_url }}">
             <div>
-                {{ article_obj.content }}
+                {{ article_obj.content|safe }}
             </div>
         </div>
         <div class="article-menu">

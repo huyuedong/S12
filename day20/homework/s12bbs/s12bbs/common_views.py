@@ -16,11 +16,10 @@ logger = logging.getLogger(__name__)
 
 def acc_login(request):
 	login_form_obj = login_signup_form.LoginForm()
+	status = ""
 	if request.method == "POST":
 		login_form_obj = login_signup_form.LoginForm(request.POST)
 		if login_form_obj.is_valid():
-			print(request.POST.get("username"))
-			print(request.POST.get("password"))
 			user = authenticate(
 				username=request.POST.get("username"),
 				password=request.POST.get("password"),
@@ -29,10 +28,9 @@ def acc_login(request):
 				login(request, user)
 				return redirect(request.GET.get("next", "/bbs/"))
 			else:
-				login_error = "用户名或密码错误"
-				return render(request, "common/login.html", {"login_form_obj": login_form_obj, "login_error": login_error})
+				status = "用户名或密码错误"
 
-	return render(request, "common/login.html", {"login_form_obj": login_form_obj})
+	return render(request, "common/login.html", {"login_form_obj": login_form_obj, "login_error": status})
 
 
 def acc_logout(request):
@@ -42,12 +40,12 @@ def acc_logout(request):
 
 def signup(request):
 	signup_form_obj = login_signup_form.SignupForm()
+	status = ""
 	if request.method == "POST":
 		signup_form_obj = login_signup_form.SignupForm(request.POST)
 		logger.debug(signup_form_obj)
 		if signup_form_obj.is_valid():
 			signup_data = signup_form_obj.clean()
-			print(signup_data)
 			if signup_data.get("password") == signup_data.get("repeat_password"):
 				signup_data.pop("repeat_password")
 				# 如何判断注册成功与失败？？？
@@ -59,14 +57,12 @@ def signup(request):
 						return redirect("/login/")
 				except Exception as e:
 					print(e)
-					error_msg = "注册失败。"
+					status = "注册失败。"
 					if str(e).startswith("UNIQUE"):
-						error_msg = "用户名已存在"
-					return render(request, "common/signup.html", {"signup_form_obj": signup_form_obj, "status": error_msg})
+						status = "用户名已存在"
 
 			else:
 				print("两次密码不一致")
-				sign_status = "两次密码不一致"
-				return render(request, "common/signup.html", {"signup_form_obj": signup_form_obj, "status": sign_status})
-	return render(request, "common/signup.html", {"signup_form_obj": signup_form_obj})
+				status = "两次密码不一致"
+	return render(request, "common/signup.html", {"signup_form_obj": signup_form_obj, "status": status})
 

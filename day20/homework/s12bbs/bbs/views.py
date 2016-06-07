@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from bbs import models
+from bbs import forms
+from bbs.bll import uploadfile_handle
 
 # Create your views here.
 
@@ -56,3 +58,22 @@ def post_comment(request):
 		)
 		new_comment_obj.save()
 	return HttpResponse("OK")
+
+
+def new_article(request):
+	if request.method == "POST":
+		print(request.POST)
+		article_form = forms.ArticleForm(request.POST, request.FILES)  # 验证数据和文件
+		if article_form.is_valid():  # 使用form进行验证
+			print(article_form.cleaned_data)
+			form_data = article_form.cleaned_data
+			form_data["author_id"] = request.user.userprofile.id  # 文章作者
+			new_article_img_path = uploadfile_handle.uploadfile_handle(request)
+			new_article_obj = models.Article(**form_data)  # 返回文章id
+			new_article_obj["head_img"] = new_article_img_path
+			new_article_obj.save()
+		else:
+			pass
+
+	all_category_list = models.Category.objects.all()
+	return render(request, "bbs/new_article.html", {"category_list": all_category_list})

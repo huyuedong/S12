@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block page-container %}
-    {% for article in article_list %}
+    {% for article in article_list reversed %}
     <div class="row">
         <div class="col-xs-6 col-md-3">
             <a class="thumbnail" href="{% url 'bbs:article_detail' article.id %}">
