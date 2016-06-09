@@ -3,6 +3,9 @@
 # __author__ = "Q1mi"
 # Email: master@liwenzhou.com
 
+"""
+用于验证发帖的form
+"""
 from django import forms
 
 

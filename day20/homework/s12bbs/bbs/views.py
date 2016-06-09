@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from bbs import models
 from bbs import forms
-from bbs.bll import uploadfile_handle
+from bbs.bll import uploadfile_handler, comments_handler
 
 # Create your views here.
 
@@ -38,16 +38,16 @@ def category(request, category_id):
 # 文章页面
 def article_detail(request, article_id):
 	article_obj = models.Article.objects.get(id=article_id)
+	print(article_obj.pub_date)
 	return render(request, "bbs/article_detail.html", {
-		"article_obj": article_obj,
 		"category_list": category_list,
+		"article_obj": article_obj,
+
 	})
 
 
 # 评论提交
 def post_comment(request):
-	print(request.POST)
-	print(request.user)
 	if request.method == "POST":
 		new_comment_obj = models.Comment(
 			comment_type=request.POST.get("comment_type"),
@@ -57,7 +57,17 @@ def post_comment(request):
 			comment=request.POST.get("comment"),
 		)
 		new_comment_obj.save()
-	return HttpResponse("OK")
+		return HttpResponse("OK")
+
+
+# 获取评论
+def get_comments(request, article_id):
+	article_obj = models.Article.objects.get(id=article_id)
+	comment_set = article_obj.comment_set.select_related().filter(comment_type=1)  # 只取评论
+	comment_tree = comments_handler.build_comment_tree(comment_set)
+	html_str = comments_handler.render_comment_tree(comment_tree)
+	print(html_str)
+	return HttpResponse(html_str)
 
 
 def new_article(request):
@@ -68,7 +78,7 @@ def new_article(request):
 			print(article_form.cleaned_data)
 			form_data = article_form.cleaned_data
 			form_data["author_id"] = request.user.userprofile.id  # 文章作者
-			new_article_img_path = uploadfile_handle.uploadfile_handle(request)
+			new_article_img_path = uploadfile_handler.uploadfile_handle(request)
 			new_article_obj = models.Article(**form_data)  # 返回文章id
 			new_article_obj["head_img"] = new_article_img_path
 			new_article_obj.save()
@@ -77,3 +87,4 @@ def new_article(request):
 
 	all_category_list = models.Category.objects.all()
 	return render(request, "bbs/new_article.html", {"category_list": all_category_list})
+
