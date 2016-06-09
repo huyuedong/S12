@@ -29,7 +29,7 @@
                 <a class="btn btn-exceptional" type="button">打赏</a>
                 <a class="btn btn-thumb pull-right" type="button">
                     <span class="fa fa-thumbs-o-up fa-lg" aria-hidden="true"></span>
-                    <span class="">4</span>
+                    <span class="">{{ article_obj.get_thumbs_up_num }}</span>
                 </a>
             </div>
         </div>
@@ -68,7 +68,7 @@
                 //"/bbs/get_comments/1/",
                 function(callback) {
                     console.log(callback);
-                    $(".comment-box-wrapper").append(callback);
+                    $(".comment-box").html(callback);
                 }
             ); //end get
         }
@@ -95,7 +95,9 @@
                         function(callback) {
                             console.log(callback);
                             if (callback == 'OK') {
-                                alert("post comment success!");
+                                console.log("post comment success!");
+                                getComments();
+
                             }
                         }
                     );  // end post

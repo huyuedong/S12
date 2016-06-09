@@ -11,6 +11,12 @@ from collections import OrderedDict
 
 
 def tree_search(comment_dic, comment_obj):
+	"""
+	递归生成评论树
+	:param comment_dic: 目标字典
+	:param comment_obj: 评论对象
+	:return:
+	"""
 	if not comment_obj.parent_comment:  # 顶级评论
 		comment_dic[comment_obj] = OrderedDict()
 	else:
@@ -22,16 +28,25 @@ def tree_search(comment_dic, comment_obj):
 
 
 def build_comment_tree(comment_set):
+	"""
+	将评论按时间先后顺序和父节点生成有序字典
+	:param comment_set: 后台返回的评论结果集
+	:return:
+	"""
 	tree_dic = OrderedDict()
 	for comment in comment_set:
 		tree_search(tree_dic, comment)
-	# return tree_dic.__reversed__()
-	return OrderedDict(map(reversed, tree_dic.items()))
+	return tree_dic
 
 
 def render_comment_tree(comment_tree_dic):
+	"""
+	遍历得到的有序的评论字典渲染生成前端的html
+	:param comment_tree_dic:
+	:return:
+	"""
 	comment_html_str = ""
-	for comment_obj in comment_tree_dic:
+	for comment_obj, son_dic in reversed(comment_tree_dic.items()):  # 按时间先后倒序显示
 		ele = '''
 			<div class="media">
 				<div class="media-left">
@@ -49,11 +64,11 @@ def render_comment_tree(comment_tree_dic):
 			datetime_handler.readable_date(comment_obj.date),
 			comment_obj.comment,
 		)
-		if comment_tree_dic.get(comment_obj):  # 如果还有子评论
-			ele += render_comment_tree(comment_tree_dic[comment_obj])
-		else:
-			ele += "</div>"
-		ele += "</div>"
+		if son_dic:  # 如果还有子评论
+			ele += render_comment_tree(son_dic)
+		else:  # 结束子评论
+			ele += "</div><hr/>"
+		ele += "</div>"  # 结束评论
 		comment_html_str += ele
 	return comment_html_str
 

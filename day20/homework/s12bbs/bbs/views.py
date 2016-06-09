@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from bbs import models
 from bbs import forms
 from bbs.bll import uploadfile_handler, comments_handler
+from datetime import datetime, timezone
 
 # Create your views here.
 
@@ -66,24 +67,24 @@ def get_comments(request, article_id):
 	comment_set = article_obj.comment_set.select_related().filter(comment_type=1)  # 只取评论
 	comment_tree = comments_handler.build_comment_tree(comment_set)
 	html_str = comments_handler.render_comment_tree(comment_tree)
-	print(html_str)
 	return HttpResponse(html_str)
 
 
 def new_article(request):
 	if request.method == "POST":
-		print(request.POST)
 		article_form = forms.ArticleForm(request.POST, request.FILES)  # 验证数据和文件
 		if article_form.is_valid():  # 使用form进行验证
-			print(article_form.cleaned_data)
 			form_data = article_form.cleaned_data
 			form_data["author_id"] = request.user.userprofile.id  # 文章作者
+			form_data["pub_date"] = datetime.now(timezone.utc)
 			new_article_img_path = uploadfile_handler.uploadfile_handle(request)
+			form_data["head_img"] = new_article_img_path
 			new_article_obj = models.Article(**form_data)  # 返回文章id
-			new_article_obj["head_img"] = new_article_img_path
+
 			new_article_obj.save()
+			return render(request, "bbs/new_article.html", {"new_article_obj": new_article_obj})
 		else:
-			pass
+			print(article_form.errors)
 
 	all_category_list = models.Category.objects.all()
 	return render(request, "bbs/new_article.html", {"category_list": all_category_list})

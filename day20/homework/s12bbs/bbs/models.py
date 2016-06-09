@@ -61,6 +61,7 @@ class Comment(models.Model):
 	comment = models.TextField(blank=True, null=True)
 	date = models.DateTimeField(auto_now_add=True)
 
+	# 调用模型的save() 方法时不会引起clean() 方法的调用。
 	def clean(self):
 		if self.comment_type == 1 and not self.comment:
 			raise ValidationError(u'评论内容不能为空，sb')
