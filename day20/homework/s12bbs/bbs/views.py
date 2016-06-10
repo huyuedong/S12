@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from bbs import models
+from django.db.models import F, Q, Count, Sum, aggregates
 from bbs import forms
 from bbs.bll import uploadfile_handler, comments_handler
 from datetime import datetime, timezone
@@ -39,7 +40,6 @@ def category(request, category_id):
 # 文章页面
 def article_detail(request, article_id):
 	article_obj = models.Article.objects.get(id=article_id)
-	print(article_obj.pub_date)
 	return render(request, "bbs/article_detail.html", {
 		"category_list": category_list,
 		"article_obj": article_obj,
@@ -64,7 +64,8 @@ def post_comment(request):
 # 获取评论
 def get_comments(request, article_id):
 	article_obj = models.Article.objects.get(id=article_id)
-	comment_set = article_obj.comment_set.select_related().filter(comment_type=1)  # 只取评论
+	# comment_set = article_obj.comment_set.select_related().filter(comment_type=1)  # 只取评论
+	comment_set = article_obj.comment_set.select_related()
 	comment_tree = comments_handler.build_comment_tree(comment_set)
 	html_str = comments_handler.render_comment_tree(comment_tree)
 	return HttpResponse(html_str)

@@ -7,7 +7,7 @@
 
 {% block page-container %}
     <div class="wrap-left">
-        <h1>
+        <h1 thumb-num="{{ article_obj.get_thumbs_up_num }}" id="article-title">
             {{ article_obj.title }}
         </h1>
         <div class="article-author">
@@ -60,23 +60,22 @@
 {% endblock %}
 
 {% block extend-js %}
-{#    <script src="/static/scripts/bbs/get_comments.js"></script>#}
+    <script src="/static/scripts/bbs/add_comment_bar.js"></script>
     <script>
         function getComments() {
             $.get(
                 "{% url 'bbs:get_comments' article_obj.id %}",
                 //"/bbs/get_comments/1/",
                 function(callback) {
-                    console.log(callback);
                     $(".comment-box").html(callback);
+                    add_comment_bar();
                 }
             ); //end get
-        }
+        }  //end function getComments
 
         function getCsrf() {
             return $("input[name='csrfmiddlewaretoken']").val();
         }
-
         $(document).ready(function() {
             $(".comment-form-box button").click(function () {  // 给发表评论的按钮绑定事件
                 var comment_text = $(".comment-form-box textarea").val();  //获得评论内容
@@ -93,16 +92,17 @@
                             'csrfmiddlewaretoken': getCsrf()
                         },  // end post args
                         function(callback) {
-                            console.log(callback);
                             if (callback == 'OK') {
                                 console.log("post comment success!");
                                 getComments();
-
                             }
                         }
                     );  // end post
                 }
-            });  //end button click
+            });  //end submit comment button click
+            $("btn-thumb").click(function() {
+
+            });  //end thumb button click
             getComments();
         }); // end document ready
     </script>

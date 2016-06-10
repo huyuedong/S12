@@ -35,7 +35,8 @@ def build_comment_tree(comment_set):
 	"""
 	tree_dic = OrderedDict()
 	for comment in comment_set:
-		tree_search(tree_dic, comment)
+		if comment.comment_type == 1:
+			tree_search(tree_dic, comment)
 	return tree_dic
 
 
@@ -46,29 +47,32 @@ def render_comment_tree(comment_tree_dic):
 	:return:
 	"""
 	comment_html_str = ""
-	for comment_obj, son_dic in reversed(comment_tree_dic.items()):  # 按时间先后倒序显示
+	for comment_obj, son_dic in reversed(list(comment_tree_dic.items())):  # 按时间先后倒序显示
 		ele = '''
 			<div class="media">
 				<div class="media-left">
 					<a href="{0}" class="comment-head-img">
-						<img class="media-object comment-head-img" src="{1}" alt="{2}的头像">
+						<img class="media-object comment-head-img" src="{2}" alt="{3}的头像">
 					</a>
 				</div>
 			<div class="media-body">
-				<h4 class="media-heading">{2}<small class="margin-left-twenty">{3}</small></h4>
-				{4}
+				<h4 class="media-heading" comment_id="{1}">{3}<small class="margin-left-twenty">{4}</small></h4>
+				<p>{5}</p>
 		'''.format(
-			comment_obj.user.id,
-			comment_obj.user.get_head_img(),
-			comment_obj.user.name,
-			datetime_handler.readable_date(comment_obj.date),
-			comment_obj.comment,
+			comment_obj.user.id,  # 用户id
+			comment_obj.id,  # 评论id
+			comment_obj.user.get_head_img(),  # 头像
+			comment_obj.user.name,  # 用户名
+			datetime_handler.readable_date(comment_obj.date),  # 处理过的发布日期
+			comment_obj.comment,  # 评论内容
+
 		)
 		if son_dic:  # 如果还有子评论
 			ele += render_comment_tree(son_dic)
+			ele += "</div>"
 		else:  # 结束子评论
-			ele += "</div><hr/>"
-		ele += "</div>"  # 结束评论
+			ele += "</div>"
+		ele += "</div>"
 		comment_html_str += ele
 	return comment_html_str
 
@@ -85,4 +89,11 @@ def render_comment_tree(comment_tree_dic):
     ...
   </div>
 </div>
+'''
+
+'''
+<small class='comment-bar pull-right'>
+<a style='cursor: pointer' class='margin-left-twenty' comment-type='2'><i class='fa fa-thumbs-o-up fa-fw'></i>{6}"</a>
+<a style='cursor: pointer' class='margin-left-twenty' comment-type='1'>回复</a>
+</small>
 '''

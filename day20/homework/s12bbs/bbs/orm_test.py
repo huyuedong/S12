@@ -52,10 +52,13 @@ print(obj)
 # print("Count:", common_counts)
 
 # comment_counts = models.Comment.objects.all().values("article_id", "comment_type").annotate(comm_num=Count("*"))
-print(obj.comment_set.select_related().annotate(comment_num=Count("article__comment__comment_type")))
-comment_counts = obj.comment_set.select_related().annotate(comment_num=Count("article__comment__comment_type"))
-obj = models.Article.objects.all().values("comment__comment_type").annotate(c_n=Count("comment"))
-print(obj)
-p1 = models.Article.objects.get(id=1)
+# print(obj.comment_set.select_related().annotate(comment_num=Count("article__comment__comment_type")))
+# comment_counts = obj.comment_set.select_related().annotate(comment_num=Count("article__comment__comment_type"))
+# obj = models.Article.objects.all().values("comment__comment_type").annotate(c_n=Count("comment"))
+# print(obj)
+# p1 = models.Article.objects.get(id=1)
+
+# comment_set = obj.comment_set.select_related().values("comment_type").annotate(thumb_num=Count("comment_id"))
+# print(comment_set)
 
 
