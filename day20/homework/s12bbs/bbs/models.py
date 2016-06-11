@@ -97,6 +97,7 @@ class UserProfile(models.Model):
 	name = models.CharField(max_length=32)
 	signature = models.CharField(max_length=255, blank=True, null=True)
 	head_img = models.ImageField(upload_to="uploads", blank=True, null=True)
+	friends = models.ManyToManyField("self", related_name="my_friends", blank=True, null=True)
 
 	def get_head_img(self):
 		return "/static/{}".format(str(self.head_img).split("/")[-1])

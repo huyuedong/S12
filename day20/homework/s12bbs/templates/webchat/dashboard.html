@@ -1,0 +1,32 @@
+{% extends "bbs/master/base.html" %}
+
+{% block extend-css %}
+    <link href="/static/styles/custom.css" rel="stylesheet">
+{% endblock %}
+
+{% block page-container %}
+    <div class="chat-container">
+        <div class="left-contact-panel">
+            <div id="contact-tab">
+                <ul class="nav nav-tabs pull-left">
+                  <li role="presentation" class="active"><a href="#friend-page">好友</a></li>
+                  <li role="presentation"><a href="#group-page">群组</a></li>
+                </ul>
+            </div>
+            <div id="contact-tabContent">
+                <div id="friend-page">friend</div>
+                <div id="group-page">group</div>
+            </div>
+        </div>
+        <div class="right-chat-panel pull-right">
+            <div class="chat-box-title">title</div>
+            <div class="chat-box-window">window</div>
+            <div class="chat-box-emoj">emoj</div>
+            <div class="chat-box-msg-box">
+                <textarea id="msg"></textarea>
+                <button class="btn btn-success pull-right">发送消息</button>
+            </div>
+            <div class="clear-both"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -13,18 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.conf.urls import url
 from django.contrib import admin
-from s12bbs import common_views
-from bbs import urls as bbs_urls
-from webchat import urls as webchat_urls
+from webchat import views
+
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^login/', common_views.acc_login, name="login"),
-    url(r'^logout/', common_views.acc_logout, name="logout"),
-    url(r'^signup/', common_views.signup, name="signup"),
-    url(r'^bbs/', include(bbs_urls, namespace="bbs")),
-    url(r'^webchat/', include(bbs_urls, namespace="bbs")),
-    url(r'^.*', include(webchat_urls, namespace="webchat")),
+    url(r'^$', views.dashboard, name="chat_dashboard"),
+    # url(r'^category/(?P<category_id>\d+)/$', views.category),
+    # url(r'^article_detail/(?P<article_id>\d+)/$', views.article_detail, name="article_detail"),
+    # url(r'^post_comment/$', views.post_comment, name="post_comment"),
+    # url(r'^get_comments/(?P<article_id>\d+)/$', views.get_comments, name="get_comments"),
+    # url(r'^new_article/$', views.new_article, name="new_article"),
+
 ]
+

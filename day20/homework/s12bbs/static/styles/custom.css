@@ -154,3 +154,53 @@ body{
 .comment-bar a {
 
 }
+
+/*for webchat*/
+.chat-container {
+    width: 100%;
+    border: 1px dashed darkgray;
+    height: 100%;
+}
+
+.left-contact-panel {
+    width: 200px;
+    height: 635px;
+    border: 2px solid green;
+    float: left;
+}
+
+.right-chat-panel {
+    width: 640px;
+    height: 100%;
+    border: 2px solid greenyellow;
+    float: left;
+}
+
+.chat-box-title {
+    height: 30px;
+    border: 1px solid darkmagenta;
+}
+
+.chat-box-window {
+    height: 450px;
+    border: 1px solid black;
+}
+
+.chat-box-emoj {
+    height: 30px;
+    border: 1px solid brown;
+}
+
+.chat-box-msg-box{
+    height: 120px;
+    border: 1px solid deeppink;
+}
+
+.chat-box-msg-box textarea {
+    width: 85%;
+    height: 100%;
+}
+
+.chat-box-msg-box button {
+    margin-bottom: 30px;
+}
