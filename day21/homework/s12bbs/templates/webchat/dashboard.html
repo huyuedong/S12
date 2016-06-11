@@ -1,0 +1,48 @@
+{% extends "bbs/master/base.html" %}
+
+{% block extend-css %}
+    <link href="/static/styles/custom.css" rel="stylesheet">
+{% endblock %}
+
+{% block page-container %}
+    <div class="chat-container">
+        <div class="left-contact-panel">
+            <div>
+                <!--Nav tabs -->
+                <ul class="nav nav-tabs nav-justified" role="tablist">
+                  <li role="presentation" class="active">
+                      <a href="#friend-tab" role="tab" data-toggle="tab">好友</a>
+                  </li>
+                  <li role="presentation">
+                      <a href="#group-tab" role="tab" data-toggle="tab">群组</a>
+                  </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div id="tabContent" class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="friend-tab">
+                        <ul class="list-group">
+                        {% for friend in request.user.userprofile.friends.select_related %}
+                            <li contact-type="single" contact-id="{{ friend.id }}" class="list-group-item">
+                                <span class="badge hide"></span>
+                                <span class="contact-name">{{ friend.name }}</span>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="group-tab"></div>
+                </div>
+            </div>
+        </div>
+        <div class="right-chat-panel pull-right">
+            <div class="chat-box-title">title</div>
+            <div class="chat-box-window">window</div>
+            <div class="chat-box-emoj">emoj</div>
+            <div class="chat-box-msg-box">
+                <textarea id="msg"></textarea>
+                <button class="btn btn-success pull-right">发送消息</button>
+            </div>
+            <div class="clear-both"></div>
+        </div>
+    </div>
+{% endblock %}
