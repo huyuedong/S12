@@ -20,6 +20,8 @@ from webchat import views
 
 urlpatterns = [
     url(r'^$', views.dashboard, name="chat_dashboard"),
+    url(r'^msg_send/$', views.send_msg, name="send_msg"),
+    url(r'^new_msgs/$', views.get_new_msgs, name="get_new_msgs"),
     # url(r'^category/(?P<category_id>\d+)/$', views.category),
     # url(r'^article_detail/(?P<article_id>\d+)/$', views.article_detail, name="article_detail"),
     # url(r'^post_comment/$', views.post_comment, name="post_comment"),

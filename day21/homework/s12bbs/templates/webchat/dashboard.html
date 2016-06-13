@@ -32,7 +32,8 @@
                         <ul class="list-group">
                         {% for friend in request.user.userprofile.friends.select_related %}
                             <li contact-type="single" contact-id="{{ friend.id }}" class="list-group-item">
-                                <span class="badge hide"></span>
+                            <img style="width: 40px; height: 40px" src="{{ friend.get_head_img }}">
+                                <span class="badge hide">1</span>
                                 <span class="contact-name">{{ friend.name }}</span>
                             </li>
                         {% endfor %}
@@ -47,9 +48,7 @@
         <!-- start right box-->
         <div class="col-md-9 chat">
             <div class="chat-box">
-                <div class="box-hd">
-                    <span>title</span>
-                </div>
+                <div class="box-hd"></div>
                 <div class="box-bd"></div>
                 <div class="box-ft">
                     <div class="box-toolbar">
@@ -63,7 +62,7 @@
                         <textarea id="msg"></textarea>
                     </div>
                     <div class="content">
-                        <button class="btn btn-default pull-right">发送消息</button>
+                        <button id="send msg" class="btn btn-default pull-right">发送消息</button>
                     </div>
                 </div>
             </div>
@@ -74,5 +73,107 @@
 {% endblock %}
 
 {% block extend-js %}
-    <script></script>
+<script>
+    //for csrf
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }  //end csrf
+
+    $(document).ready(function() {
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });  //end set csrf
+
+        //delegate function to 'enter' keydown
+        $("body").delegate("textarea", "keydown",function(e){
+            if(e.which == 13) {//Enter key down
+                //send msg button clicked
+                var msg_text = $("textarea").val();
+                if ($.trim(msg_text).length > 0){
+                    console.log(msg_text);
+                    SendMSG(msg_text);
+                    //no wait the send_msg's call confirm msg
+                    AddMSGIntoBox(msg_text);
+                    $("textarea").val('');
+                }
+                e.returnValue = false; //回车不换行
+                return false;
+            }
+        });
+    });  // end document ready
+    // start function SendMSG
+    function SendMSG(msg_text){
+        var contact_type = $(".box-hd").attr("contact-type");
+        var contact_id = $(".box-hd").attr("contact-id");
+        if (contact_type && contact_id) {
+            var msg_obj = {
+                "from": "{{ request.user.userprofile.id }}",
+                "to": contact_id,
+                "type": contact_type,
+                "msg": msg_text
+            };
+            $.post(
+                "{% url "webchat:send_msg" %}",
+                {data: JSON.stringify(msg_obj)},
+                function (callback) {
+                    console.log(callback);
+                }
+            );  // end post
+        }  // end if
+    }  // end function SendMSG
+
+    // start function AddMSGIntoBox
+    function AddMSGIntoBox(msg_text) {
+        var new_msg_ele = "<div class='msg-item'>" +
+                            "<span>" + "{{ request.user.userprofile.name }}"  + "</span>" +
+                            "<span>"  + new Date().toLocaleTimeString() +"</span>" +
+                            "<div class='msg-text'>" + msg_text +"</div>" +
+                          "</div>";
+        $(".box-bd").append(new_msg_ele);
+        $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
+    }  // end function AddMSGIntoBox
+
+    // start function OpenChatWindow
+    function OpenChatWindow(ele){
+        console.log($(ele));
+        $(ele).addClass("active");
+        $(ele).siblings().removeClass("active");
+        var contact_id = $(ele).attr("contact-id");
+        var contact_name = $(ele).find(".contact-name").text();
+        var contact_type = $(ele).attr("contact-type");
+
+        var box_hd_content = "正在跟" +contact_name +"聊天";
+        $(".box-hd").html(box_hd_content).attr("contact-id",contact_id).attr("contact-type",contact_type);
+    }  // end function OpenChatWindow
+
+    // start function GetNewMsgs
+    function GetNewMsgs() {
+        console.log("getting new msgs...");
+        $.getJSON("{% url 'webchat:get_new_msgs' %}", function(callback) {
+            GetNewMsgs();
+        });  // end getJSON
+    }  // end function GetNewMsgs
+</script>
 {% endblock %}

@@ -8,7 +8,6 @@ body{
 
 .chat-panel {
     height: 840px;
-    /*background-color: #292c33;*/
     background-color: #444444;
     color: #FFFFFF;
 }
@@ -20,7 +19,6 @@ body{
 }
 
 .chat-panel * {
-    /*background-color: #292c33;*/
     background-color: #444444;
     color: #FFFFFF;
 }
@@ -45,12 +43,25 @@ body{
     line-height: 32px;
 }
 
+.search-bar input:focus {
+    border: none;
+    box-shadow: none;
+}
+
+.tab-content {
+    overflow: auto;
+}
+
 .tab-content li {
     border: none;!important;
 }
 
 .list-group-item span {
     background-color: inherit;
+}
+
+.list-group-item .badge {
+    background-color: red;
 }
 
 .list-group-item:hover {
@@ -75,6 +86,7 @@ body{
 .box-bd {
     height: 600px;
     border-top: 1px solid #cccccc;
+    overflow: auto;  /*内容多了，自动加滚动条*/
 }
 .box-toolbar {
     height: 35px;
@@ -95,12 +107,13 @@ body{
 }
 
 .box-ft textarea {
-    width: 655px;
+    width: 100%;
     height: 100px;
     color: #333333;
     background-color: #eeeeee;
     border: none;
     outline: none;
     resize: none;
+    overflow: auto;
 }
 
