@@ -29,10 +29,10 @@ def send_msg(request):
 	print(msg_data)
 	if msg_data:
 		msg_data = json.loads(msg_data)
-		msg_to_obj = bbs_models.UserProfile.objects.get(id=msg_data["to"])
-		msg_data["name"] = msg_to_obj.name
+		msg_to_obj = bbs_models.UserProfile.objects.get(id=msg_data["from"])
+		msg_data["nickname"] = msg_to_obj.name
 		msg_data["hd_img"] = msg_to_obj.get_head_img()
-		msg_data["timestamp"] = time.time()
+		msg_data["timestamp"] = time.strftime("%H:%M:%S", time.localtime(time.time()))
 		print(msg_data)
 		if msg_data["type"] == "single":  # 发送给单人
 			if not GLOBAL_MSG_QUEUES.get(int(msg_data["to"])):  # 没有该对象的queue就新建，这里的id值是字符串类型需要转换
