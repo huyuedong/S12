@@ -65,6 +65,7 @@ body{
 }
 
 .list-group-item:hover {
+    cursor: pointer;
     background-color: #333333;
 }
 .chat {
@@ -81,6 +82,13 @@ body{
 .box-hd {
     text-align: center;
     height: 50px;
+}
+
+.box-hd-wrapper {
+    text-align: center;
+    line-height: 30px;
+    vertical-align: middle;
+    padding-top: 10px;
 }
 
 .box-bd {
@@ -117,3 +125,104 @@ body{
     overflow: auto;
 }
 
+.hd-img {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.msg-me {
+    text-align: right;
+    float: right;
+    margin: 5px 0;
+}
+
+.msg-you {
+    text-align: left;
+    float: left;
+    margin: 5px 0;
+}
+
+.msg-me .hd-img {
+    margin-top: 12px;
+    float: right;
+}
+
+.msg-you .hd-img {
+    margin-top: 12px;
+    float: left;
+}
+
+.msg-wrapper {
+    overflow: hidden;
+}
+.msg-me .msg-wrapper {
+    float: right;
+    max-width: inherit;
+}
+
+.msg-you .msg-wrapper {
+    float: left;
+    max-width: inherit;
+}
+
+.msg-item {
+    max-width: 500px;
+    min-height: 1em;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    text-align: left;
+    font-size: 14px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin: 0 10px;
+}
+
+.msg-me .msg-text {
+    background-color: #b2e281;!important;
+    display:block;
+    word-break: break-all;
+    word-wrap: break-word;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.msg-you .msg-text {
+    background-color: #FFFFFF;!important;
+    display:block;
+    word-break: break-all;
+    word-wrap: break-word;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.msg-me .msg-text:before {
+    position: absolute;
+    top: 27px;
+    right: -12px;
+    height: 0;
+    width: 0;
+    content: "";
+    border: 6px solid transparent;
+    border-left-color: #b2e281;
+}
+
+.msg-you .msg-text:before {
+    position: absolute;
+    top: 27px;
+    left: -12px;
+    height: 0;
+    width: 0;
+    content: "";
+    border: 6px solid transparent;
+    border-right-color: #FFFFFF;
+}
+
+.my-active {
+    z-index: 2;
+    color: #fff;
+    background-color: #26292E;
+    border-color: #26292E;
+}

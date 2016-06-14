@@ -31,15 +31,25 @@
                     <div role="tabpanel" class="tab-pane active" id="friend-tab">
                         <ul class="list-group">
                         {% for friend in request.user.userprofile.friends.select_related %}
-                            <li contact-type="single" contact-id="{{ friend.id }}" class="list-group-item">
-                            <img style="width: 40px; height: 40px" src="{{ friend.get_head_img }}">
+                            <li contact-type="single" contact-id="{{ friend.id }}" class="list-group-item" onclick="OpenChatWindow(this)">
+                            <img class="hd-img" src="{{ friend.get_head_img }}">
                                 <span class="badge hide">1</span>
                                 <span class="contact-name">{{ friend.name }}</span>
                             </li>
                         {% endfor %}
                         </ul>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="group-tab"></div>
+                    <div role="tabpanel" class="tab-pane" id="group-tab">
+                        <ul class="list-group">
+                            {% for group in request.user.userprofile.group_members.select_related %}
+                            <li contact-type="group" contact-id="{{ group.id }}" class="list-group-item" onclick="OpenChatWindow(this)">
+{#                            <img class="hd-img" src="{{ group.get_head_img }}">#}
+                                <span class="badge hide">1</span>
+                                <span class="contact-name">{{ group.name }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
                 <!-- end Tab panes -->
             </div>
@@ -48,7 +58,9 @@
         <!-- start right box-->
         <div class="col-md-9 chat">
             <div class="chat-box">
-                <div class="box-hd"></div>
+                <div class="box-hd">
+                    <div class="box-hd-wrapper"></div>
+                </div>
                 <div class="box-bd"></div>
                 <div class="box-ft">
                     <div class="box-toolbar">
@@ -91,7 +103,7 @@
         }
         return cookieValue;
     }
-
+    var csrftoken = getCookie("csrftoken");
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -115,25 +127,29 @@
                     console.log(msg_text);
                     SendMSG(msg_text);
                     //no wait the send_msg's call confirm msg
-                    AddMSGIntoBox(msg_text);
+                    AddSendMSGIntoBox(msg_text);
                     $("textarea").val('');
                 }
                 e.returnValue = false; //回车不换行
                 return false;
             }
         });
+        GetNewMsgs();
     });  // end document ready
     // start function SendMSG
     function SendMSG(msg_text){
-        var contact_type = $(".box-hd").attr("contact-type");
-        var contact_id = $(".box-hd").attr("contact-id");
+        var contact_type = $(".box-hd-wrapper").attr("contact-type");
+        var contact_id = $(".box-hd-wrapper").attr("contact-id");
+        console.log("begin send msg...");
         if (contact_type && contact_id) {
+            console.log(contact_id, contact_type);
             var msg_obj = {
                 "from": "{{ request.user.userprofile.id }}",
                 "to": contact_id,
                 "type": contact_type,
                 "msg": msg_text
             };
+            console.log(msg_obj);
             $.post(
                 "{% url "webchat:send_msg" %}",
                 {data: JSON.stringify(msg_obj)},
@@ -142,36 +158,65 @@
                 }
             );  // end post
         }  // end if
+
     }  // end function SendMSG
 
     // start function AddMSGIntoBox
-    function AddMSGIntoBox(msg_text) {
-        var new_msg_ele = "<div class='msg-item'>" +
-                            "<span>" + "{{ request.user.userprofile.name }}"  + "</span>" +
-                            "<span>"  + new Date().toLocaleTimeString() +"</span>" +
-                            "<div class='msg-text'>" + msg_text +"</div>" +
-                          "</div>";
+    function AddSendMSGIntoBox(msg_text) {
+        var new_msg_ele = "<div class='msg-me clearfix'>" +
+            "<img class='hd-img' src='{{ request.user.userprofile.get_head_img }}'>" +
+            "<div class='msg-wrapper'>" +
+                "<div class='msg-item'>" +
+                    "<span>" + "{{ request.user.userprofile.name }}"  + "</span>" +
+                    "<span>"  + new Date().toLocaleTimeString() +"</span>" +
+                    "<div class='msg-text'>" + msg_text +"</div>" +
+                "</div>" +
+            "</div>" +
+        "</div>" +
+        "<div style='clear:both'></div>";
         $(".box-bd").append(new_msg_ele);
         $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
-    }  // end function AddMSGIntoBox
+    }  // end function AddSendMSGIntoBox
+
+    // start AddGetMSGIntoBox
+    function AddGetMSGIntoBox(msg_obj) {
+        var msg_dict = new Object(msg_obj);
+        var new_msg_ele = "<div class='msg-you clearfix'>" +
+            "<img class='hd-img' src='" + msg_dict.hd_img + "'>" +
+            "<div class='msg-wrapper'>" +
+                "<div class='msg-item'>" +
+                    "<span>" + msg_dict.name + "</span>" +
+                    "<span>"  + msg_dict.timestamp +"</span>" +
+                    "<div class='msg-text'>" + msg_dict.data +"</div>" +
+                "</div>" +
+            "</div>" +
+        "</div>" +
+        "<div style='clear:both'></div>";
+        $(".box-bd").append(new_msg_ele);
+        $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
+    }
+    // end AddGetMSGIntoBox
 
     // start function OpenChatWindow
     function OpenChatWindow(ele){
         console.log($(ele));
-        $(ele).addClass("active");
-        $(ele).siblings().removeClass("active");
+        $(ele).addClass("my-active");
+        $(ele).siblings().removeClass("my-active");
         var contact_id = $(ele).attr("contact-id");
         var contact_name = $(ele).find(".contact-name").text();
         var contact_type = $(ele).attr("contact-type");
 
         var box_hd_content = "正在跟" +contact_name +"聊天";
-        $(".box-hd").html(box_hd_content).attr("contact-id",contact_id).attr("contact-type",contact_type);
+        $(".box-hd .box-hd-wrapper").html(box_hd_content).attr("contact-id",contact_id).attr("contact-type",contact_type);
     }  // end function OpenChatWindow
 
     // start function GetNewMsgs
     function GetNewMsgs() {
         console.log("getting new msgs...");
         $.getJSON("{% url 'webchat:get_new_msgs' %}", function(callback) {
+            for (var i=0;i<=callback.length;i++) {
+                AddGetMSGIntoBox(callback[i]);
+            }
             GetNewMsgs();
         });  // end getJSON
     }  // end function GetNewMsgs

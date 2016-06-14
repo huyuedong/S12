@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from s12bbs import common_views
+from bbs import views as bbs_views
 from bbs import urls as bbs_urls
 from webchat import urls as webchat_urls
 
@@ -25,6 +26,6 @@ urlpatterns = [
     url(r'^logout/', common_views.acc_logout, name="logout"),
     url(r'^signup/', common_views.signup, name="signup"),
     url(r'^bbs/', include(bbs_urls, namespace="bbs")),
-    url(r'^webchat/', include(bbs_urls, namespace="bbs")),
-    url(r'^.*', include(webchat_urls, namespace="webchat")),
+    url(r'^webchat/', include(webchat_urls, namespace="webchat")),
+    url(r'.*', bbs_views.index),
 ]
