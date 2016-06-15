@@ -6,6 +6,18 @@ body{
     background-size: cover;
 }
 
+.chat-container {
+    max-width: 1000px;
+    min-width: 800px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #eeeeee;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    overflow: hidden;
+}
+
 .chat-panel {
     height: 840px;
     background-color: #444444;
@@ -15,7 +27,6 @@ body{
 .chat * {
     background-color: #eeeeee;
     color: #333333;
-
 }
 
 .chat-panel * {
@@ -74,7 +85,6 @@ body{
     padding: 0;!important;
 }
 
-
 .chat-box {
     padding: 0 20px;
 }
@@ -96,6 +106,14 @@ body{
     border-top: 1px solid #cccccc;
     overflow: auto;  /*内容多了，自动加滚动条*/
 }
+
+.box-bd-notify p {
+    text-align: center;
+    margin-top: 130px;
+    color: #ccc;!important;
+    font-size: 13px;
+}
+
 .box-toolbar {
     height: 35px;
     padding: 5px 0;

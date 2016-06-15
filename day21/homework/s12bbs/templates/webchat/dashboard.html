@@ -33,7 +33,7 @@
                         {% for friend in request.user.userprofile.friends.select_related %}
                             <li contact-type="single" contact-id="{{ friend.id }}" class="list-group-item" onclick="OpenChatWindow(this)">
                             <img class="hd-img" src="{{ friend.get_head_img }}">
-                                <span class="badge hide">1</span>
+                                <span class="badge hide">0</span>
                                 <span class="contact-name">{{ friend.name }}</span>
                             </li>
                         {% endfor %}
@@ -44,7 +44,7 @@
                             {% for group in request.user.userprofile.group_members.select_related %}
                             <li contact-type="group" contact-id="{{ group.id }}" class="list-group-item" onclick="OpenChatWindow(this)">
 {#                            <img class="hd-img" src="{{ group.get_head_img }}">#}
-                                <span class="badge hide">1</span>
+                                <span class="badge hide">0</span>
                                 <span class="contact-name">{{ group.name }}</span>
                             </li>
                             {% endfor %}
@@ -61,8 +61,13 @@
                 <div class="box-hd">
                     <div class="box-hd-wrapper"></div>
                 </div>
-                <div class="box-bd"></div>
-                <div class="box-ft">
+                <div class="box-bd">
+                    <div class="box-bd-notify">
+                        <p id="no-msg-notify" class="hide">暂时没有新消息</p>
+                        <p id="no-chat-notify">未选择聊天</p>
+                    </div>
+                </div>
+                <div class="box-ft hide">
                     <div class="box-toolbar">
                         <div class="content">
                             <a href="#"><span class="fa fa-smile-o fa-2x"></span></a>
@@ -141,6 +146,7 @@
         var contact_type = $(".box-hd-wrapper").attr("contact-type");
         var contact_id = $(".box-hd-wrapper").attr("contact-id");
         console.log("begin send msg...");
+        console.log(contact_id, contact_type);
         if (contact_type && contact_id) {
             console.log(contact_id, contact_type);
             var msg_obj = {
@@ -183,6 +189,15 @@
         var msg_html = "";
         $.each(msg_list, function(index, msg_obj) {
             console.log(msg_obj);
+            var current_id = $(".box-hd-wrapper").attr("contact-id");
+            var current_type = $(".box-hd-wrapper").attr("contact-type");
+            var the_list_ele = $("li[contact-type='" + msg_obj.type + "'][contact-id='" + msg_obj.from + "']")[0];
+            if (!the_list_ele){
+                console.log("Can't find the sender...");
+                return true; //如果好友列表中不存在这个发消息的人就跳过这次循环
+            } else if (!the_list_ele.data) {  //元素的数据未定义或为空就初始化
+                the_list_ele.data = "";  //初始化
+            }
             var new_msg_ele = "<div class='msg-you clearfix'>" +
                 "<img class='hd-img' src='" + msg_obj.hd_img + "'>" +
                 "<div class='msg-wrapper'>" +
@@ -194,7 +209,15 @@
                 "</div>" +
             "</div>" +
             "<div style='clear:both'></div>";
-            msg_html += new_msg_ele;
+            if (msg_obj.from == current_id && msg_obj.type == current_type) {  // 如果当前正在聊的人就是这条信息的发送者
+                msg_html += new_msg_ele;
+            } else {  // 如果列表有这个
+                if ($(the_list_ele).children("span:first").hasClass("hide")){
+                    $(the_list_ele).children("span:first").removeClass("hide");
+                }
+                $(the_list_ele).children("span:first").text(parseInt($(the_list_ele).children("span:first").text()) + 1);  //消息数+1
+                the_list_ele.data += new_msg_ele;  //把消息数据存储到对应好友的html元素中
+            }  // end if
         });  // end each
 
         $(".box-bd").append(msg_html);
@@ -204,15 +227,42 @@
 
     // start function OpenChatWindow
     function OpenChatWindow(ele){
+        var prev_contact_id = $(".box-hd .box-hd-wrapper").attr("contact-id");
+        var prev_contact_type = $(".box-hd .box-hd-wrapper").attr("contact-type");
+        if (prev_contact_id && prev_contact_type) {  //有旧消息
+            var prev_list_ele = $("li[contact-type='" + prev_contact_type + "'][contact-id='" + prev_contact_id + "']")[0];
+            if (prev_list_ele.data) {
+                prev_list_ele.data += $(".box-bd").html();
+                console.log(prev_list_ele.data);
+            }else {
+                prev_list_ele.data = "";
+                prev_list_ele.data += $(".box-bd").html();
+                console.log(prev_list_ele.data);
+            }
+        }
         console.log($(ele));
+        if (!$(ele).children("span:first").hasClass("hide")) {
+            $(ele).children("span:first").addClass("hide");
+        }
+        $(ele).children("span:first").text(0);
         $(ele).addClass("my-active");
         $(ele).siblings().removeClass("my-active");
         var contact_id = $(ele).attr("contact-id");
         var contact_name = $(ele).find(".contact-name").text();
         var contact_type = $(ele).attr("contact-type");
-
-        var box_hd_content = "正在跟" +contact_name +"聊天";
-        $(".box-hd .box-hd-wrapper").html(box_hd_content).attr("contact-id",contact_id).attr("contact-type",contact_type);
+        if ($(".box-ft").hasClass("hide")){
+            $(".box-ft").removeClass("hide");
+        }
+        if (!$("#no-chat-notify").hasClass("hide")) {
+            $("#no-chat-notify").addClass("hide");
+        }
+        if (contact_id != prev_contact_id && contact_type != prev_contact_type) {
+            var box_hd_content = "正在跟" +contact_name +"聊天";
+            $(".box-hd .box-hd-wrapper").html(box_hd_content).attr("contact-id",contact_id).attr("contact-type",contact_type);
+            console.log("begin to load msgs...");
+            $(".box-bd").html(ele.data);
+            ele.data = "";
+        }
     }  // end function OpenChatWindow
 
     // start function GetNewMsgs
