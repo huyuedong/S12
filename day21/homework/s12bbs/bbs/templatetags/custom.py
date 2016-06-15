@@ -16,6 +16,11 @@ def truncate_url(img_obj):
 
 @register.simple_tag
 def filter_comment(article_obj):
+    """
+    用来统计文章有多少评论、多少赞
+    :param article_obj:
+    :return:
+    """
     query_set = article_obj.comment_set.select_related()
     comments = {
         'comment_count': query_set.filter(comment_type=1).count(),

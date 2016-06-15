@@ -71,6 +71,7 @@ def get_comments(request, article_id):
 	return HttpResponse(html_str)
 
 
+# 发表新文章
 def new_article(request):
 	if request.method == "POST":
 		article_form = forms.ArticleForm(request.POST, request.FILES)  # 验证数据和文件
