@@ -169,17 +169,18 @@
 
     // start function AddMSGIntoBox
     function AddSendMSGIntoBox(msg_text) {
-        var new_msg_ele = "<div class='msg-me clearfix'>" +
-            "<img class='hd-img' src='{{ request.user.userprofile.get_head_img }}'>" +
-            "<div class='msg-wrapper'>" +
-                "<div class='msg-item'>" +
-                    "<span>" + "{{ request.user.userprofile.name }}" + "</span>" +
-                    "<span class='margin-left-five'>"  + new Date().toLocaleTimeString() +"</span>" +
-                    "<div class='msg-text'>" + msg_text +"</div>" +
+        var new_msg_ele = "<div class='clearfix'>" +
+            "<div class='msg-me'>" +
+                "<img class='hd-img' src='{{ request.user.userprofile.get_head_img }}'>" +
+                "<div class='msg-wrapper'>" +
+                    "<div class='msg-item'>" +
+                        "<span>" + "{{ request.user.userprofile.name }}" + "</span>" +
+                        "<span class='margin-left-five'>"  + new Date().toLocaleTimeString() +"</span>" +
+                        "<div class='msg-text'>" + msg_text +"</div>" +
+                    "</div>" +
                 "</div>" +
             "</div>" +
-        "</div>" +
-        "<div style='clear:both'></div>";
+        "</div>";
         $(".box-bd").append(new_msg_ele);
         $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
     }  // end function AddSendMSGIntoBox
@@ -192,76 +193,82 @@
             var current_id = $(".box-hd-wrapper").attr("contact-id");
             var current_type = $(".box-hd-wrapper").attr("contact-type");
             var the_list_ele = $("li[contact-type='" + msg_obj.type + "'][contact-id='" + msg_obj.from + "']")[0];
-            if (!the_list_ele){
-                console.log("Can't find the sender...");
-                return true; //如果好友列表中不存在这个发消息的人就跳过这次循环
-            } else if (!the_list_ele.data) {  //元素的数据未定义或为空就初始化
-                the_list_ele.data = "";  //初始化
-            }
-            var new_msg_ele = "<div class='msg-you clearfix'>" +
-                "<img class='hd-img' src='" + msg_obj.hd_img + "'>" +
-                "<div class='msg-wrapper'>" +
-                    "<div class='msg-item'>" +
-                        "<span>" + msg_obj.nickname + "</span>" +
-                        "<span class='margin-left-five'>" + msg_obj.timestamp +"</span>" +
-                        "<div class='msg-text'>" + msg_obj.msg +"</div>" +
+            var new_msg_ele = "<div class='clearfix'>"+
+                "<div class='msg-you'>" +
+                    "<img class='hd-img' src='" + msg_obj.hd_img + "'>" +
+                    "<div class='msg-wrapper'>" +
+                        "<div class='msg-item'>" +
+                            "<span>" + msg_obj.nickname + "</span>" +
+                            "<span class='margin-left-five'>" + msg_obj.timestamp +"</span>" +
+                            "<div class='msg-text'>" + msg_obj.msg +"</div>" +
+                        "</div>" +
                     "</div>" +
                 "</div>" +
-            "</div>" +
-            "<div style='clear:both'></div>";
+            "</div>";
             if (msg_obj.from == current_id && msg_obj.type == current_type) {  // 如果当前正在聊的人就是这条信息的发送者
                 msg_html += new_msg_ele;
-            } else {  // 如果列表有这个
-                if ($(the_list_ele).children("span:first").hasClass("hide")){
+                $(".box-bd").append(msg_html);  //把收到的消息加到聊天窗口
+                $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
+            } else if(the_list_ele) {  //当前聊的不是这个发消息的人就把消息加到好友列表元素的data中
+                if ($(the_list_ele).children("span:first").hasClass("hide")){  //让未读消息数显示出来
                     $(the_list_ele).children("span:first").removeClass("hide");
                 }
                 $(the_list_ele).children("span:first").text(parseInt($(the_list_ele).children("span:first").text()) + 1);  //消息数+1
+                if (!the_list_ele.data) {  //data未定义就初始化
+                    the_list_ele.data = "";  //初始化
+                }
                 the_list_ele.data += new_msg_ele;  //把消息数据存储到对应好友的html元素中
-            }  // end if
+            } else {  //好友列表找不到这个发消息的人
+                console.log("Can't find the sender...");
+                return true; //如果好友列表中不存在这个发消息的人就跳过这次循环
+            }// end if
         });  // end each
-
-        $(".box-bd").append(msg_html);
-        $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
     }
     // end AddGetMSGIntoBox
 
     // start function OpenChatWindow
     function OpenChatWindow(ele){
-        var prev_contact_id = $(".box-hd .box-hd-wrapper").attr("contact-id");
+        var prev_contact_id = $(".box-hd .box-hd-wrapper").attr("contact-id");  //获取当前聊天人的属性
         var prev_contact_type = $(".box-hd .box-hd-wrapper").attr("contact-type");
-        if (prev_contact_id && prev_contact_type) {  //有旧消息
-            var prev_list_ele = $("li[contact-type='" + prev_contact_type + "'][contact-id='" + prev_contact_id + "']")[0];
-            if (prev_list_ele.data) {
-                prev_list_ele.data += $(".box-bd").html();
-                console.log(prev_list_ele.data);
-            }else {
-                prev_list_ele.data = "";
-                prev_list_ele.data += $(".box-bd").html();
-                console.log(prev_list_ele.data);
-            }
-        }
-        console.log($(ele));
-        if (!$(ele).children("span:first").hasClass("hide")) {
-            $(ele).children("span:first").addClass("hide");
-        }
-        $(ele).children("span:first").text(0);
-        $(ele).addClass("my-active");
-        $(ele).siblings().removeClass("my-active");
         var contact_id = $(ele).attr("contact-id");
         var contact_name = $(ele).find(".contact-name").text();
         var contact_type = $(ele).attr("contact-type");
-        if ($(".box-ft").hasClass("hide")){
-            $(".box-ft").removeClass("hide");
-        }
-        if (!$("#no-chat-notify").hasClass("hide")) {
-            $("#no-chat-notify").addClass("hide");
-        }
-        if (contact_id != prev_contact_id && contact_type != prev_contact_type) {
-            var box_hd_content = "正在跟" +contact_name +"聊天";
-            $(".box-hd .box-hd-wrapper").html(box_hd_content).attr("contact-id",contact_id).attr("contact-type",contact_type);
-            console.log("begin to load msgs...");
-            $(".box-bd").html(ele.data);
-            ele.data = "";
+        console.log(prev_contact_id, prev_contact_type);
+        console.log(contact_name, contact_type);
+        if (contact_id == prev_contact_id && contact_type == prev_contact_type) {
+        }else {  //点击的好友不是当前聊天对象时执行
+            console.log("点击的好友不是当前聊天对象时执行...");
+            if (prev_contact_id && prev_contact_type) {  //如果当前聊天框有旧消息
+                console.log("如果当前聊天框有旧消息...");
+                var prev_list_ele = $("li[contact-type='" + prev_contact_type + "'][contact-id='" + prev_contact_id + "']")[0];
+                console.log(prev_list_ele);
+                prev_list_ele.data = "";  //初始化当前聊天联系人元素的data
+                prev_list_ele.data += $(".box-bd").html();  //保存当前的聊天信息
+                $(".box-bd").html("");  //清空聊天窗口
+                console.log(prev_list_ele.data);
+            }
+            if (!$(ele).children("span:first").hasClass("hide")) {
+                $(ele).children("span:first").addClass("hide");  //隐藏未读消息数的标签
+            }
+            $(ele).children("span:first").text(0);  //将未读消息数置为0
+            $(ele).addClass("my-active");
+            $(ele).siblings().removeClass("my-active");
+
+            if ($(".box-ft").hasClass("hide")) {
+                $(".box-ft").removeClass("hide");  //显示输入框
+            }
+            if (!$("#no-chat-notify").hasClass("hide")) {
+                $("#no-chat-notify").addClass("hide");  //隐藏聊天窗口的提示信息
+            }
+            var box_hd_content = "正在跟" + contact_name + "聊天";
+            console.log(box_hd_content);
+            $(".box-hd .box-hd-wrapper").html(box_hd_content).attr("contact-id", contact_id).attr("contact-type", contact_type);
+
+            if (ele.data) {  //如果该元素的data中有消息
+                console.log("begin to load msgs...");
+                $(".box-bd").html(ele.data);  //加载保存在当前元素data中的数据
+                ele.data = "";  //加载完就清空该元素的data
+            }
         }
     }  // end function OpenChatWindow
 
@@ -270,8 +277,8 @@
         console.log("getting new msgs...");
         $.getJSON("{% url 'webchat:get_new_msgs' %}", function(callback) {
             console.log(callback);
-            AddGetMSGIntoBox(callback);
-            GetNewMsgs();
+            AddGetMSGIntoBox(callback); //加载后台传来的数据
+            GetNewMsgs();  //继续获取新消息
         });  // end getJSON
     }  // end function GetNewMsgs
 </script>

@@ -29,15 +29,28 @@ def send_msg(request):
 	print(msg_data)
 	if msg_data:
 		msg_data = json.loads(msg_data)
-		msg_to_obj = bbs_models.UserProfile.objects.get(id=msg_data["from"])
-		msg_data["nickname"] = msg_to_obj.name
-		msg_data["hd_img"] = msg_to_obj.get_head_img()
-		msg_data["timestamp"] = time.strftime("%H:%M:%S", time.localtime(time.time()))
-		print(msg_data)
-		if msg_data["type"] == "single":  # 发送给单人
-			if not GLOBAL_MSG_QUEUES.get(int(msg_data["to"])):  # 没有该对象的queue就新建，这里的id值是字符串类型需要转换
-				GLOBAL_MSG_QUEUES[int(msg_data["to"])] = queue.Queue()
-			GLOBAL_MSG_QUEUES[int(msg_data["to"])].put(msg_data)  # 把消息数据放入queue
+		if msg_data.get("to"):  # 确保接收到的消息有to属性
+			msg_to_obj = bbs_models.UserProfile.objects.get(id=msg_data["from"])  # 发送消息的人
+			msg_data["nickname"] = msg_to_obj.name  # 发消息的人的名字
+			msg_data["hd_img"] = msg_to_obj.get_head_img()  # 头像
+			msg_data["timestamp"] = time.strftime("%H:%M:%S", time.localtime(time.time()))  # 消息的时间戳
+			print(msg_data)
+			global msg_to_list  # 消息接收人列表
+			if msg_data["type"] == "single":  # 发送给单人
+				msg_to_list = [int(msg_data["to"]), ]  # msg_data中的值都是字符串类型
+			elif msg_data["type"] == "group":  # 群发消息
+				msg_data["from"] = msg_data["to"]  # 群发消息的发送者默认为群组的id,发消息认得信息在上面已经提取出来了
+				webgroup_obj = webchat_models.WebGroup.objects.get(id=msg_data["to"])  # 找到群对象
+				members_obj_set = webgroup_obj.members.select_related()
+				msg_to_list = [member.id for member in members_obj_set]
+				msg_to_list.remove(request.user.userprofile.id)  # 收消息的人中移除自己
+			print(msg_to_list)
+			for to_id in msg_to_list:  # 遍历将消息放进queue
+				if not GLOBAL_MSG_QUEUES.get(int(to_id)):  # 没有该对象的queue就新建，注意id值是否需要转换
+					GLOBAL_MSG_QUEUES[int(to_id)] = queue.Queue()
+				GLOBAL_MSG_QUEUES[int(to_id)].put(msg_data)  # 把消息数据放入queue
+	else:
+		print("invalid request post data:{}".format(request.POST))
 	return HttpResponse("msg received.")
 
 
@@ -56,5 +69,8 @@ def get_new_msgs(request):
 		try:
 			msg_list.append(queue_obj.get(timeout=60))  # 60秒超时
 		except queue.Empty:
-			print("\033[41;1mNo msg for {}(id:{}),timeout.\033[0m".format(request.user.userprofile.name, request.user.userprofile.id))
+			print("\033[41;1mNo msg for {}(id:{}),timeout.\033[0m".format(
+					request.user.userprofile.name,
+					request.user.userprofile.id
+			))
 	return HttpResponse(json.dumps(msg_list))
