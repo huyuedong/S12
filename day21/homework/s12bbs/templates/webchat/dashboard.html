@@ -77,7 +77,31 @@
                         <div class="content">
                             <a href="#"><span class="fa fa-smile-o fa-2x"></span></a>
                             <a href="#"><span class="fa fa-scissors fa-2x"></span></a>
-                            <a href="#"><span class="fa fa-folder-o fa-2x"></span></a>
+                            <!-- Button trigger modal -->
+                            <a type="button" data-toggle="modal" data-target="#myModal" style="cursor: pointer">
+                                <span class="fa fa-folder-o fa-2x"></span>
+                                <input id="select-file" name="file" style="display: none" multiple="multiple" type="file"/>
+                            </a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">上传文件</h4>
+                                  </div>
+                                    <form enctype="multipart/form-data" method="post" id="upload-form">
+                                      <div class="modal-body">
+                                        <input type="file" name="file" />
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary" onclick="return UploadFile();">上传</button>
+                                      </div>
+                                    </form>
+                                </div>
+                              </div>
+                            </div>
                         </div>
                     </div>
                     <div class="content">
@@ -366,5 +390,26 @@
                 }
         );  //end getJSON
     }  //end GetFriendStatus
+
+    //upload file
+    function UploadFile() {
+        var formData = new FormData($("form")[0]);
+        console.log(formData);
+
+        $.ajax({
+            url: '{% url "webchat:upload_file" %}',
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            processData: false,
+            success: function (response) {
+                alert(response);
+            }
+        });
+    }
+
 </script>
 {% endblock %}

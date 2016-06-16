@@ -56,6 +56,7 @@
             border-right-color:#F8C301;
         }
     </style>
+    <script src="../../static/scripts/jquery-2.2.3.js"></script>
 </head>
 <body>
     <div class="container">
@@ -71,6 +72,35 @@
         <div>1<span class="fa fa-circle" style="color: lawngreen"></span></div>
         <div>2<span class="fa fa-circle" style="color: lightgrey"></span></div>
         <div>2<i class='fa fa-circle' style='color:greenyellow;margin-right:10px'></i></div>
+        <form id="upload-form">
+            <input id="upload-file" type="file" name="file" />
+            <input id="submit" type="submit" value="submit" />
+
+        </form>
     </div>
+    <script>
+        $("form").submit(function(evt){
+            evt.preventDefault();
+
+            var formData = new FormData($(this)[0]);
+            console.log(formData);
+
+            $.ajax({
+                url: 'fileUpload',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                processData: false,
+                success: function (response) {
+                    alert(response);
+                }
+            });
+
+            return false;
+        });
+</script>
 </body>
 </html>

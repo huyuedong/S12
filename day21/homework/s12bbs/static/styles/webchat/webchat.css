@@ -258,3 +258,8 @@ body{
 .margin-left-five {
     margin-left: 5px;
 }
+
+.upload-file {
+    position: absolute;
+    clip: rect(1px,1px,1px,1px);
+}

@@ -6,6 +6,7 @@ from bbs import models as bbs_models
 import queue
 import json
 import time
+import os
 
 # Create your views here.
 
@@ -103,4 +104,18 @@ def check_my_friends_status(request):
 	print("online list==>", online_friends_list)
 	return HttpResponse(json.dumps(online_friends_list))
 
+
+@login_required(login_url="/login/")
+def upload_file(request):
+	f = request.FILES["file"]
+	print(f)
+	base_path = "uploads"
+	user_path = "{}/{}".format(base_path, request.user.userprofile.id)
+	if not os.path.exists(user_path):
+		os.mkdir(user_path)
+	file_path = "{}/{}".format(user_path, f.name)
+	with open(file_path, "wb+") as destination:
+		for chunk in f.chunks():
+			destination.write(chunk)
+	return HttpResponse(file_path)
 

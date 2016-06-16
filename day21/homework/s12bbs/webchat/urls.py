@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^$', views.dashboard, name="chat_dashboard"),
     url(r'^msg_send/$', views.send_msg, name="send_msg"),
     url(r'^new_msgs/$', views.get_new_msgs, name="get_new_msgs"),
-    url(r'^my_friends_status/$', views.check_my_friends_status, name="check_my_friends_status")
+    url(r'^my_friends_status/$', views.check_my_friends_status, name="check_my_friends_status"),
+    url(r'^fileUpload/$', views.upload_file, name="upload_file"),
 
 ]
-
