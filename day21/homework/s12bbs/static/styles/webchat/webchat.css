@@ -71,8 +71,18 @@ body{
     background-color: inherit;
 }
 
-.list-group-item .badge {
+.list-group-item .badge, .my-badge {
     background-color: red;
+}
+
+.online {
+    color: lime;
+    margin-right: 5px;
+}
+
+.offline {
+    color: darkgray;
+    margin-right: 5px;
 }
 
 .list-group-item:hover {

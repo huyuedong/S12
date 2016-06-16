@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from webchat import models as webchat_models
 from bbs import models as bbs_models
 import queue
@@ -16,12 +17,26 @@ GLOBAL_MSG_QUEUES = {
 }
 
 
+# 状态装饰器,只要用户开始收消息就写一个五分钟的cache
+def set_status(func):
+	def inner(arg):
+		print("start decorator:set_status...")
+		status_key = "{}_status".format(arg.user.userprofile.id)
+		print("status key==>", status_key)
+		cache.set(status_key, 1, 300)  # 保存用户在线状态5分钟
+		return func(arg)  # 继续执行取消息的方法
+	return inner
+
+
 @login_required(login_url="/login/")
+@set_status
 def dashboard(request):
+	print(request.user.userprofile.group_members.select_related())
 	return render(request, "webchat/dashboard.html", {'category_list': category_list})
 
 
 @login_required(login_url="/login/")
+@set_status
 def send_msg(request):
 	print("get data from send_msg...")
 	print(request.POST)
@@ -55,6 +70,7 @@ def send_msg(request):
 
 
 @login_required(login_url="/login/")
+@set_status
 def get_new_msgs(request):
 	if request.user.userprofile.id not in GLOBAL_MSG_QUEUES:
 		GLOBAL_MSG_QUEUES[request.user.userprofile.id] = queue.Queue()  # 这里的id值是int类型
@@ -74,3 +90,17 @@ def get_new_msgs(request):
 					request.user.userprofile.id
 			))
 	return HttpResponse(json.dumps(msg_list))
+
+
+@login_required(login_url="/login/")
+def check_my_friends_status(request):
+	print("get request from frontend to get online friends...")
+	my_friends_list = request.user.userprofile.friends.select_related()
+	online_friends_list = []
+	for my_friend_obj in my_friends_list:
+		if cache.get("{}_status".format(my_friend_obj.id)):
+			online_friends_list.append(my_friend_obj.id)
+	print("online list==>", online_friends_list)
+	return HttpResponse(json.dumps(online_friends_list))
+
+
