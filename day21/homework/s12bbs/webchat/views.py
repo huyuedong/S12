@@ -107,15 +107,18 @@ def check_my_friends_status(request):
 
 @login_required(login_url="/login/")
 def upload_file(request):
-	f = request.FILES["file"]
-	print(f)
-	base_path = "uploads"
-	user_path = "{}/{}".format(base_path, request.user.userprofile.id)
-	if not os.path.exists(user_path):
-		os.mkdir(user_path)
-	file_path = "{}/{}".format(user_path, f.name)
-	with open(file_path, "wb+") as destination:
-		for chunk in f.chunks():
-			destination.write(chunk)
-	return HttpResponse(file_path)
-
+	if request.method == "POST":
+		print("in post...")
+		f = request.FILES["file"]
+		print(f)
+		base_path = "uploads"
+		user_path = "{}/{}".format(base_path, request.user.userprofile.id)
+		if not os.path.exists(user_path):
+			os.mkdir(user_path)
+		file_path = "{}/{}".format(user_path, f.name)
+		with open(file_path, "wb+") as destination:
+			for chunk in f.chunks():
+				destination.write(chunk)
+		return HttpResponse(file_path)
+	else:
+		return render(request, "webchat/test.html")
