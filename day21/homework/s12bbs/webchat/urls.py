@@ -24,5 +24,9 @@ urlpatterns = [
     url(r'^new_msgs/$', views.get_new_msgs, name="get_new_msgs"),
     url(r'^my_friends_status/$', views.check_my_friends_status, name="check_my_friends_status"),
     url(r'^fileUpload/$', views.upload_file, name="upload_file"),
+    url(r'^upload_file_progress/$', views.upload_file_progress, name="upload_file_progress"),
+    url(r'^delete_cache_key/$', views.delete_cache_key, name="delete_cache_key"),
+
+
 
 ]

@@ -116,9 +116,25 @@ def upload_file(request):
 		if not os.path.exists(user_path):
 			os.mkdir(user_path)
 		file_path = "{}/{}".format(user_path, f.name)
+		recv_size = 0
 		with open(file_path, "wb+") as destination:
 			for chunk in f.chunks():
 				destination.write(chunk)
+				recv_size += len(chunk)  # 累加已传文件大小
+				cache.set(f.name, recv_size)  # 设置文件名及已传大小
 		return HttpResponse(file_path)
 	else:
 		return render(request, "webchat/test.html")
+
+
+def upload_file_progress(request):
+	filename = request.GET.get("filename")
+	progress = cache.get(filename)
+	print("file:{}, uploading progress:{}.".format(filename, progress))
+	return HttpResponse(json.dumps({"recv_size": progress}))
+
+
+def delete_cache_key(request):
+	cache_key = request.GET.get("cache_key")
+	cache.delete(cache_key)
+	return HttpResponse("cache key :{} has deleted...".format(cache_key))
