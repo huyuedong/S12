@@ -76,9 +76,9 @@
               {% endfor%}
                 {% url "webchat:chat_dashboard" as chat_url %}
                 {% if request.path == chat_url %}
-                    <li class="active"><a href="/webchat/">撩妹战区</a></li>
+                    <li class="active"><a href="/webchat/">WebChat</a></li>
                 {% else %}
-                    <li class=""><a href="/webchat/">撩妹战区</a></li>
+                    <li class=""><a href="/webchat/">WebChat</a></li>
                 {% endif %}
               </ul>
             {% endblock %}
