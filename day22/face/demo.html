@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jquery新浪微博表情插件-dwtedx博客</title>
+	<link rel="stylesheet" type="text/css" href="jquery.sinaEmotion.css" />
+	<style type="text/css">
+		h1 {
+			font: 16px '微软雅黑';
+			color: #0000ff;
+		}
+		body{
+			font-size:13px;
+		}
+	</style>
+</head>
+<body>
+
+    <div id="content">
+	
+<br><br><br>
+<!--DEMO start-->
+<div style="width:450px; height:auto; margin:50px auto;">
+	<h1>JQuery新浪1630个表情插件(带解析方法)</h1>
+	<h1>完美兼容IE6+所有浏览器</h1>
+	<div id="out" style="height:auto; width: 400px; border: 1px dashed #000000; padding: 10px;"></div>
+	<textarea id="emotion" class="emotion" cols="58" rows="5" style="font-size: 13px;"></textarea>
+	<br />
+	<input id="face" type="button" value="表情" />
+	<input id="analytic" type="button" value="解析" onClick="out()" />
+	<br /><br /><br />
+	
+	<div id="out1" style="height:auto; width: 400px; border: 1px dashed #000000; padding: 10px;"></div>
+	<textarea id="emotion1" class="emotion" cols="58" rows="5" style="font-size: 13px;"></textarea>
+	<br />
+	<input id="face1" type="button" value="表情" />
+	<input id="analytic1" type="button" value="解析" onClick="out1()" />
+	<br />
+	
+</div>	
+	
+	<script type="text/javascript" src="jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="jquery.sinaEmotion.js"></script>
+	
+	<script type="text/javascript">
+		// 绑定表情
+		$('#face').SinaEmotion($('#emotion'));
+
+		// 测试本地解析
+		function out() {
+			var inputText = $('#emotion').val();
+			$('#out').html(AnalyticEmotion(inputText));
+		}
+		
+		
+		// 绑定表情
+		$('#face1').SinaEmotion($('#emotion1'));
+
+		// 测试本地解析
+		function out1() {
+			var inputText = $('#emotion1').val();
+			$('#out1').html(AnalyticEmotion(inputText));
+		}
+	</script>
+<!--DEMO end-->
+
+	</div>
+<div style="text-align:center;clear:both">
+<p>适用浏览器：IE8、360、FireFox、Chrome、Safari、Opera、傲游、搜狗、世界之窗. </p>
+<p>来源：<a href="http://dwtedx.com" target="_blank">dwtedx博客</a></p>
+</div>
+</body>
+</html>
