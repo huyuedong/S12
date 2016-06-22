@@ -33,7 +33,8 @@ var uSinaEmotionsHt = new Hashtable();
 $(function() {
 	$.ajax( {
 		dataType : 'json',
-		url : 'json/jquery.sinaEmotion.json',
+		//url : 'json/jquery.sinaEmotion.json',
+		url : 'json/simple.json',
 		success : function(response) {
 			var data = response.data;
 			for ( var i in data) {
