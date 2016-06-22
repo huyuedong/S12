@@ -82,11 +82,6 @@
                                 <span onclick="$('#upload-file').click()" class="fa fa-folder-o fa-2x"></span>
                                 <input id="upload-file" name="file" class="hide" multiple="multiple" type="file"/>
                             </a>
-                            <div class="progress ">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 10%;">
-                                    10%
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="content">
@@ -144,7 +139,7 @@
                 var msg_text = $("textarea").val();
                 if ($.trim(msg_text).length > 0){
                     console.log(msg_text);
-                    SendMSG(msg_text);
+                    SendMSG(msg_text, "text");
                     //no wait the send_msg's call confirm msg
                     AddSendMSGIntoBox(msg_text, "text");
                     $("textarea").val('');
@@ -173,7 +168,7 @@
 
     });  // end document ready
     // start function SendMSG
-    function SendMSG(msg_text){
+    function SendMSG(msg_text, send_type){
         var contact_type = $(".box-hd-wrapper").attr("contact-type");
         var contact_id = $(".box-hd-wrapper").attr("contact-id");
         console.log("begin send msg...");
@@ -186,6 +181,7 @@
                 "from_hd_img": "{{ request.user.userprofile.head_img | truncate_url }}",
                 "to": contact_id,
                 "type": contact_type,
+                "send_type": send_type,
                 "msg": msg_text
             };
             console.log(msg_obj);
@@ -224,7 +220,7 @@
                         "<div class='msg-item'>" +
                             "<span>" + "{{ request.user.userprofile.name }}" + "</span>" +
                             "<span class='margin-left-five'>"  + new Date().toLocaleTimeString() +"</span>" +
-                            "<div class='msg-text'><a href='' class='thumbnail'><img src='/static/'" +
+                            "<div class='msg-text'><a href='#' class='thumbnail'><img src='/static/" +
                             "{{ request.user.userprofile.id }}/" +
                             msg_text +"'/></a></div>" +
                         "</div>" +
@@ -239,7 +235,7 @@
                         "<div class='msg-item'>" +
                             "<span>" + "{{ request.user.userprofile.name }}" + "</span>" +
                             "<span class='margin-left-five'>"  + new Date().toLocaleTimeString() +"</span>" +
-                            "<div class='msg-text'><a href='/static/'" +
+                            "<div class='msg-text'><a style='background-color: inherit; text-decoration: underline;' href='/static/" +
                             "{{ request.user.userprofile.id }}/" +
                             msg_text +"'target='_blank'>"+ msg_text + "</div>" +
                         "</div>" +
@@ -256,22 +252,54 @@
     function AddGetMSGIntoBox(msg_list) {
         var msg_html = "";
         $.each(msg_list, function(index, msg_obj) {
-            console.log(msg_obj);
+            console.log("======>", msg_obj);
             var current_id = $(".box-hd-wrapper").attr("contact-id");
             var current_type = $(".box-hd-wrapper").attr("contact-type");
             var the_list_ele = $("li[contact-type='" + msg_obj.type + "'][contact-id='" + msg_obj.from + "']")[0];
-            var new_msg_ele = "<div class='clearfix'>"+
-                "<div class='msg-you'>" +
-                    "<img class='hd-img' src='" + msg_obj.from_hd_img + "'>" +
-                    "<div class='msg-wrapper'>" +
-                        "<div class='msg-item'>" +
-                            "<span>" + msg_obj.from_name + "</span>" +
-                            "<span class='margin-left-five'>" + msg_obj.timestamp +"</span>" +
-                            "<div class='msg-text'>" + msg_obj.msg +"</div>" +
+            // text
+            if ( msg_obj.send_type == "text" ) {
+                var new_msg_ele = "<div class='clearfix'>" +
+                    "<div class='msg-you'>" +
+                        "<img class='hd-img' src='" + msg_obj.from_hd_img + "'>" +
+                        "<div class='msg-wrapper'>" +
+                            "<div class='msg-item'>" +
+                                "<span>" + msg_obj.from_name + "</span>" +
+                                "<span class='margin-left-five'>" + msg_obj.timestamp +"</span>" +
+                                "<div class='msg-text'>" + msg_obj.msg +"</div>" +
+                            "</div>" +
                         "</div>" +
                     "</div>" +
-                "</div>" +
-            "</div>";
+                "</div>";
+            }else if (msg_obj.send_type.startsWith("image")) {  //image
+                var new_msg_ele = "<div class='clearfix'>" +
+                    "<div class='msg-you'>" +
+                        "<img class='hd-img' src='" + msg_obj.from_hd_img + "'>" +
+                        "<div class='msg-wrapper'>" +
+                            "<div class='msg-item'>" +
+                                "<span>" + msg_obj.from_name + "</span>" +
+                                "<span class='margin-left-five'>"  + msg_obj.timestamp +"</span>" +
+                                "<div class='msg-text'><a href='#' class='thumbnail'><img src='/static/" +
+                                msg_obj.msg +"'/></a></div>" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>" +
+                "</div>";
+            }else {  //else
+                var new_msg_ele = "<div class='clearfix'>" +
+                    "<div class='msg-you'>" +
+                        "<img class='hd-img' src='" + msg_obj.from_hd_img + "'>" +
+                        "<div class='msg-wrapper'>" +
+                            "<div class='msg-item'>" +
+                                "<span>" + msg_obj.from_name + "</span>" +
+                                "<span class='margin-left-five'>"  + msg_obj.timestamp +"</span>" +
+                                "<div class='msg-text'><a style='background-color: inherit; text-decoration: underline;' href='/static/" +
+                                msg_obj.msg +"'target='_blank'>"+ msg_obj.msg.split("/").pop() + "</div>" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>" +
+                "</div>";
+            }
+
             if (msg_obj.from == current_id && msg_obj.type == current_type) {  // 如果当前正在聊的人就是这条信息的发送者
                 msg_html += new_msg_ele;
                 $(".box-bd").append(msg_html);  //把收到的消息加到聊天窗口
@@ -447,6 +475,8 @@
                         if (file_obj.size == callback.recv_size) {
                             clearInterval(UploadProgressRefresh);
                             AddSendMSGIntoBox(file_obj.name, file_obj.type);
+                            var msg_text = "{{ request.user.userprofile.id }}/" + file_obj.name;  //处理文件的路径
+                            SendMSG(msg_text, file_obj.type);
                             $.post(  //文件传完了就把session去掉
                                     "{% url 'webchat:delete_cache_key' %}",
                                     {cache_key: file_obj.name},
