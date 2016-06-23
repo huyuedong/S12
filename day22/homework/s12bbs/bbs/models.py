@@ -99,7 +99,6 @@ class UserProfile(models.Model):
 	head_img = models.ImageField(upload_to="uploads", blank=True, null=True)
 	friends = models.ManyToManyField("self", related_name="my_friends", blank=True)
 
-
 	def __str__(self):
 		return self.name
 

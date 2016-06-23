@@ -18,7 +18,7 @@
             </div>
             <div class="search-bar input-group">
                 <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
-                <input class="form-control" type="text" placeholder="搜索">
+                <input id="search" class="form-control" type="text" placeholder="搜索">
             </div>
             <div class="">
                 <!-- Nav tabs -->
@@ -183,6 +183,17 @@
         $("#upload-file").change(function () {
             UploadFile();
         });
+
+        //搜索
+        $("#search").on('keyup change', function() {
+           showSearchResult();
+        });
+
+        //移除搜索结果
+		$(document).click(function(){
+			$('#search-result').hide();
+			$('#search-result').remove();
+		});
 
     });  // end document ready
 
@@ -532,6 +543,34 @@
            }
         });
     }
+
+    //showSearchResult
+    function showSearchResult() {
+        var arg = $("#search").val();
+        console.log(arg);
+        $.getJSON(
+                "{% url 'webchat:show_search_results' %}",
+                {data: arg},
+                function(callback) {
+                    console.log(callback);
+                    if (callback.length <=0) {
+                        var html_ele = "<div class='recommendation'><div>找不到匹配的结果</div></div>"
+                        $("#search").append(html_ele);
+                    } else {
+                        var html_ele = "<div class='recommendation'><div class='mmpop'><ul>";
+                        $.each(callback, function(index, result_obj){
+                            var user_id = result_obj.id;
+                            var user_name = result_obj.name;
+                            ele = "<li>" + user_name + "</li>";
+                            html_ele += ele;
+                        });
+                        html_ele += "</ul></div></div>";
+                        $("#search").append(html_ele);
+                    }
+                }
+        )
+    }
+
 
 
 </script>

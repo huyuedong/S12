@@ -268,3 +268,25 @@ body{
     position: absolute;
     clip: rect(1px,1px,1px,1px);
 }
+
+.recommendation {
+    background: #33363b;
+    width: 244px;
+    top: 36px;
+    left: 0;
+    box-shadow: 0 0 10px #2a2a2a;
+    -moz-box-shadow: 0 0 10px #2a2a2a;
+    -webkit-box-shadow: 0 0 10px #2a2a2a;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+
+.mmpop {
+    position: absolute;
+    background-color: #fff;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    outline: 0;
+}

@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^fileUpload/$', views.upload_file, name="upload_file"),
     url(r'^upload_file_progress/$', views.upload_file_progress, name="upload_file_progress"),
     url(r'^delete_cache_key/$', views.delete_cache_key, name="delete_cache_key"),
+    url(r'^show_search_results/$', views.show_search_results, name="show_search_results"),
 
 
 

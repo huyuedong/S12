@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from webchat import models as webchat_models
 from bbs import models as bbs_models
+from django.db.models import Q
 import queue
 import json
 import time
@@ -122,7 +123,7 @@ def upload_file(request):
 		return HttpResponse("--upload success--")
 
 
-@login_required
+@login_required(login_url="/login/")
 def upload_file_progress(request):
 	filename = request.GET.get("filename")  # 获得文件名，这里用作cache的key
 	progress = cache.get(filename)  # 从缓存里得到已上传的进度
@@ -130,7 +131,7 @@ def upload_file_progress(request):
 	return HttpResponse(json.dumps({"recv_size": progress}))  # 返回前端
 
 
-@login_required
+@login_required(login_url="/login/")
 def delete_cache_key(request):
 	"""
 	从缓存中删除此次上传文件的信息
@@ -140,3 +141,16 @@ def delete_cache_key(request):
 	cache_key = request.GET.get("cache_key")
 	cache.delete(cache_key)
 	return HttpResponse("cache key :{} has deleted...".format(cache_key))
+
+
+@login_required(login_url="/login/")
+def show_search_results(request):
+	print(request.GET.get("data"))
+	key_arg = request.GET.get("data")
+	query_set = bbs_models.UserProfile.objects.filter(name__icontains=key_arg)
+	print(query_set)
+	results_list = []
+	for obj in query_set:
+		tmp = {"id": obj.id, "name": obj.name}
+		results_list.append(tmp)
+	return HttpResponse(json.dumps(results_list))
