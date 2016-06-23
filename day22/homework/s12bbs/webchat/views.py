@@ -18,7 +18,7 @@ GLOBAL_MSG_QUEUES = {
 }
 
 
-# 状态装饰器,只要用户开始收消息就写一个五分钟的cache
+# 状态装饰器,只要用户有登录、发消息、收消息的操作证明在线，就写一个五分钟的cache
 def set_status(func):
 	def inner(arg):
 		print("start decorator:set_status...")

@@ -5,6 +5,10 @@
     <link href="/static/styles/webchat/webchat.css" rel="stylesheet">
 {% endblock %}
 
+{% block head-js %}
+    <script src="/static/plugins/qqface/jquery.qqFace.js"></script>
+{% endblock %}
+
 {% block container %}
     <div class="chat-container">
         <!-- start left panel-->
@@ -36,7 +40,7 @@
                     <div role="tabpanel" class="tab-pane active" id="friend-tab">
                         <ul class="list-group">
                         {% for friend in request.user.userprofile.friends.select_related %}
-                            <li contact-type="single" contact-id="{{ friend.id }}" class="list-group-item" onclick="OpenChatWindow(this)">
+                            <li contact-type="single" contact-id="{{ friend.id }}" class="list-group-item sub-menu" onclick="OpenChatWindow(this)">
                             <i class='fa fa-circle offline'></i>
                             <img class="hd-img" src="{{ friend.head_img | truncate_url}}">
                                 <span class="badge my-badge hide">0</span>
@@ -48,10 +52,16 @@
                     <div role="tabpanel" class="tab-pane" id="group-tab">
                         <ul class="list-group">
                             {% for group in request.user.userprofile.group_members.select_related %}
-                            <li contact-type="group" contact-id="{{ group.id }}" class="list-group-item" onclick="OpenChatWindow(this)">
-{#                            <img class="hd-img" src="{{ group.get_head_img }}">#}
-                                <span class="badge my-badge hide">0</span>
-                                <span class="contact-name">{{ group.name }}</span>
+                            <li contact-type="group" contact-id="{{ group.id }}" class="list-group-item sub-menu" onclick="OpenChatWindow(this);showGroupMembers(this)">
+                                <a class="group-title">
+                                    <span class="badge my-badge hide">0</span>
+                                    <span class="contact-name">{{ group.name }}</span>
+                                </a>
+                                <ul class="list-group hide">
+                                    {% for member in group.members.select_related %}
+                                        <li contact-type="single" contact-id="{{ member.id }}" class="list-group-item">{{ member.name }}</li>
+                                    {% endfor %}
+                                </ul>
                             </li>
                             {% endfor %}
                         </ul>
@@ -76,7 +86,7 @@
                 <div class="box-ft hide">
                     <div class="box-toolbar">
                         <div class="content">
-                            <a href="#"><span class="fa fa-smile-o fa-2x"></span></a>
+                            <a id="face"><span class="fa fa-smile-o fa-2x"></span></a>
                             <a href="#"><span class="fa fa-scissors fa-2x"></span></a>
                             <a style="cursor: pointer">
                                 <span onclick="$('#upload-file').click()" class="fa fa-folder-o fa-2x"></span>
@@ -85,7 +95,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        <textarea id="msg"></textarea>
+                        <textarea id="msg" name="msg"></textarea>
                     </div>
                     <div class="content">
                         <button id="send msg" class="btn btn-default pull-right">发送消息</button>
@@ -99,8 +109,15 @@
 {% endblock %}
 
 {% block extend-js %}
-    <script src="/static/plugins/face/jquery.sinaEmotion.js"></script>
+
 <script>
+    $(function() {
+        $("#face").qqFace({
+            id: "facebox",  //表情盒子的ID
+            assign: "msg", //给那个控件赋值
+            path: "/static/plugins/qqface/face/"  //表情存放的路径
+        });
+    });
     //for csrf
     // using jQuery
     function getCookie(name) {
@@ -168,6 +185,16 @@
         });
 
     });  // end document ready
+
+    //parseFace
+    function parseFace(str) {
+        str = str.replace(/\</g,'&lt;');
+        str = str.replace(/\>/g,'&gt;');
+        str = str.replace(/\n/g,'<br/>');
+        str = str.replace(/\[em_([0-9]*)\]/g,'<img style="background-color: inherit;" src="/static/plugins/qqface/face/$1.gif" border="0" />');
+        return str;
+    }
+
     // start function SendMSG
     function SendMSG(msg_text, send_type){
         var contact_type = $(".box-hd-wrapper").attr("contact-type");
@@ -208,7 +235,7 @@
                         "<div class='msg-item'>" +
                             "<span>" + "{{ request.user.userprofile.name }}" + "</span>" +
                             "<span class='margin-left-five'>"  + new Date().toLocaleTimeString() +"</span>" +
-                            "<div class='msg-text'>" + msg_text +"</div>" +
+                            "<div class='msg-text'>" + parseFace(msg_text) +"</div>" +
                         "</div>" +
                     "</div>" +
                 "</div>" +
@@ -249,6 +276,7 @@
         $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
     }  // end function AddSendMSGIntoBox
 
+
     // start AddGetMSGIntoBox
     function AddGetMSGIntoBox(msg_list) {
         var msg_html = "";
@@ -266,7 +294,7 @@
                             "<div class='msg-item'>" +
                                 "<span>" + msg_obj.from_name + "</span>" +
                                 "<span class='margin-left-five'>" + msg_obj.timestamp +"</span>" +
-                                "<div class='msg-text'>" + msg_obj.msg +"</div>" +
+                                "<div class='msg-text'>" + parseFace(msg_obj.msg) +"</div>" +
                             "</div>" +
                         "</div>" +
                     "</div>" +
@@ -306,10 +334,10 @@
                 $(".box-bd").append(msg_html);  //把收到的消息加到聊天窗口
                 $(".box-bd").animate({scrollTop: $(".box-bd")[0].scrollHeight}, 500);  // 窗口滚动到最下
             } else if(the_list_ele) {  //当前聊的不是这个发消息的人就把消息加到好友列表元素的data中
-                if ($(the_list_ele).children("span:first").hasClass("hide")){  //让未读消息数显示出来
-                    $(the_list_ele).children("span:first").removeClass("hide");
+                if ($(the_list_ele).find("span:first").hasClass("hide")){  //让未读消息数显示出来
+                    $(the_list_ele).find("span:first").removeClass("hide");
                 }
-                $(the_list_ele).children("span:first").text(parseInt($(the_list_ele).children("span:first").text()) + 1);  //消息数+1
+                $(the_list_ele).find("span:first").text(parseInt($(the_list_ele).find("span:first").text()) + 1);  //消息数+1
                 if (!the_list_ele.data) {  //data未定义就初始化
                     the_list_ele.data = "";  //初始化
                 }
@@ -343,10 +371,10 @@
                 $(".box-bd").html("");  //清空聊天窗口
                 console.log(prev_list_ele.data);
             }
-            if (!$(ele).children("span:first").hasClass("hide")) {
-                $(ele).children("span:first").addClass("hide");  //隐藏未读消息数的标签
+            if (!$(ele).find("span:first").hasClass("hide")) {
+                $(ele).find("span:first").addClass("hide");  //隐藏未读消息数的标签
             }
-            $(ele).children("span:first").text(0);  //将未读消息数置为0
+            $(ele).find("span:first").text(0);  //将未读消息数置为0
             GetTotalMSGNum();
 
             $(ele).addClass("my-active");
@@ -494,6 +522,17 @@
             );  //end getJSON
         }, 1000);  //1000ms取一次
     } //end GetFileUploadProgress
+
+    //showGroupMembers
+    function showGroupMembers(ele) {
+        $(ele).children("ul:first").toggleClass("hide");
+        $(ele).siblings("li").children("ul").each(function() {
+           if (!$(this).hasClass("hide")) {
+               $(this).addClass("hide");
+           }
+        });
+    }
+
 
 </script>
 {% endblock %}
