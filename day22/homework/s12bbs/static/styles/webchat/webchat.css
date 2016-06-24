@@ -284,9 +284,9 @@ body{
 
 .mmpop {
     position: absolute;
-    background-color: #fff;
+    background-color: #444444;
     z-index: 99;
-    top: 0;
-    left: 0;
+    top: 90px;
+    left: 15px;
     outline: 0;
 }
