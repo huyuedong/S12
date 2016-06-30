@@ -3,11 +3,25 @@
 # __author__ = "Q1mi"
 # Email: master@liwenzhou.com
 
-from Arya.backends import base_module
+from Arya.backends.base_module import BaseSaltModule
 
 
-class User(base_module.BaseSaltModule):
+class User(BaseSaltModule):
 
-	def __init__(self, sys_argvs, db_models):
-		super().__init__(sys_argvs, db_models)
-		print("in cmd module.")
+	def uid(self, *args, **kwargs):
+		pass
+
+	def gid(self, *args, **kwargs):
+		pass
+
+	def shell(self, *args, **kwargs):
+		pass
+
+	def home(self, *args, **kwargs):
+		pass
+
+
+class UbuntuUser(User):
+
+	def home(self, *args, **kwargs):
+		print("in ubuntu home...")

@@ -3,11 +3,9 @@
 # __author__ = "Q1mi"
 # Email: master@liwenzhou.com
 
-from Arya.backends import base_module
+from Arya.backends.base_module import BaseSaltModule
 
 
-class File(base_module.BaseSaltModule):
+class File(BaseSaltModule):
 
-	def __init__(self, sys_argvs, db_models):
-		super().__init__(sys_argvs, db_models)
-		print("in file module.")
+	pass
