@@ -123,3 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# for Arya
+SALT_CONFIG_FILES_DIR = "{}/Arya/salt_configs".format(BASE_DIR)
+SALT_PLUGINS_DIR = "{}/Arya/plugins".format(BASE_DIR)

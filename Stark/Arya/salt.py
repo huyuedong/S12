@@ -8,7 +8,7 @@ import sys
 
 
 if __name__ == "__main__":
-	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Stark.setting")
+	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Stark.settings")
 	BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	sys.path.append(BASE_DIR)
 

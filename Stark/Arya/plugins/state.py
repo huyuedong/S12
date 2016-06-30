@@ -4,23 +4,27 @@
 # Email: master@liwenzhou.com
 
 import os
+import importlib
 from Arya.backends.base_module import BaseSaltModule
 
 
 class State(BaseSaltModule):
+	"""
+	定义每个模块特有的方法
+	"""
 	def load_state_files(self, state_filename):
 		from yaml import load, dump
 		try:
 			from yaml import CLoader as Loader, CDumper as Dumper
 		except ImportError:
 			from yaml import Loader, Dumper
-		state_file_path = "%s/%s" % (self.settings.SALT_CONFIG_FILES_DIR, state_filename)
+		state_file_path = "{}/{}".format(self.settings.SALT_CONFIG_FILES_DIR, state_filename)  # 配置文件路径
 		if os.path.isfile(state_file_path):
 			with open(state_file_path) as f:
 				data = load(f.read(), Loader=Loader)
 				return data
 		else:
-			exit("%s is not a valid yaml config file" % state_filename)
+			exit("{} is not a valid yaml config file".format(state_filename))
 
 	def apply(self):
 		"""
@@ -43,14 +47,17 @@ class State(BaseSaltModule):
 
 						for mod_name, mod_data in section_data.items():
 							base_mod_name = mod_name.split(".")[0]
-							plugin_file_path = "{}/{}.py".format(self.settings.SALT_PLUGINS_DIR, base_mod_name)
+							plugin_file_path = "{}/{}.py".format(self.settings.SALT_PLUGINS_DIR, base_mod_name)  # 插件路径
 							if os.path.isfile(plugin_file_path):
 								# 导入模块
 								# TODO 使用importlib 导入模块
-								module_plugin = __import__('plugins.%s' % base_mod_name)
-								special_os_module_name = "%s%s" % (os_type.capitalize(), base_mod_name.capitalize())
-								module_file = getattr(module_plugin, base_mod_name)  # 这里才是真正导入模块
-								if hasattr(module_file, special_os_module_name):  # 判断有没有根据操作系统的类型进行特殊解析 的类，在这个文件里
+								module_plugin = __import__('plugins.{}'.format(base_mod_name))  # 导入包
+								print("==>", module_plugin)
+								module_plugin = importlib.import_module('plugins.{}'.format(base_mod_name))
+								print("===>", module_plugin)
+								special_os_module_name = "{}{}".format(os_type.capitalize(), base_mod_name.capitalize())
+								module_file = getattr(module_plugin, base_mod_name)  # 这里才是真正导入模块（反射包内的类）
+								if hasattr(module_file, special_os_module_name):  # 判断有没有根据操作系统的类型进行特殊解析的类，在这个文件里
 									module_instance = getattr(module_file, special_os_module_name)
 								else:
 									module_instance = getattr(module_file, base_mod_name.capitalize())

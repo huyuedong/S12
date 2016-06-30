@@ -3,12 +3,15 @@
 # __author__ = "Q1mi"
 # Email: master@liwenzhou.com
 
-from Stark import settings
+
 from Arya import action_list
-from Arya import models
 
 import django
 django.setup()
+
+# 在django启动后再import django的配置
+from Stark import settings
+from Arya import models
 
 
 class ArgvManagement(object):
@@ -35,7 +38,7 @@ class ArgvManagement(object):
 			module_name, module_method = module_name.split(".")
 			module_instance = action_list.actions.get(module_name)  # 获取匹配到的模块实例
 			if module_instance:  # 匹配到
-				module_obj = module_instance(self.argvs, models, settings)
+				module_obj = module_instance(self.argvs, models, settings)  # 实例化
 				module_obj.process()  # 提取主机
 				if hasattr(module_obj, module_method):
 					module_method_obj = getattr(module_obj, module_method)  # 解析
