@@ -3,13 +3,20 @@
 # __author__ = "Q1mi"
 # Email: master@liwenzhou.com
 
+"""
+处理user相关
+"""
+
 from Arya.backends.base_module import BaseSaltModule
 
 
 class User(BaseSaltModule):
 
 	def uid(self, *args, **kwargs):
-		pass
+		self.argv_validation("uid", args[0], int)
+		cmd = "-u {}".format(args[0])
+		self.raw_cmds.append(cmd)
+		return cmd
 
 	def gid(self, *args, **kwargs):
 		pass
