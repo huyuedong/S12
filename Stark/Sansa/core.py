@@ -180,33 +180,33 @@ class Asset(object):
 		更新资产的数据
 		"""
 		func = getattr(self, "_update_{}".format(self.clean_data["asset_type"]))
-		create_obj = func
+		create_obj = func()
 
 	def _update_server(self):
 		"""
 		更新服务器的资产数据
 		"""
-		nic = self.__update_asset_component(
+		self.__update_asset_component(
 			data_source=self.clean_data["nic"],
 			fk="nic_set",
 			update_fields=["name", "sn", "model", "macaddress", "ipaddress", "netmask", "bonding"],
 			identify_field="macaddress",
 		)
-		disk = self.__update_asset_component(
+		self.__update_asset_component(
 			data_source=self.clean_data["physical_disk_driver"],
 			fk="disk_set",
 			update_fields=["slot", "sn", "model", "manufactory", "capacity", "iface_type"],
 			identify_field="slot",
 		)
-		ram = self.__update_asset_component(
+		self.__update_asset_component(
 			data_source=self.clean_data["ram"],
 			fk="ram_set",
 			update_fields=["slot", "sn", "model", "capacity"],
-			identify_fiels="slot",
+			identify_field="slot",
 		)
-		cpu = self.__update_cpu_component()
-		manufactory = self.__update_manufactory_component()
-		server = self.__update_server_component()
+		self.__update_cpu_component()
+		self.__update_manufactory_component()
+		self.__update_server_component()
 
 	def _create_server(self):
 		self.__create_server_info()
@@ -404,7 +404,7 @@ class Asset(object):
 					else:  # 汇报上来的元数据格式不是列表
 						print("\033[31;1mMust be sth wrong, logic should not goes to here at all.\033[0m")
 				# 比较完了所有的数据
-				self.__filter_Add_or_deleted_componets(
+				self.__filter_add_or_deleted_components(
 					model_obj_name=component_obj.model_meta.object_name,
 					data_from_db=objects_from_db,
 					data_source=data_source,
@@ -436,7 +436,6 @@ class Asset(object):
 		self.__delete_components(
 			all_components=data_from_db,
 			delete_list=data_only_in_db,
-			add_list=data_only_in_db,
 			identify_field=identify_field,
 		)
 		if data_only_in_data_source:
@@ -486,7 +485,7 @@ class Asset(object):
 			log_msg = "Asset[{}] --> component[{}] --> is lacking from reporting source data, assume it has been removed or replaced,will also delete it from DB".format(self.asset_obj, i)
 			self.response_msg("info", "HardwareChanges", log_msg)
 			log_handler(self.asset_obj, "HardwareChanges", self.request.user, log_msg, i)
-		i.delete()
+			i.delete()
 
 	def __compare_componet(self, model_obj, fields_from_db, data_source):
 		for field in fields_from_db:
