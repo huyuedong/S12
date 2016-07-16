@@ -17,5 +17,8 @@ from django.conf.urls import url
 from Sansa import views
 
 urlpatterns = [
-    url(r'^report/', views.asset_report),
+    url(r'^report/', views.asset_report),  # 别忘记$结尾
+    url(r'^report/asset_id_without_asset_id/$', views.asset0_report),  # 别忘记$结尾, 待批准的
+
+
 ]

@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from Arya import urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'salt/', include('Arya.urls'))
+    url(r'salt/', include('Arya.urls')),
+    url(r'api/', include('Sansa.rest_urls'))
 ]

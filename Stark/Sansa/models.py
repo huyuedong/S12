@@ -79,7 +79,7 @@ class NetworkDevice(models.Model):
 	asset = models.OneToOneField("Asset")  # 一对一关联至资产总表
 	vlan_ip = models.GenericIPAddressField(verbose_name=u"VlanIP", null=True, blank=True)
 	intranet_ip = models.GenericIPAddressField(verbose_name=u"内网IP", null=True, blank=True)
-	firmware = models.CharField(verbose_name=u"固件版本", null=True, blank=True)
+	firmware = models.CharField(verbose_name=u"固件版本", max_length=64, null=True, blank=True)
 	port_num = models.SmallIntegerField(verbose_name=u"端口个数", null=True, blank=True)
 	device_detail = models.TextField(verbose_name=u"设置详细配置", null=True, blank=True)
 

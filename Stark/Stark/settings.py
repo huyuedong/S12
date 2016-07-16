@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Wolf',
     'Arya',
+    'Sansa',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,3 +130,11 @@ STATIC_URL = '/static/'
 # for Arya
 SALT_CONFIG_FILES_DIR = "{}/Arya/salt_configs".format(BASE_DIR)
 SALT_PLUGINS_DIR = "{}/Arya/plugins".format(BASE_DIR)
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
