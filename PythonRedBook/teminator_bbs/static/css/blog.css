@@ -1,0 +1,330 @@
+/*
+ * Globals
+ */
+body {
+    color: #333;!important
+    font-family: Arial,"微软雅黑","Microsoft yahei","Hiragino Sans GB","冬青黑体简体中文 w3","Microsoft Yahei","Hiragino Sans GB","冬青黑体简体中文 w3",STXihei,"华文细黑",SimSun,"宋体",Heiti,"黑体",sans-serif;!important
+}
+body {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: #555;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  margin-top: 0;
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+  font-family: Arial,"微软雅黑","Microsoft yahei","Hiragino Sans GB","冬青黑体简体中文 w3","Microsoft Yahei","Hiragino Sans GB","冬青黑体简体中文 w3",STXihei,"华文细黑",SimSun,"宋体",Heiti,"黑体",sans-serif;
+
+  font-weight: normal;
+  color: #333;
+}
+
+
+/*
+ * Override Bootstrap's default container.
+ */
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1300px;
+  }
+}
+
+
+/*
+ * Masthead for nav
+ */
+
+.blog-masthead {
+  background-color: #428bca;
+  -webkit-box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+          box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+}
+
+/* Nav links */
+.blog-nav-item {
+  position: relative;
+  display: inline-block;
+  padding: 0px 10px 0px 10px;
+  font-weight: 500;
+    height: 60px;
+    line-height: 60px;
+  color: #cdddeb;
+}
+.blog-nav-item:hover,
+.blog-nav-item:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Active state gets a caret at the bottom */
+.blog-nav .active {
+  color: #fff;
+}
+.blog-nav .active:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  vertical-align: middle;
+  content: " ";
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid;
+  border-left: 5px solid transparent;
+}
+
+
+/*
+ * Blog name and description
+ */
+
+.blog-header {
+  /*padding-top: 20px;*/
+  /*padding-bottom: 20px;*/
+}
+.blog-title {
+  margin-top: 30px;
+  margin-bottom: 0;
+  font-size: 60px;
+  font-weight: normal;
+}
+.blog-description {
+  font-size: 20px;
+  color: #999;
+}
+
+
+/*
+ * Main column and sidebar layout
+ */
+
+.blog-main {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Sidebar modules for boxing content */
+.sidebar-module {
+  padding: 15px;
+  margin: 0 -15px 15px;
+}
+.sidebar-module-inset {
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+.sidebar-module-inset p:last-child,
+.sidebar-module-inset ul:last-child,
+.sidebar-module-inset ol:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Pagination */
+.pager {
+  margin-bottom: 60px;
+  text-align: left;
+}
+.pager > li > a {
+  width: 140px;
+  padding: 10px 20px;
+  text-align: center;
+  border-radius: 30px;
+}
+
+
+/*
+ * Blog posts
+ */
+
+.blog-post {
+  margin-bottom: 60px;
+}
+.blog-post-title {
+  margin-bottom: 5px;
+  font-size: 40px;
+}
+.blog-post-meta {
+  margin-bottom: 20px;
+  color: #999;
+}
+
+
+/*
+ * Footer
+ */
+
+.blog-footer {
+  padding: 40px 0;
+  color: #999;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e5e5;
+}
+.blog-footer p:last-child {
+  margin-bottom: 0;
+}
+
+/*自定义*/
+
+
+body {
+    color: #333;
+    font-family: Arial,"微软雅黑","Microsoft yahei","Hiragino Sans GB","冬青黑体简体中文 w3","Microsoft Yahei","Hiragino Sans GB","冬青黑体简体中文 w3",STXihei,"华文细黑",SimSun,"宋体",Heiti,"黑体",sans-serif;
+}
+
+/*.pagination>li>a{*/
+    /*color: #999;*/
+/*}*/
+/*.pagination>li>a, a:hover, a:link {*/
+    /*text-decoration: none;*/
+/*}*/
+/*.mod-b {*/
+    /*position: relative;*/
+    /*padding: 30px 0;*/
+    /*height: 185px;*/
+    /*border-bottom: 1px solid #f0f0f0;*/
+    /*width: 100%;*/
+/*}*/
+/*.mod-thumb {*/
+    /*width: 220px;*/
+    /*height: 124px;*/
+    /*overflow: hidden;*/
+
+
+/*}*/
+/*.wraper-main img{*/
+    /*width: 100%;*/
+/*}*/
+/*.mob-ctt {*/
+    /*position: relative;*/
+    /*float: right;*/
+    /*margin: -120px 160px 0;*/
+    /*width: 520px;*/
+/*}*/
+
+/*.mob-ctt h3 {*/
+    /*margin-top: -5px;*/
+/*}*/
+/*.mob-ctt h3 a {*/
+    /*font-size: 18px;*/
+/*}*/
+
+/*a:hover {*/
+    /*color: #3ca5f6;*/
+/*}*/
+
+
+/*.mob-sub {*/
+    /*font-size: 14px;*/
+    /*color: #999;*/
+    /*line-height: 24px;*/
+/*}*/
+/*.article-title{*/
+    /*!*color: #999;*!*/
+    /*color: #333;*/
+    /*font-family: Arial,"微软雅黑","Microsoft yahei","Hiragino Sans GB","冬青黑体简体中文 w3","Microsoft Yahei","Hiragino Sans GB","冬青黑体简体中文 w3",STXihei,"华文细黑",SimSun,"宋体",Heiti,"黑体",sans-serif;*/
+
+/*}*/
+/*.article-title:hover{*/
+    /*color: #333;*/
+/*}*/
+/*.article-title:focus{*/
+    /*color: #333;*/
+/*}*/
+
+
+
+.Article-item {
+    /*padding-bottom: 20px;*/
+    margin-right: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    /*border-bottom: 1px solid red;*/
+    /*margin-bottom: 20px;*/
+}
+.article-item-title a{
+    color: #333;
+}
+.article-item-title a:hover, a:focus{
+    color: #333;
+    text-decoration: none;
+}
+
+
+.article-item-title{
+    padding-bottom: 20px;
+}
+.article-sub{
+    height: 48px;
+    font-size: 14px;
+    color: #999;
+    line-height: 24px;
+}
+.active-brief{
+    color: #999;
+    line-height: 30px;
+}
+.comment-item{
+    font-size: 14px;
+    line-height: 30px;
+}
+.comments{
+    /*background-color: #f5f5f5;*/
+    padding: 10px;
+    margin: 30px 0px;
+
+}
+.items{
+    border-bottom: 1px dashed #d4d4d4;
+    margin-bottom: 15px;
+}
+.comment-date{
+    padding: 0px 15px;
+}
+.comment-comment{
+    padding: 0px 10px;
+    color: #999;
+    cursor:pointer
+ }
+.comment-thumb{
+    padding: 0px 10px;
+    color: #999;
+    cursor:pointer
+ }
+.close-comment-label{
+    font-size: 14px;
+    padding-left: 15px;
+}
+.close-comment-label:hover, .close-comment-label:focus{
+    text-decoration: none;
+}
+.comment{
+    font-size: 16px;
+}
+.head-img{
+    width: 35px; !important;
+    height: 35px; !important;
+    border-radius: 35px;
+    margin-right: 20px;
+}
+.title-img{
+    width: 220px;
+    height: 124px;
+    padding: 10px;
+}
+.thumbed{
+    color: #F57527;
+}
+.errortext{
+    color:#a94442; font-size: 14px
+}
+.modal-body{
+    margin: 20px;
+}

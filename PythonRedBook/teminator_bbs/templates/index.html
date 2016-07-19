@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block container-lift %}
+{#    {{ article_list }}#}
+{% load mytag %}
+{% for article in article_list %}
+{#    <div class="mod-b mod-art " data-aid="151271">#}
+{#        <!--栏目链接-->#}
+{#        <div class="mod-thumb">#}
+{#            <a class="transition" href="#" target="_blank">#}
+{#                <img class="lazy" alt="" src="/{{ article.head_img }}" style="display: inline;">#}
+{#            </a>#}
+{#        </div>#}
+{#        <div class="mob-ctt">#}
+{#            <h3><a href="#" class="transition article-title" target="_blank">{{ article.title }}</a></h3>#}
+{##}
+{#            <div class="mob-author">#}
+{#                <div class="author-face">#}
+{#                    <a href="/member/284725.html" target="_blank"><img src=""></a>#}
+{#                </div>#}
+{#                    <a href="/member/284725.html" target="_blank"><span class="author-name ">{{ article.author.name }}</span><i class="i-icon icon-auth3" title=""></i></a>#}
+{#                <span class="time">{{ article.pub_date|date:"Y-m-d" }}</span>#}
+{#                <i class="icon icon-cmt"></i><em>1</em>#}
+{#                <i class="icon icon-fvr"></i><em>3</em>#}
+{#            </div>#}
+{#            <div class="mob-sub">{{ article.brief }}</div>#}
+{#        </div>#}
+{#    </div>#}
+    <div class="wraper-main row Article-item" >
+        <div class="col-md-3">
+            <img class="lazy title-img" alt="" src="/{{ article.head_img }}" style="display: inline;">
+        </div>
+        <div class="col-md-9" style="padding-top: 10px">
+            <div class="article-item-title">
+                <a href="{% url 'article' article.id %}">{% if article.priority == 1001 %}<span style="font-weight: 300;color: red">【置顶】</span>{% endif %}{{ article.title }}</a>
+            </div>
+            <div style="font-size: 14px;color: #bbb;">
+                {% filter_comment article as comments %}
+                <img src="/{{ article.author.head_img }}" class="head-img" style=""><span style="padding-right: 25px">{{ article.author }}</span><span style="padding-right: 25px">{{ article.pub_date|date:"Y年m月d日 H:i"  }}</span><span style="padding-right: 25px"><i class="glyphicon glyphicon-comment" aria-hidden="true"></i><span style="padding:0px 5px">{{ comments.comment_count }}</span></span><span><i class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i><span style="padding:0px 5px">{{ comments.thumb_count }}</span></span>
+            </div>
+            <div class="article-sub">
+                {% if article.brief %}
+                    {{ article.brief|truncatechars:50 }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endfor %}
+    <div class="row pull-right">
+        <div class="pagination ">
+            <nav>
+                <ul class="pagination  pagination-sm">
+                {% if article_list.has_previous %}
+                    <li class="">
+                        <a href="?page={{ article_list.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif  %}
+                {% for page_num in article_list.paginator.page_range %}
+                    {%  guess_page article_list.number page_num  %}
+                {% endfor %}
+                {% if article_list.has_next %}
+                    <li class=""><a href="?page={{ customer_list.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}

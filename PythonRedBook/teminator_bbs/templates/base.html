@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)http://v3.bootcss.com/examples/blog/ -->
+<html lang="zh-CN">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+    <title>UnionSmart社区</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/blog.css" rel="stylesheet">
+    <link href="/static/css/sweetalert.css" rel="stylesheet">
+    {% block style %}
+    {% endblock %}
+
+
+</head>
+
+<body style="min-width: 1300px">
+
+    <div class="blog-masthead navbar-fixed-top" >
+        <div class="container">
+            <nav class="blog-nav">
+                <span class="blog-nav-item">
+                <img src="/static/img/logo.png">
+                </span>
+                <a class="blog-nav-item {% if not category_id %}active{% endif %}" href="{% url 'index' %}">全部</a>
+                {% for category in category_list %}
+
+                <a class="blog-nav-item {% if category.id == category_id %}active{% endif %}" href="{% url 'category' category.id %}">{{ category }}</a>
+                {% endfor %}
+                {% if request.user.is_authenticated %}
+                    <span class="dropdown pull-right">
+                    <a class="blog-nav-item" href="{% url 'new_article' %}?next={{ request.path }}">发帖</a>
+                    <a class="blog-nav-item dropdown-toggle" href="#" data-toggle="dropdown" id="userprofileMenu" aria-haspopup="true" aria-expanded="false">{{ request.user.userprofile.name }}
+                    <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="userprofileMenu">
+                        <li><a href="#">我的主页</a></li>
+                        <li><a href="#">修改密码</a></li>
+                        <li><a href="#">退出</a></li>
+                    </ul>
+                    <a class="blog-nav-item" href="{% url 'logout' %}">注销</a>
+                    </span>
+
+
+                {% else %}
+                    <a class="blog-nav-item pull-right" href="{% url 'login' %}">登录</a>
+                    <a class="blog-nav-item pull-right" href="#">注册</a>
+                {% endif %}
+            </nav>
+
+        </div>
+    </div>
+
+    <div class="container">
+
+    <div class="blog-header"  style="margin-top: 90px">
+    </div>
+    {% block container %}
+    <div class="row">
+
+        <div class="col-md-9 blog-main">
+            {% block container-lift %}
+            {% endblock %}
+        </div><!-- /.blog-main -->
+
+        <div class="col-md-3 blog-sidebar">
+            <div class="sidebar-module sidebar-module-inset">
+                <h4>版块介绍：</h4>
+                <p>
+                    版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍版块介绍
+                    版块介绍版块介绍版块介绍版块介绍
+                </p>
+            </div>
+{#            <div class="sidebar-module">#}
+{#                <h4>板块</h4>#}
+{#                <ol class="list-unstyled">#}
+{#                    <li><a href="http://v3.bootcss.com/examples/blog/#">版块一</a></li>#}
+{#                </ol>#}
+{#            </div>#}
+        </div><!-- /.blog-sidebar -->
+
+    </div><!-- /.row -->
+        {% endblock %}
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+        <p>Copyright ©  <a href="">unionSmart</a> by <a href="">@张晓宇</a>.</p>
+        <p><a href="#">2016-06-06</a></p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-2.1.4.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/sweetalert-dev.js"></script>
+    {% block js %}
+    {% endblock %}
+
+</body></html>

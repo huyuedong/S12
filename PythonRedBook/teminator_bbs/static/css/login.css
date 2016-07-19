@@ -1,0 +1,70 @@
+body {
+	background:url(../img/login_bg_0.jpg) repeat center top;
+    /*background-size: 100% 100%;*/
+    /*max-width: 1440px;*/
+    background-size:auto;
+}
+.join{
+    height:800px;
+}
+.signin {
+	width:470px;
+	height:330px;
+    background-color: #fff;
+	margin:0 auto;
+	
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-139px;
+	margin-left:-238px;
+    border-radius: 8px;
+}
+
+.signin-head {
+	margin:0 auto;
+	padding-top:30px;
+	/*width:120px;*/
+    text-align: center;
+    height: 100px;
+    background-color: #1060B7;
+    border-radius: 8px 8px 0px 0px;
+}
+.form-signin {
+  max-width: 330px;
+  padding: 43px 15px 15px 15px;
+  margin: 0 auto;
+}
+.title{
+    font-family: "Microsoft Yahei",Simsun,Arial,sans-serif;
+    /*width: 80px;*/
+    text-align: center;
+    line-height: 100px;
+    color: #9CBEE0;
+    font-size: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 0 20px;
+}
+#username,#password,#repassword,#tel,#email{
+    width: 290px;
+    height:25px;
+    font-size: 15px;
+}
+.login-label{
+    font-size: 13px;
+    font-weight: 600;
+
+}
+.register{
+    padding-top: 7px;
+    text-align: center;
+    font-size: 14px;
+}
+.login-error{
+    color: red;
+    padding-top: -5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-size: 14px;
+}

@@ -52,7 +52,7 @@ def render_comment_tree(comment_tree_dic):
 			<div class="media">
 				<div class="media-left">
 					<a href="{0}" class="comment-head-img">
-						<img class="media-object comment-head-img" src="{2}" alt="{3}的头像">
+						<img class="media-object comment-head-img" src="/static/{2}" alt="{3}的头像">
 					</a>
 				</div>
 			<div class="media-body">
@@ -61,7 +61,7 @@ def render_comment_tree(comment_tree_dic):
 		'''.format(
 			comment_obj.user.id,  # 用户id
 			comment_obj.id,  # 评论id
-			comment_obj.user.get_head_img(),  # 头像
+			comment_obj.user.head_img,  # 头像
 			comment_obj.user.name,  # 用户名
 			datetime_handler.readable_date(comment_obj.date),  # 处理过的发布日期
 			comment_obj.comment,  # 评论内容

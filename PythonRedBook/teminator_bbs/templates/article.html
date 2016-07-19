@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block container-lift %}
+{#    {{ article_list }}#}
+{% load mytag %}
+<div class="article-title" article_id="{{ article.id }}">
+    <h1>{{ article.title }}</h1>
+    <div style="font-size: 16px;color: #bbb;">
+        {% filter_comment article as comments %}
+        <span style="padding-right: 25px">{{ article.author }}</span><span style="padding-right: 25px">{{ article.pub_date|date:"Y年m月d日 H:i"  }}</span><span style="padding-right: 25px" class="comment-comment"><i class="glyphicon glyphicon-comment" aria-hidden="true"></i><span style="padding:0px 5px">{{ comments.comment_count }}</span></span><span class="comment-thumb {% if request.user.is_authenticated %}{% get_thumb article request.user %}{% endif %}"><i class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i><span style="padding:0px 5px">{{ comments.thumb_count }}</span></span>
+    </div>
+    <div style="padding-top: 30px;padding-bottom: 20px; text-align: center">
+        <img alt="" src="/{{ article.head_img }}" style="display: inline;width: 80%">
+    </div>
+    <div class="active-brief" style="margin-bottom: 30px">
+        摘要：
+        {% if article.brief %}
+            {{ article.brief }}
+        {% endif %}
+    </div>
+    <div style="line-height: 30px;">
+        {{ article.content|safe }}
+    </div>
+    <div class="comments">
+        <div class="items hidden" >
+        {% for comment in comment_list %}
+            {% filter_comment_comment comment.1 as comment_comments %}
+            {% if comment.0 == 0 %}</div><div class="items">{% endif %}
+            <div {% if comment.0 != 0 %}style="padding-left: {{ comment.0}}px"{% endif %} class="comment-item {% if comment.0 == 0 %}root{% endif %}">
+                <div class=""><div class=""><img src="/{{ comment.1.user.head_img }}" class="head-img" style=""><a href="">{{ comment.1.user.name }}</a><span class="comment-date">{{ comment.1.date|date:"Y年m月d日 H:i" }}</span><span class="comment-comment" comment_author="{{ comment.1.user.name }}" comment_id = '{{ comment.1.id }}'><i class="glyphicon glyphicon-comment" aria-hidden="true" style="padding-right: 5px"></i>{{ comment_comments.comment_count }}</span><span class="comment-thumb  {% if request.user.is_authenticated %}{% get_thumb comment.1 request.user %}{% endif %}" comment_id = '{{ comment.1.id }}'><i class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="padding-right: 5px"></i><span>{{ comment_comments.thumb_count }}</span></span></div>
+                <div class="">{{ comment.1.comment }}</div></div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    {% if request.user.is_authenticated %}
+    <div class="row">
+        <form action="" method="post" id="comment_form">{% csrf_token %}
+            <div style="padding: 0px 0px 10px 18px" class="hidden" id="comment_label"><span class="label label-primary" style="font-weight: 300; border-radius: 15px;padding: 2px 10px; background-color: orange;" id="comment_author_label"></span><a class="close-comment-label" href="">取消</a></div>
+            <div  class="col-md-10 form-group" id="comment-group">
+                <textarea style="width: 100%" placeholder="客官，8字起评，不讲价哦！" class="comment form-control" rows="4" name="comment" id="comment"></textarea>
+                <span style="" class="hidden errortext"></span>
+            </div>
+            <div  class="col-md-2">
+                <input type="hidden" name = 'arctile_id' value="{{ article.id }}">
+                <input type="hidden" id="parent_comment_id" name= "parent_comment_id" value="">
+                <div class="form-group">
+                    <input class="btn btn-primary sb"  type="submit" value="评论" style="width: 80%">
+                </div>
+            </div>
+        </form>
+    </div>
+    {% else %}
+        <div class="jumbotron">
+            <h4 class="text-center"><a class="btn-link" href="{% url 'login' %}?next={{ request.path }}">登录</a>后评论</h4>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block js %}
+    {% if request.user.is_authenticated %}
+    <script>
+        $(function () {
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+            $('.comment-comment').click(function () {
+                console.log(1)
+                var parent_comment_id = $(this).attr('comment_id')
+                var comment_author = $(this).attr('comment_author')
+                console.log(parent_comment_id)
+                if(parent_comment_id){
+                    $('#parent_comment_id').val($(this).attr('comment_id'))
+                    $('#comment_author_label').text('回复：' + comment_author)
+                    $('#comment_label').removeClass('hidden')
+                }
+                $("#comment").focus()
+
+            })
+            $('.sb').click(function () {
+                var comment_text = $("#comment").val();
+                console.log(comment_text)
+                if (comment_text.trim().length < 8) {
+                    $('#comment-group').addClass('has-error')
+                    $('.errortext').text('客官，不能小于8个字哦')
+                    $('.errortext').removeClass('hidden')
+                    return false
+                } else {
+                    return true
+                }
+            })
+            $('#comment').focus(function () {
+                $('#comment-group').removeClass('has-error')
+                $('.errortext').text('')
+                $('.errortext').addClass('hidden')
+            })
+            $('.comment-thumb').click(function () {
+                var parent_comment_id = $(this).attr('comment_id')
+                var clicked = this
+                var article_id = $('.article-title').attr('article_id')
+                var data = {'parent_comment_id': parent_comment_id,"article_id":article_id}
+                $.ajax({
+                    type: "POST",
+                    url: "/bbs/click_thumb/",
+                    traditional: true,
+                    data: data,
+                    statusCode: {
+                        404: function () {
+                            swal("错误！！", "提交失败", "error");
+                        },
+                        500: function () {
+                            swal("错误！！", "提交失败", "error");
+                        },
+                        403: function () {
+                            swal("错误！！", "没有权限", "error");
+                        }
+                    },
+                    success: function (arg) {
+                        console.log(arg)
+                        var count = $(clicked).children('span').text()
+                        if (arg == 'add') {
+                            $(clicked).toggleClass('thumbed')
+                            count = parseInt(count)+1
+                            swal("成功！！", "点赞成功", "success");
+                        }
+                        if(arg == 'del'){
+                            $(clicked).toggleClass('thumbed')
+                            count = parseInt(count)-1
+                            swal("成功！！", "取消点赞成功", "success");
+                        }
+                        console.log(count)
+                        $(clicked).children('span').text(count)
+                    }
+                })
+            })
+        })
+    </script>
+    {% endif %}
+{% endblock %}

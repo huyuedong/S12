@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>欢迎登录UnionSmart社区</title>
+    {% load staticfiles %}
+	<link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/login.css" rel="stylesheet">
+	<link href="/static/css/sweetalert.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="signin">
+	<div class="signin-head title">UnionSmart社区</div>
+	<div style="padding-top: 20px">
+		<form class="form-horizontal" style="margin-bottom: 0px; padding-left: 30px; padding-right: 30px" action="" method="post" >{% csrf_token %}
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username" class="col-sm-2 control-label">用户名</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_username" maxlength="255" name="username" placeholder="用户名" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_password" class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_password" maxlength="255" name="password" placeholder="密码" type="password">
+                </div>
+            </div>
+            <input class="btn btn-primary" type="submit" style="width: 100%" value="登录">
+		</form>
+	</div>
+</div>
+<script src="/static/js/jquery-2.1.4.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/sweetalert-dev.js"></script>
+<script>
+    $(function (){
+        {% if login_err %}
+            {#  判断参数loginerror是否不为空，不为空说明有错无，通过弹窗提示错误  #}
+            swal("错误！！", "{{ login_err }}", "error");
+        {% endif %}
+    });
+</script>
+</body>
+</html>
