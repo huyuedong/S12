@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Wolf',
     'Arya',
     'Sansa',
+    'Robb',
     'rest_framework',
 ]
 
