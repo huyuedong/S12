@@ -11,8 +11,13 @@ from Robb import models
 REDIS_OBJ = redis_conn.redis_conn(settings)
 
 
-
 def client_configs(request,client_id):
+    """
+    根据客户端ID取客户端的配置信息
+    :param request:
+    :param client_id:
+    :return:
+    """
     print("--->",client_id)
     config_obj = ClientHandler(client_id)
     config = config_obj.fetch_configs()
@@ -23,22 +28,27 @@ def client_configs(request,client_id):
 
 @csrf_exempt
 def service_data_report(request):
+    """
+    客户端数据每项服务数据的汇报
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         print("---->",request.POST)
-        #REDIS_OBJ.set("test_alex",'hahaha')
+        # REDIS_OBJ.set("test_alex",'hahaha')
         try:
             print('host=%s, service=%s' %(request.POST.get('client_id'),request.POST.get('service_name') ) )
-            data =  json.loads(request.POST['data'])
+            data = json.loads(request.POST['data'])
 
             client_id = request.POST.get('client_id')
             service_name = request.POST.get('service_name')
-            data_saveing_obj = data_optimization.DataStore(client_id,service_name,data,REDIS_OBJ)
+            data_saveing_obj = data_optimization.DataStore(client_id,service_name,data,REDIS_OBJ)  # 对汇报过来的数据进行处理
 
-            #redis_key_format = "StatusData_%s_%s_latest" %(client_id,service_name)
-            #data['report_time'] = time.time()
-            #REDIS_OBJ.lpush(redis_key_format,json.dumps(data))
+            # redis_key_format = "StatusData_%s_%s_latest" %(client_id,service_name)
+            # data['report_time'] = time.time()
+            # REDIS_OBJ.lpush(redis_key_format,json.dumps(data))
 
-            #在这里同时触发监控
+            # 在这里同时触发监控
             host_obj = models.Host.objects.get(id=client_id)
             service_triggers = get_host_triggers(host_obj)
 
@@ -48,11 +58,10 @@ def service_data_report(request):
             print("service trigger::",service_triggers)
 
 
-            #更新主机存活状态
-            #host_alive_key = "HostAliveFlag_%s" % client_id
-            #REDIS_OBJ.set(host_alive_key,time.time())
+            # 更新主机存活状态
+            # host_alive_key = "HostAliveFlag_%s" % client_id
+            # REDIS_OBJ.set(host_alive_key,time.time())
         except IndexError as e:
             print('----->err:',e)
-
 
     return HttpResponse(json.dumps("---report success---"))

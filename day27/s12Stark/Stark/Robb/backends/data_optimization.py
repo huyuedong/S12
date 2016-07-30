@@ -8,6 +8,7 @@ import copy
 class DataStore(object):
     '''
     processing the client reported service data , do some data optimiaztion and save it into redis DB
+    处理客户端传过来的服务数据，做一些数据优化并把数据存储到
     '''
     def __init__(self, client_id,service_name, data,redis_obj):
         '''
@@ -26,6 +27,7 @@ class DataStore(object):
     def get_data_slice(self,lastest_data_key,optimization_interval):
         '''
         :param optimization_interval: e.g: 600, means get latest 10 mins real data from redis
+        根据间隔取数据
         :return:
         '''
         all_real_data = self.redis_conn_obj.lrange(lastest_data_key,1,-1)
@@ -50,6 +52,7 @@ class DataStore(object):
     def process_and_save(self):
         '''
         processing data and save into redis
+        处理并存储到redis
         :return:
         '''
         print("\033[42;1m---service data-----------------------\033[0m")
